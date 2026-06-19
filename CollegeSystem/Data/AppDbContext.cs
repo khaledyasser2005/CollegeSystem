@@ -30,8 +30,8 @@ namespace CollegeSystem.Data
                     ID = 1,
                     Name = "Super Admin",
                     Email = "superadmin@college.com",
-                    Password = "Super@1234"
-                }
+                    Password = "AQAAAAIAAYagAAAAEAC0BU6coyUVwufnT74u5I+OZmeZ6+RAZH6D2ngNXsQCmE6ZgaY5SRftfNpTP3iq9A=="
+            }
             );
             // Enrollment Primary Key
             modelBuilder.Entity<Enrollment>()

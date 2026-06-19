@@ -1,5 +1,7 @@
 ﻿using CollegeSystem.Data;
+using CollegeSystem.Models;
 using CollegeSystem.ViewModels;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
@@ -18,7 +20,6 @@ namespace CollegeSystem.Controllers
         {
             return View();
         }
-
         //Login --Post
 
         [HttpPost] 
@@ -36,32 +37,50 @@ namespace CollegeSystem.Controllers
             }
             else if(model.Role == "Professor")
             {
-                var professor = _context.Professors.FirstOrDefault(p => p.Email == model.Email && p.Password == model.Password);
+                var professor = _context.Professors.FirstOrDefault(p => p.Email == model.Email);
                 if (professor != null)
                 {
-                    HttpContext.Session.SetString("UserId", professor.ID.ToString());
-                    HttpContext.Session.SetString("Role", "Professor");
-                    return RedirectToAction("Index", "Professor");
+                    var hasher = new PasswordHasher<Professor>();
+                    var result = hasher.VerifyHashedPassword(professor, professor.Password, model.Password);
+
+                    if(result == PasswordVerificationResult.Success)
+                    {
+                        HttpContext.Session.SetString("UserId", professor.ID.ToString());
+                        HttpContext.Session.SetString("Role", "Professor");
+                        return RedirectToAction("Index", "Professor");
+                    }
                 }
             }
             else if(model.Role == "Admin")
             {
-                var Admin = _context.Admins.FirstOrDefault(a => a.Email == model.Email && a.Password == model.Password);
-                if (Admin != null)
+                var admin = _context.Admins.FirstOrDefault(a => a.Email == model.Email);
+                if (admin != null)
                 {
-                    HttpContext.Session.SetString("UserId", Admin.ID.ToString());
-                    HttpContext.Session.SetString("Role", "Admin");
-                    return RedirectToAction("Index", "Admin");
+                    var hasher = new PasswordHasher<Admin>();
+                    var result = hasher.VerifyHashedPassword(admin, admin.Password, model.Password);
+
+                    if(result == PasswordVerificationResult.Success)
+                    {
+                        HttpContext.Session.SetString("UserId", admin.ID.ToString());
+                        HttpContext.Session.SetString("Role", "Admin");
+                        return RedirectToAction("AdminDashboard", "Admin");       
+                    }
                 }
             }
             else if(model.Role == "SuperAdmin")
             {
-                var SuperAdmin = _context.SuperAdmins.FirstOrDefault(S => S.Email == model.Email && S.Password == model.Password);
-                if (SuperAdmin != null)
+                var superAdmin = _context.SuperAdmins.FirstOrDefault(S => S.Email == model.Email);
+                if (superAdmin != null)
                 {
-                    HttpContext.Session.SetString("UserId", SuperAdmin.ID.ToString());
-                    HttpContext.Session.SetString("Role", "SuperAdmin");
-                    return RedirectToAction("Index", "SuperAdmin");
+                    var hasher = new PasswordHasher<SuperAdmin>();
+                    var result = hasher.VerifyHashedPassword(superAdmin, superAdmin.Password, model.Password);
+
+                    if (result == PasswordVerificationResult.Success)
+                    {
+                        HttpContext.Session.SetString("UserId", superAdmin.ID.ToString());
+                        HttpContext.Session.SetString("Role", "Super Admin");
+                        return RedirectToAction("SuperAdminDashboard", "SuperAdmin");
+                    }
                 }
             }
             ModelState.AddModelError("", "Invalid Email or Password");

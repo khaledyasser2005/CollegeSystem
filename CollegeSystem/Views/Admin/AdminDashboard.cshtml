@@ -1,0 +1,73 @@
+﻿@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<section class="p-10 bg-surface-container-low min-h-screen flex flex-col items-center justify-start">
+
+    <!-- Title -->
+    <div class="text-center mb-10">
+        <h1 class="text-4xl font-bold text-on-surface">
+            Admin Dashboard
+        </h1>
+        <p class="text-sm text-on-surface-variant mt-2">
+            Manage Students, Courses and Professors
+        </p>
+    </div>
+
+    <!-- Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-5xl">
+
+        <!-- Courses -->
+        <a asp-controller="Admin" asp-action="ManageCourses"
+           class="bg-white rounded-2xl shadow-md hover:shadow-xl transition p-8 border border-gray-200 flex flex-col items-center text-center">
+
+            <span class="material-symbols-outlined text-5xl text-blue-600 mb-4">
+                library_books
+            </span>
+
+            <h2 class="text-2xl font-semibold mb-2">
+                Courses
+            </h2>
+
+            <p class="text-gray-500 text-sm">
+                Add, edit and manage courses
+            </p>
+        </a>
+
+        <!-- Students -->
+        <a asp-controller="Admin" asp-action="ManageStudents"
+           class="bg-white rounded-2xl shadow-md hover:shadow-xl transition p-8 border border-gray-200 flex flex-col items-center text-center">
+
+            <span class="material-symbols-outlined text-5xl text-green-600 mb-4">
+                group
+            </span>
+
+            <h2 class="text-2xl font-semibold mb-2">
+                Students
+            </h2>
+
+            <p class="text-gray-500 text-sm">
+                Add, edit and manage students
+            </p>
+        </a>
+
+        <!-- Professors -->
+        <a asp-controller="Admin" asp-action="ManageProfessors"
+           class="bg-white rounded-2xl shadow-md hover:shadow-xl transition p-8 border border-gray-200 flex flex-col items-center text-center">
+
+            <span class="material-symbols-outlined text-5xl text-purple-600 mb-4">
+                school
+            </span>
+
+            <h2 class="text-2xl font-semibold mb-2">
+                Professors
+            </h2>
+
+            <p class="text-gray-500 text-sm">
+                Add, edit and manage pforessors
+            </p>
+        </a>
+
+    </div>
+
+</section>

@@ -1,0 +1,102 @@
+﻿@{
+    ViewData["Title"] = "Manage Professors";
+}
+
+<section class="min-h-full flex flex-col items-center justify-start bg-surface-container-low px-10 pt-10">
+
+    <!-- Title -->
+    <div class="text-center mb-10 -mt-2">
+        <h1 class="text-4xl font-bold text-on-surface">
+            Manage Professors
+        </h1>
+        <p class="text-sm text-on-surface-variant mt-2">
+            Add, Update and Delete Professors
+        </p>
+    </div>
+
+    <!-- Cards Container -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-6xl">
+
+        <!-- ================= ADD PROFESSOR ================= -->
+        <div class="bg-white rounded-3xl shadow-lg border border-outline-variant p-8">
+
+            <h2 class="text-2xl font-semibold text-center mb-6">Add Professor</h2>
+
+            <form asp-controller="Admin" asp-action="AddProfessor" method="post" class="space-y-5">
+
+                <!-- Name -->
+                <input type="text" name="Name" placeholder="Name"
+                       class="w-full rounded-xl border px-4 py-3 focus:ring-2 focus:ring-blue-500" />
+
+                <!-- Email -->
+                <input type="email" name="Email" placeholder="Email"
+                       class="w-full rounded-xl border px-4 py-3 focus:ring-2 focus:ring-blue-500" />
+
+                <!-- Password -->
+                <input type="password" name="Password" placeholder="Password"
+                       class="w-full rounded-xl border px-4 py-3 focus:ring-2 focus:ring-blue-500" />
+
+                <button type="submit"
+                        class="w-full bg-blue-600 text-white py-3 rounded-xl hover:bg-blue-700 transition">
+                    Add
+                </button>
+
+            </form>
+        </div>
+
+    <!-- ================= UPDATE PROFESSOR ================= -->
+    <div class="bg-white rounded-3xl shadow-lg border border-outline-variant p-8">
+
+        <h2 class="text-2xl font-semibold text-center mb-6">Update Professor</h2>
+
+        <form asp-controller="Admin" asp-action="UpdateProfessor" method="post" class="space-y-5">
+
+            <!-- Current ID -->
+            <input type="number" name="Id" placeholder="Professor ID"
+                   class="w-full rounded-xl border px-4 py-3 focus:ring-2 focus:ring-blue-500" />
+
+            <!-- New ID -->
+            <input type="number" name="NewId" placeholder="New ID"
+                   class="w-full rounded-xl border px-4 py-3 focus:ring-2 focus:ring-blue-500" />
+
+            <!-- New Name -->
+            <input type="text" name="Name" placeholder="New Name"
+                   class="w-full rounded-xl border px-4 py-3 focus:ring-2 focus:ring-blue-500" />
+
+            <!-- New Email -->
+            <input type="email" name="Email" placeholder="New Email"
+                   class="w-full rounded-xl border px-4 py-3 focus:ring-2 focus:ring-blue-500" />
+
+            <!-- New Password -->
+            <input type="password" name="Password" placeholder="New Password"
+                   class="w-full rounded-xl border px-4 py-3 focus:ring-2 focus:ring-blue-500" />
+
+            <button type="submit"
+                    class="w-full bg-yellow-500 text-white py-3 rounded-xl hover:bg-yellow-600 transition">
+                Update
+            </button>
+
+        </form>
+    </div>
+
+        <!-- ================= DELETE PROFESSOR ================= -->
+        <div class="bg-white rounded-3xl shadow-lg border border-outline-variant p-8">
+
+            <h2 class="text-2xl font-semibold text-center mb-6">Delete Professor</h2>
+
+            <form asp-controller="Admin" asp-action="DeleteProfessor" method="post" class="space-y-5">
+
+                <input type="number" name="Id" placeholder="Professor ID"
+                       class="w-full rounded-xl border px-4 py-3 focus:ring-2 focus:ring-red-500" />
+
+                <button type="submit"
+                        class="w-full bg-red-600 text-white py-3 rounded-xl hover:bg-red-700 transition">
+                    Delete
+                </button>
+
+            </form>
+        </div>
+
+    </div>
+
+</section>

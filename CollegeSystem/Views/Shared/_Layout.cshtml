@@ -1,49 +1,83 @@
-﻿<!DOCTYPE html>
+﻿@{
+    var Role = Context.Session.GetString("Role");
+}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - CollegeSystem</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/CollegeSystem.styles.css" asp-append-version="true" />
+    <title>@ViewData["Title"]</title>
+
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
 </head>
-<body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">CollegeSystem</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                </div>
+
+<body class="h-screen m-0">
+
+<div class="flex h-screen">
+
+    <!-- SIDEBAR -->
+    <aside class="w-64 bg-[#00174d] flex flex-col justify-between shrink-0">
+
+        <div class="p-6">
+
+            <h1 class="text-white font-bold text-xl uppercase">
+                College CMS
+            </h1>
+
+            <nav class="mt-6 space-y-1">
+
+                    @if (Role == "Super Admin")
+                    {
+                        <a asp-controller="Home" asp-action="Index"
+                           class="flex items-center px-4 py-3 text-white/80 hover:text-white hover:bg-white/10 rounded-lg">
+                            <span class="material-symbols-outlined mr-3">home</span>
+                            Home
+                        </a>
+
+                        <a asp-controller="SuperAdmin" asp-action="SuperAdminDashboard"
+                           class="flex items-center px-4 py-3 text-white/80 hover:text-white hover:bg-white/10 rounded-lg">
+                            <span class="material-symbols-outlined mr-3">shield</span>
+                            Super Admin Dashboard
+                        </a>
+                    }
+
+            </nav>
+
+        </div>
+
+        <div class="p-4 border-t border-white/10">
+            <p class="text-xs text-white/40 text-center">
+                © 2026 College CMS
+            </p>
+        </div>
+
+    </aside>
+
+    <!-- MAIN AREA -->
+    <div class="flex-1 flex flex-col">
+
+        <header class="h-16 flex items-center justify-between px-8 bg-white border-b">
+            <div class="text-lg font-semibold">
+                Welcome
             </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
+
+            <a asp-controller="Account" asp-action="Logout"
+               class="text-gray-600 hover:text-red-500 font-medium">
+                Log out
+            </a>
+        </header>
+
+        <main class="flex-1 overflow-y-auto p-8 bg-gray-50">
+                @RenderBody()
         </main>
+
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2026 - CollegeSystem - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+</div>
+
 </body>
 </html>
