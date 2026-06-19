@@ -1,1 +1,106 @@
-﻿<h1>this is manage courses page</h1>
+﻿@{
+    ViewData["Title"] = "Manage Courses";
+}
+
+<section class="min-h-full flex flex-col items-center justify-start bg-surface-container-low px-10 pt-10">
+
+    <!-- Title -->
+    <div class="text-center mb-10 -mt-2">
+        <h1 class="text-4xl font-bold text-on-surface">
+            Manage Courses
+        </h1>
+        <p class="text-sm text-on-surface-variant mt-2">
+            Add, Update and Delete Courses
+        </p>
+    </div>
+
+    <!-- Cards Container -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-6xl">
+
+        <!-- ================= ADD COURSE ================= -->
+        <div class="bg-white rounded-3xl shadow-lg border border-outline-variant p-8">
+
+            <h2 class="text-2xl font-semibold text-center mb-6">Add Course</h2>
+
+            <form asp-controller="Admin" asp-action="AddCourse" method="post" class="space-y-5">
+
+                <!-- Name -->
+                <input type="text" name="Name" placeholder="Course Name"
+                       class="w-full rounded-xl border px-4 py-3 focus:ring-2 focus:ring-blue-500" />
+
+                <!-- Duration -->
+                <input type="text" name="Duration" placeholder="Duration"
+                       class="w-full rounded-xl border px-4 py-3 focus:ring-2 focus:ring-blue-500" />
+
+                <!-- Description -->
+                <input type="text" name="Description" placeholder="Description"
+                       class="w-full rounded-xl border px-4 py-3 focus:ring-2 focus:ring-blue-500" />
+
+                <!-- Course Prerequisites -->
+                <input type="text" name="CoursePrerequisites" placeholder="Course Prerequisites"
+                       class="w-full rounded-xl border px-4 py-3 focus:ring-2 focus:ring-blue-500" />
+
+                <button type="submit"
+                        class="w-full bg-blue-600 text-white py-3 rounded-xl hover:bg-blue-700 transition">
+                    Add
+                </button>
+
+            </form>
+        </div>
+
+        <!-- ================= UPDATE COURSE ================= -->
+        <div class="bg-white rounded-3xl shadow-lg border border-outline-variant p-8">
+
+            <h2 class="text-2xl font-semibold text-center mb-6">Update Course</h2>
+
+            <form asp-controller="Admin" asp-action="UpdateCourse" method="post" class="space-y-5">
+
+                <!-- ID -->
+                <input type="number" name="Id" placeholder="Course ID"
+                       class="w-full rounded-xl border px-4 py-3 focus:ring-2 focus:ring-blue-500" />
+
+                <!-- New Name -->
+                <input type="text" name="Name" placeholder="New Name"
+                       class="w-full rounded-xl border px-4 py-3 focus:ring-2 focus:ring-blue-500" />
+
+                <!-- Duration -->
+                <input type="text" name="Duration" placeholder="Duration"
+                       class="w-full rounded-xl border px-4 py-3 focus:ring-2 focus:ring-blue-500" />
+
+                <!-- Description -->
+                <input type="text" name="Description" placeholder="Description"
+                       class="w-full rounded-xl border px-4 py-3 focus:ring-2 focus:ring-blue-500" />
+
+                <!-- Course Prerequisites -->
+                <input type="text" name="CoursePrerequisites" placeholder="Course Prerequisites"
+                       class="w-full rounded-xl border px-4 py-3 focus:ring-2 focus:ring-blue-500" />
+
+                <button type="submit"
+                        class="w-full bg-yellow-500 text-white py-3 rounded-xl hover:bg-yellow-600 transition">
+                    Update
+                </button>
+
+            </form>
+        </div>
+
+        <!-- ================= DELETE COURSE ================= -->
+        <div class="bg-white rounded-3xl shadow-lg border border-outline-variant p-8">
+
+            <h2 class="text-2xl font-semibold text-center mb-6">Delete Course</h2>
+
+            <form asp-controller="Admin" asp-action="DeleteCourse" method="post" class="space-y-5">
+
+                <input type="number" name="Id" placeholder="Course ID"
+                       class="w-full rounded-xl border px-4 py-3 focus:ring-2 focus:ring-red-500" />
+
+                <button type="submit"
+                        class="w-full bg-red-600 text-white py-3 rounded-xl hover:bg-red-700 transition">
+                    Delete
+                </button>
+
+            </form>
+        </div>
+
+    </div>
+
+</section>
