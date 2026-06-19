@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 
 namespace CollegeSystem.Controllers
 {
@@ -7,6 +7,26 @@ namespace CollegeSystem.Controllers
         public IActionResult Index()
         {
             return View();
+        }
+
+        public IActionResult MyCourses()
+        {
+            return View("MyCourses");
+        }
+
+        public IActionResult Students()
+        {
+            return View("Students");
+        }
+
+        public IActionResult Professors()
+        {
+            return View("Professors");
+        }
+
+        public IActionResult CollegeCourses()
+        {
+            return View("CollegeCourses");
         }
     }
 }

@@ -51,6 +51,21 @@ namespace CollegeSystem.Controllers
         public IActionResult ManageStudents()
         {
             return View("ManageStudents");
+
+        }
+        public IActionResult CollegeCourses()
+        {
+            return View("CollegeCourses");
+        }
+
+        public IActionResult AssignCourseToStudent()
+        {
+            return View("AssignCourseToStudent");
+        }
+
+        public IActionResult AssignCourseToProfessor()
+        {
+            return View("AssignCourseToProfessor");
         }
     }
 }
