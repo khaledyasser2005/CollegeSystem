@@ -132,35 +132,35 @@ namespace CollegeSystem.Controllers
 
         }
         [HttpPost]
-        public IActionResult UpdateStudent(int Id, string Name, string Email, string Password)
+        public IActionResult UpdateStudent(StudentViewModel model)
         {
-            var student = _context.Students.Find(Id);
+            var student = _context.Students.Find(model.ID);
 
             if (student == null)
             {
                 ModelState.AddModelError("", "Student not found!");
                 return View("ManageStudents");
             }
-            if (!String.IsNullOrEmpty(Name))
+            if (!String.IsNullOrEmpty(model.Name))
             {
-                student.Name = Name;
+                student.Name = model.Name;
             }
-            if (!String.IsNullOrEmpty(Email))
+            if (!String.IsNullOrEmpty(model.Email))
             {
-                student.Email = Email;
+                student.Email = model.Email;
             }
-            if (!String.IsNullOrEmpty(Password))
+            if (!String.IsNullOrEmpty(model.Password))
             {
                 var hasher = new PasswordHasher<Student>();
-                student.Password = hasher.HashPassword(student, Password);
+                student.Password = hasher.HashPassword(student, model.Password);
             }
             _context.SaveChanges();
             return RedirectToAction("ManageStudents");
         }
         [HttpPost]
-        public IActionResult DeleteStudent(int Id)
+        public IActionResult DeleteStudent(StudentViewModel model)
         {
-            var student = _context.Students.Find(Id);
+            var student = _context.Students.Find(model.ID);
 
             if (student == null)
             {
