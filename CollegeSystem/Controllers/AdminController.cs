@@ -1,5 +1,6 @@
 ﻿using CollegeSystem.Data;
 using CollegeSystem.Models;
+using CollegeSystem.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 namespace CollegeSystem.Controllers
@@ -20,7 +21,7 @@ namespace CollegeSystem.Controllers
             return View("ManageProfessors");
         }
         [HttpPost]
-        public IActionResult AddProfessor(Professor model)
+        public IActionResult AddProfessor(ProfessorViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -41,6 +42,34 @@ namespace CollegeSystem.Controllers
             professor.Password = hasher.HashPassword(professor,model.Password);
 
             _context.Professors.Add(professor);
+            _context.SaveChanges();
+            return RedirectToAction("AdminDashboard");
+        }
+        [HttpPost]
+        public IActionResult UpdateProfessor(ProfessorViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                ModelState.AddModelError("", "Invalid Email");
+                return View(model);
+            }
+            var professor = _context.Professors.Find(model.ID);
+
+            if(professor == null)
+            {
+                ModelState.AddModelError("", "Professor not found!");
+                return View(model);
+            }
+            if(!String.IsNullOrEmpty(model.Email)){ 
+                professor.Email=model.Email;
+            }
+            if (!String.IsNullOrEmpty(model.Name)){
+                professor.Name = model.Name;
+            }
+            if (!String.IsNullOrEmpty(model.Password)){
+                var hasher = new PasswordHasher<Professor>();
+                professor.Password = hasher.HashPassword(professor, model.Password);
+            }
             _context.SaveChanges();
             return RedirectToAction("AdminDashboard");
         }

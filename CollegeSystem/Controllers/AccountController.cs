@@ -47,7 +47,7 @@ namespace CollegeSystem.Controllers
                     {
                         HttpContext.Session.SetString("UserId", professor.ID.ToString());
                         HttpContext.Session.SetString("Role", "Professor");
-                        return RedirectToAction("Index", "Professor");
+                        return RedirectToAction("MyCourses", "Professor");
                     }
                 }
             }

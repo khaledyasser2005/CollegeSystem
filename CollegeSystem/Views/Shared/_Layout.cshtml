@@ -77,6 +77,38 @@
                             </a>
                     }
 
+                    else if(Role == "Professor")
+                    {
+                        <a asp-controller="Home" asp-action="Index"
+                            class="flex items-center px-4 py-3 text-white/80 hover:text-white hover:bg-white/10 rounded-lg">
+                            <span class="material-symbols-outlined mr-3">home</span>
+                            Home
+                        </a>
+
+                        <a asp-controller="Professor" asp-action="MyCourses"
+                            class="flex items-center px-4 py-3 text-white/80 hover:text-white hover:bg-white/10 rounded-lg">
+                            <span class="material-symbols-outlined mr-3">home</span>
+                            My Courses
+                        </a>
+
+                        <a asp-controller="Professor" asp-action="Students"
+                            class="flex items-center px-4 py-3 text-white/80 hover:text-white hover:bg-white/10 rounded-lg">
+                            <span class="material-symbols-outlined mr-3">home</span>
+                                Students
+                        </a>
+                        <a asp-controller="Professor" asp-action="Professors"
+                            class="flex items-center px-4 py-3 text-white/80 hover:text-white hover:bg-white/10 rounded-lg">
+                            <span class="material-symbols-outlined mr-3">home</span>
+                                Professors
+                        </a>
+                    
+                        <a asp-controller="Professor" asp-action="CollegeCourses"
+                            class="flex items-center px-4 py-3 text-white/80 hover:text-white hover:bg-white/10 rounded-lg">
+                            <span class="material-symbols-outlined mr-3">home</span>
+                                College Courses
+                        </a>
+                    }
+
             </nav>
 
         </div>

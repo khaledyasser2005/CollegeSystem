@@ -4,11 +4,6 @@ namespace CollegeSystem.Controllers
 {
     public class ProfessorController : Controller
     {
-        public IActionResult Index()
-        {
-            return View();
-        }
-
         public IActionResult MyCourses()
         {
             return View("MyCourses");
