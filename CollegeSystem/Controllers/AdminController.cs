@@ -3,6 +3,7 @@ using CollegeSystem.Models;
 using CollegeSystem.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+
 namespace CollegeSystem.Controllers
 {
     public class AdminController : Controller
@@ -72,7 +73,55 @@ namespace CollegeSystem.Controllers
             }
             _context.SaveChanges();
             return RedirectToAction("AdminDashboard");
+
         }
+        [HttpPost]
+        public IActionResult AddCourse(CourseViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                ModelState.AddModelError("", "Invalid Data!");
+                return View("ManageCourses");
+            }
+
+            Course course = new Course();
+
+            course.Name = model.Name;
+
+            _context.Courses.Add(course);
+            _context.SaveChanges();
+
+            return RedirectToAction("AdminDashboard");
+        }
+        [HttpPost]
+        public IActionResult UpdateCourse(CourseViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                ModelState.AddModelError("", "Invalid Data!");
+                return View(model);
+            }
+
+            var course = _context.Courses.Find(model.ID);
+
+            if (course == null)
+            {
+                ModelState.AddModelError("", "Course not found!");
+                return View(model);
+            }
+
+            if (!string.IsNullOrEmpty(model.Name))
+            {
+                course.Name = model.Name;
+            }
+
+            _context.SaveChanges();
+
+            return RedirectToAction("AdminDashboard");
+        }
+
+
+
         public IActionResult ManageCourses()
         {
             return View("ManageCourses");
