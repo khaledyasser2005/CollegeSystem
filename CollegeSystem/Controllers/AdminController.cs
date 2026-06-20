@@ -131,6 +131,46 @@ namespace CollegeSystem.Controllers
             return View("ManageStudents");
 
         }
+        [HttpPost]
+        public IActionResult UpdateStudent(int Id, string Name, string Email, string Password)
+        {
+            var student = _context.Students.Find(Id);
+
+            if (student == null)
+            {
+                ModelState.AddModelError("", "Student not found!");
+                return View("ManageStudents");
+            }
+            if (!String.IsNullOrEmpty(Name))
+            {
+                student.Name = Name;
+            }
+            if (!String.IsNullOrEmpty(Email))
+            {
+                student.Email = Email;
+            }
+            if (!String.IsNullOrEmpty(Password))
+            {
+                var hasher = new PasswordHasher<Student>();
+                student.Password = hasher.HashPassword(student, Password);
+            }
+            _context.SaveChanges();
+            return RedirectToAction("ManageStudents");
+        }
+        [HttpPost]
+        public IActionResult DeleteStudent(int Id)
+        {
+            var student = _context.Students.Find(Id);
+
+            if (student == null)
+            {
+                ModelState.AddModelError("", "Student not found!");
+                return View("ManageStudents");
+            }
+            _context.Students.Remove(student);
+            _context.SaveChanges();
+            return RedirectToAction("ManageStudents");
+        }
         public IActionResult CollegeCourses()
         {
             return View("CollegeCourses");
