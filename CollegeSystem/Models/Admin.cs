@@ -6,5 +6,8 @@
         public Department Department { get; set; }
         public ICollection<Report> Reports { get; set; }
         public ICollection<Notification> Notifications { get; set; }
+        public int ID { get; set; }
+
+
     }
 }
