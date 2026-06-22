@@ -24,16 +24,22 @@
 
             <form asp-controller="Admin" asp-action="AddStudent" method="post" class="space-y-5">
 
-                <!-- Name -->
                 <input type="text" name="Name" placeholder="Name"
                        class="w-full rounded-xl border px-4 py-3 focus:ring-2 focus:ring-blue-500" />
 
-                <!-- Email -->
                 <input type="email" name="Email" placeholder="Email"
                        class="w-full rounded-xl border px-4 py-3 focus:ring-2 focus:ring-blue-500" />
 
-                <!-- Password -->
                 <input type="password" name="Password" placeholder="Password"
+                       class="w-full rounded-xl border px-4 py-3 focus:ring-2 focus:ring-blue-500" />
+
+                <input type="text" name="Phone" placeholder="Phone"
+                       class="w-full rounded-xl border px-4 py-3 focus:ring-2 focus:ring-blue-500" />
+
+                <input type="number" name="Level" placeholder="Level"
+                       class="w-full rounded-xl border px-4 py-3 focus:ring-2 focus:ring-blue-500" />
+
+                <input type="number" name="DepartmentID" placeholder="Department ID"
                        class="w-full rounded-xl border px-4 py-3 focus:ring-2 focus:ring-blue-500" />
 
                 <button type="submit"
@@ -51,20 +57,25 @@
 
             <form asp-controller="Admin" asp-action="UpdateStudent" method="post" class="space-y-5">
 
-                <!-- ID -->
                 <input type="number" name="Id" placeholder="Student ID"
                        class="w-full rounded-xl border px-4 py-3 focus:ring-2 focus:ring-blue-500" />
 
-                <!-- New Name -->
                 <input type="text" name="Name" placeholder="New Name"
                        class="w-full rounded-xl border px-4 py-3 focus:ring-2 focus:ring-blue-500" />
 
-                <!-- New Email -->
                 <input type="email" name="Email" placeholder="New Email"
                        class="w-full rounded-xl border px-4 py-3 focus:ring-2 focus:ring-blue-500" />
 
-                <!-- New Password -->
                 <input type="password" name="Password" placeholder="New Password"
+                       class="w-full rounded-xl border px-4 py-3 focus:ring-2 focus:ring-blue-500" />
+
+                <input type="text" name="Phone" placeholder="New Phone"
+                       class="w-full rounded-xl border px-4 py-3 focus:ring-2 focus:ring-blue-500" />
+
+                <input type="number" name="Level" placeholder="New Level"
+                       class="w-full rounded-xl border px-4 py-3 focus:ring-2 focus:ring-blue-500" />
+
+                <input type="number" name="DepartmentID" placeholder="New Department ID"
                        class="w-full rounded-xl border px-4 py-3 focus:ring-2 focus:ring-blue-500" />
 
                 <button type="submit"

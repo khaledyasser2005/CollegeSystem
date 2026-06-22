@@ -2,8 +2,8 @@
 {
     public class Student : AppUser
     {
-        public string Phone { get; set; }
         public double GPA { get; set; }
+        public string Phone { get; set; }
         public int Level { get; set; }
         public int DepartmentID { get; set; }
         public int CompletedHours { get; set; }

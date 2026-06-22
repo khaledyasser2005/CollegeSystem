@@ -4,6 +4,7 @@ using CollegeSystem.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CollegeSystem.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260621230650_MakeCourseFieldsNullableV2")]
+    partial class MakeCourseFieldsNullableV2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -128,6 +131,9 @@ namespace CollegeSystem.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
+                    b.Property<int>("AdminID")
+                        .HasColumnType("int");
+
                     b.Property<double>("GPARequired")
                         .HasColumnType("float");
 
@@ -136,6 +142,9 @@ namespace CollegeSystem.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ID");
+
+                    b.HasIndex("AdminID")
+                        .IsUnique();
 
                     b.ToTable("Departments");
                 });
@@ -442,6 +451,17 @@ namespace CollegeSystem.Migrations
                     b.Navigation("Professor");
                 });
 
+            modelBuilder.Entity("CollegeSystem.Models.Department", b =>
+                {
+                    b.HasOne("CollegeSystem.Models.Admin", "Admin")
+                        .WithOne("Department")
+                        .HasForeignKey("CollegeSystem.Models.Department", "AdminID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Admin");
+                });
+
             modelBuilder.Entity("CollegeSystem.Models.Enrollment", b =>
                 {
                     b.HasOne("CollegeSystem.Models.Course", "Course")
@@ -518,6 +538,9 @@ namespace CollegeSystem.Migrations
 
             modelBuilder.Entity("CollegeSystem.Models.Admin", b =>
                 {
+                    b.Navigation("Department")
+                        .IsRequired();
+
                     b.Navigation("Notifications");
 
                     b.Navigation("Reports");

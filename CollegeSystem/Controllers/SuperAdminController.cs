@@ -24,20 +24,21 @@ namespace CollegeSystem.Controllers
             return View("SuperAdminDashboard");
         }
 
+        // ================= ADD ADMIN =================
         [HttpPost]
-        public IActionResult AddAdmin(AdminModel model)
+        public IActionResult AddAdmin(AddAdminModel model)
         {
-            if(!ModelState.IsValid) 
+            if(!ModelState.IsValid)
             {
-                ModelState.AddModelError("", "Invalid Email");
-                return View(model);
+                ModelState.AddModelError("", "Invalid Data");
+                return View("SuperAdminDashboard", model);
             }
 
             var _exists = _context.Admins.Any(x=> x.Email == model.Email);
             if(_exists)
             {
                 ModelState.AddModelError("", "Email Already Exists!");
-                return View(model);
+                return View("SuperAdminDashboard", model);
             }
 
             Admin admin = new Admin();
@@ -54,10 +55,9 @@ namespace CollegeSystem.Controllers
 
         // ================= UPDATE ADMIN =================
         [HttpPost]
-        [Authorize(Roles = "Super Admin")]
-        public IActionResult UpdateAdmin(int id, AdminModel model)
+        public IActionResult UpdateAdmin(UpdateAdminModel model)
         {
-            var admin = _context.Admins.FirstOrDefault(x => x.ID == id);
+            var admin = _context.Admins.FirstOrDefault(x => x.ID == model.ID);
 
             if (admin == null)
                 return NotFound();
@@ -78,10 +78,9 @@ namespace CollegeSystem.Controllers
 
         // ================= DELETE ADMIN =================
         [HttpPost]
-        [Authorize(Roles = "Super Admin")]
-        public IActionResult DeleteAdmin(int id)
+        public IActionResult DeleteAdmin(DeleteAdminModel model)
         {
-            var admin = _context.Admins.FirstOrDefault(x => x.ID == id);
+            var admin = _context.Admins.FirstOrDefault(x => x.ID == model.ID);
 
             if (admin == null)
                 return NotFound();

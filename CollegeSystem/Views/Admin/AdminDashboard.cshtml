@@ -10,12 +10,12 @@
             Admin Dashboard
         </h1>
         <p class="text-sm text-on-surface-variant mt-2">
-            Manage Students, Courses and Professors
+            Manage Students, Courses, Professors and Departments
         </p>
     </div>
 
     <!-- Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-5xl">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 w-full max-w-6xl">
 
         <!-- Courses -->
         <a asp-controller="Admin" asp-action="ManageCourses"
@@ -64,7 +64,24 @@
             </h2>
 
             <p class="text-gray-500 text-sm">
-                Add, edit and manage pforessors
+                Add, edit and manage professors
+            </p>
+        </a>
+
+        <!-- ================= DEPARTMENT ================= -->
+        <a asp-controller="Admin" asp-action="ManageDepartments"
+           class="bg-white rounded-2xl shadow-md hover:shadow-xl transition p-8 border border-gray-200 flex flex-col items-center text-center">
+
+            <span class="material-symbols-outlined text-5xl text-orange-600 mb-4">
+                account_tree
+            </span>
+
+            <h2 class="text-2xl font-semibold mb-2">
+                Departments
+            </h2>
+
+            <p class="text-gray-500 text-sm">
+                Add, update and delete departments
             </p>
         </a>
 
