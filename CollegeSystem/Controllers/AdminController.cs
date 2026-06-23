@@ -298,7 +298,85 @@ namespace CollegeSystem.Controllers
             return View("ManageDepartments");
         }
 
-        //Your Code here for Add,Update,Delete Department..
+        /*
+         * Title: DEPI Graduation Project - Task 3
+         * Author: Ziad
+         * Role: Admin Dashboard -> Department Card -> Add Department, Update Department
+         * Date: 22-06-2026
+         * DeadLine: 23-06-2026 At 8:00 PM
+        */
+
+        [HttpPost]
+        public IActionResult AddDepartment(AddDepartmentViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                ModelState.AddModelError("", "Invalid Data");
+                return View("ManageDepartments", model);
+            }
+
+            var departmentName = model.Name.Trim();
+            var exists = _context.Departments.Any(d => d.Name == departmentName);
+
+            if (exists)
+            {
+                ModelState.AddModelError("", "Department already exists!");
+                return View("ManageDepartments", model);
+            }
+
+            var department = new Department
+            {
+                Name = departmentName,
+                GPARequired = model.GPARequired
+            };
+
+            _context.Departments.Add(department);
+            _context.SaveChanges();
+
+            return RedirectToAction("ManageDepartments");
+        }
+
+        [HttpPost]
+        public IActionResult UpdateDepartment(UpdateDepartmentViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                ModelState.AddModelError("", "Invalid Data");
+                return View("ManageDepartments", model);
+            }
+
+            var department = _context.Departments.Find(model.ID);
+
+            if (department == null)
+            {
+                ModelState.AddModelError("", "Department not found!");
+                return View("ManageDepartments", model);
+            }
+
+            if (!string.IsNullOrWhiteSpace(model.Name))
+            {
+                var departmentName = model.Name.Trim();
+                var exists = _context.Departments.Any(d => d.ID != model.ID && d.Name == departmentName);
+
+                if (exists)
+                {
+                    ModelState.AddModelError("", "Department already exists!");
+                    return View("ManageDepartments", model);
+                }
+
+                department.Name = departmentName;
+            }
+
+            if (model.GPARequired.HasValue)
+            {
+                department.GPARequired = model.GPARequired.Value;
+            }
+
+            _context.SaveChanges();
+
+            return RedirectToAction("ManageDepartments");
+        }
+
         [HttpPost]
         public IActionResult DeleteDepartment(int Id)
         {
