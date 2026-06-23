@@ -299,6 +299,21 @@ namespace CollegeSystem.Controllers
         }
 
         //Your Code here for Add,Update,Delete Department..
+        [HttpPost]
+        public IActionResult DeleteDepartment(int Id)
+        {
+            var department = _context.Departments.Find(Id);
 
+            if (department == null)
+            {
+                ModelState.AddModelError("", "Department Not Found");
+                return View("ManageDepartments");
+            }
+
+            _context.Departments.Remove(department);
+            _context.SaveChanges();
+
+            return RedirectToAction("ManageDepartments");
+        }
     }
 }
