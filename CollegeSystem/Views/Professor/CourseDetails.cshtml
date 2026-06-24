@@ -1,0 +1,37 @@
+﻿@model CollegeSystem.Models.Course
+
+<style>
+    .details-box {
+        width: 60%;
+        margin: 50px auto;
+        background: white;
+        padding: 25px;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        border-top: 6px solid #1f4aa8;
+    }
+
+    h2 {
+        color: #1f4aa8;
+        text-align: center;
+    }
+
+    .info {
+        margin: 10px 0;
+        font-size: 16px;
+    }
+
+    .label {
+        font-weight: bold;
+        color: #1f4aa8;
+    }
+</style>
+
+<div class="details-box">
+    <h2>@Model.Name</h2>
+
+    <div class="info"><span class="label">Description:</span> @Model.Description</div>
+    <div class="info"><span class="label">Duration:</span> @Model.Duration</div>
+    <div class="info"><span class="label">Semesters:</span> @Model.Semesters</div>
+    <div class="info"><span class="label">Prerequisites:</span> @Model.CoursePrerequisites</div>
+</div>
