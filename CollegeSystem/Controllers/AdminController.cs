@@ -312,33 +312,7 @@ namespace CollegeSystem.Controllers
             return View("CollegeCourses");
         }
 
-        // ================= ⭐ NEW FEATURE =================
-        public IActionResult AssignCourseToProfessor()
-        {
-            ViewBag.Professors = _context.Professors.ToList();
-            ViewBag.Courses = _context.Courses.ToList();
-
-            return View("AssignCourseToProfessor");
-        }
-
-        [HttpPost]
-        public IActionResult AssignCourseToProfessor(int professorId, int courseId)
-        {
-            var course = _context.Courses.FirstOrDefault(c => c.ID == courseId);
-
-            if (course == null)
-            {
-                ModelState.AddModelError("", "Course not found!");
-                return RedirectToAction("AssignCourseToProfessor");
-            }
-
-            course.ProfessorID = professorId;
-
-            _context.SaveChanges();
-
-            return RedirectToAction("AssignCourseToProfessor");
-        }
-
+       
         public IActionResult ManageDepartments()
         {
             return View("ManageDepartments");
