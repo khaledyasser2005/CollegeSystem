@@ -11,7 +11,16 @@ namespace CollegeSystem.Controllers
         {
             var context = HttpContext.RequestServices.GetService<AppDbContext>();
 
-            var courses = context.Courses.ToList();
+            var professorId = HttpContext.Session.GetString("UserId");
+
+            if (string.IsNullOrEmpty(professorId))
+                return RedirectToAction("Login", "Account");
+
+            int id = int.Parse(professorId);
+
+            var courses = context.Courses
+                .Where(c => c.ProfessorID == id)
+                .ToList();
 
             return View(courses);
         }
