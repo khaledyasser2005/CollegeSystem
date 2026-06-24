@@ -11,14 +11,7 @@ namespace CollegeSystem.Controllers
         {
             var context = HttpContext.RequestServices.GetService<AppDbContext>();
 
-            var professor = context.Professors.FirstOrDefault();
-
-            if (professor == null)
-                return NotFound();
-
-            var courses = context.Courses
-                .Where(c => c.ProfessorID == professor.ID)
-                .ToList();
+            var courses = context.Courses.ToList();
 
             return View(courses);
         }
