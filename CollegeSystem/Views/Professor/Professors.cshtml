@@ -1,10 +1,11 @@
+@model IEnumerable<CollegeSystem.Models.Professor>
+
 @{
     ViewData["Title"] = "Professors";
 }
 
 <section class="p-10 bg-surface-container-low min-h-screen">
 
-    <!-- Title -->
     <div class="text-center mb-10">
         <h1 class="text-4xl font-bold text-on-surface">
             Professors
@@ -15,7 +16,6 @@
         </p>
     </div>
 
-    <!-- Professors Card -->
     <div class="bg-white rounded-2xl shadow-md border border-gray-200 overflow-hidden max-w-5xl mx-auto">
 
         <div class="p-6 border-b border-gray-200 flex items-center gap-3">
@@ -31,32 +31,24 @@
         <table class="w-full">
             <thead class="bg-gray-50">
                 <tr>
-                    <th class="px-6 py-4 text-left">ID</th>
                     <th class="px-6 py-4 text-left">Name</th>
                     <th class="px-6 py-4 text-left">Email</th>
                 </tr>
             </thead>
 
             <tbody>
+                @foreach (var professor in Model)
+                {
+                    <tr class="border-t hover:bg-gray-50">
+                        <td class="px-6 py-4">
+                            @professor.Name
+                        </td>
 
-                <tr class="border-t hover:bg-gray-50">
-                    <td class="px-6 py-4">1</td>
-                    <td class="px-6 py-4">Ahmed Mohamed</td>
-                    <td class="px-6 py-4">ahmed@college.com</td>
-                </tr>
-
-                <tr class="border-t hover:bg-gray-50">
-                    <td class="px-6 py-4">2</td>
-                    <td class="px-6 py-4">Ali Hassan</td>
-                    <td class="px-6 py-4">ali@college.com</td>
-                </tr>
-
-                <tr class="border-t hover:bg-gray-50">
-                    <td class="px-6 py-4">3</td>
-                    <td class="px-6 py-4">Sara Mahmoud</td>
-                    <td class="px-6 py-4">sara@college.com</td>
-                </tr>
-
+                        <td class="px-6 py-4">
+                            @professor.Email
+                        </td>
+                    </tr>
+                }
             </tbody>
         </table>
 

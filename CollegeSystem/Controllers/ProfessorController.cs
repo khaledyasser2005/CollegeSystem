@@ -40,7 +40,11 @@ namespace CollegeSystem.Controllers
 
         public IActionResult Professors()
         {
-            return View("Professors");
+            var context = HttpContext.RequestServices.GetService<AppDbContext>();
+
+            var professors = context.Professors.ToList();
+
+            return View("Professors", professors);
         }
 
         public IActionResult CollegeCourses()
