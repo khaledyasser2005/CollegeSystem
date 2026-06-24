@@ -61,9 +61,10 @@ namespace CollegeSystem.Controllers
 
             if (admin == null)
                 return NotFound();
-
-            admin.Name = model.Name;
-            admin.Email = model.Email;
+            if (!string.IsNullOrEmpty(model.Name))
+                admin.Name = model.Name;
+            if (!string.IsNullOrEmpty(model.Email))
+                admin.Email = model.Email;
 
             if (!string.IsNullOrEmpty(model.Password))
             {
