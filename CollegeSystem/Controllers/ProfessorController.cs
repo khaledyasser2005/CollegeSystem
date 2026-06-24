@@ -11,13 +11,15 @@ namespace CollegeSystem.Controllers
         {
             var context = HttpContext.RequestServices.GetService<AppDbContext>();
 
-            var professor = context.Professors.FirstOrDefault();
+            var professorId = HttpContext.Session.GetString("UserId");
 
-            if (professor == null)
-                return NotFound();
+            if (string.IsNullOrEmpty(professorId))
+                return RedirectToAction("Login", "Account");
+
+            int id = int.Parse(professorId);
 
             var courses = context.Courses
-                .Where(c => c.ProfessorID == professor.ID)
+                .Where(c => c.ProfessorID == id)
                 .ToList();
 
             return View(courses);
