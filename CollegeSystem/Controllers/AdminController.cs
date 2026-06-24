@@ -317,5 +317,86 @@ namespace CollegeSystem.Controllers
         {
             return View("ManageDepartments");
         }
+
+        //Add Department
+        [HttpPost]
+        public IActionResult AddDepartment(AddDepartmentViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                ModelState.AddModelError("", "Invalid Data");
+                return View("ManageDepartments", model);
+            }
+            var _exists = _context.Departments.Any(s => s.Name == model.Name);
+            if (_exists)
+            {
+                ModelState.AddModelError("", "Department Already Exists!");
+                return View("ManageDepartments", model);
+            }
+            Department department = new Department();
+            if (!String.IsNullOrEmpty(model.Name))
+            {
+                department.Name = model.Name;
+            }
+            if(model.GPARequired > 0.00)
+            {
+                department.GPARequired = model.GPARequired;
+            }
+            _context.Departments.Add(department);
+            _context.SaveChanges();
+            return RedirectToAction("ManageDepartments");
+        }
+
+        //Update Department
+        [HttpPost]
+        public IActionResult UpdateDepartment(UpdateDepartmentViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                ModelState.AddModelError("", "Invalid Data");
+                return View("ManageDepartments", model);
+            }
+
+            var department = _context.Departments.Find(model.ID);
+
+            if (department == null)
+            {
+                ModelState.AddModelError("", "Department not found!");
+                return View("ManageDepartments", model);
+            }
+
+            if (!String.IsNullOrEmpty(model.Name))
+                department.Name = model.Name;
+
+            if (model.GPARequired.HasValue)
+                department.GPARequired = model.GPARequired.Value;
+
+            _context.SaveChanges();
+            return RedirectToAction("ManageDepartments");
+        }
+
+        //Delete Department
+        [HttpPost]
+        public IActionResult DeleteDepartment(DeleteDepartmentViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                ModelState.AddModelError("", "Invalid Data");
+                return View("ManageDepartments", model);
+            }
+
+            var department = _context.Departments.Find(model.ID);
+
+            if (department == null)
+            {
+                ModelState.AddModelError("", "Department not found!");
+                return View("ManageDepartments", model);
+            }
+
+            _context.Departments.Remove(department);
+            _context.SaveChanges();
+
+            return RedirectToAction("ManageDepartments");
+        }
     }
 }
