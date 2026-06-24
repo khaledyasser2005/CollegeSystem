@@ -1,4 +1,7 @@
+using CollegeSystem.Data;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace CollegeSystem.Controllers
 {
@@ -6,9 +9,30 @@ namespace CollegeSystem.Controllers
     {
         public IActionResult MyCourses()
         {
-            return View("MyCourses");
-        }
+            var context = HttpContext.RequestServices.GetService<AppDbContext>();
 
+            var professor = context.Professors.FirstOrDefault();
+
+            if (professor == null)
+                return NotFound();
+
+            var courses = context.Courses
+                .Where(c => c.ProfessorID == professor.ID)
+                .ToList();
+
+            return View(courses);
+        }
+        public IActionResult CourseDetails(int id)
+        {
+            var context = HttpContext.RequestServices.GetService<AppDbContext>();
+
+            var course = context.Courses.FirstOrDefault(c => c.ID == id);
+
+            if (course == null)
+                return NotFound();
+
+            return View(course);
+        }
         public IActionResult Students()
         {
             return View("Students");

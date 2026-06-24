@@ -3,6 +3,7 @@ using CollegeSystem.Models;
 using CollegeSystem.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
 namespace CollegeSystem.Controllers
@@ -10,18 +11,22 @@ namespace CollegeSystem.Controllers
     public class AdminController : Controller
     {
         private readonly AppDbContext _context;
+
         public AdminController(AppDbContext context)
         {
             _context = context;
         }
+
         public IActionResult AdminDashboard()
         {
             return View("AdminDashboard");
         }
+
         public IActionResult ManageProfessors()
         {
             return View("ManageProfessors");
         }
+
         // ================= ADD PROFESSOR =================
         [HttpPost]
         public IActionResult AddProfessor(AddProfessorViewModel model)
@@ -31,23 +36,27 @@ namespace CollegeSystem.Controllers
                 ModelState.AddModelError("", "Invalid Data");
                 return View("ManageProfessors", model);
             }
+
             var _exists = _context.Professors.Any(p => p.Email == model.Email);
-            if(_exists)
+            if (_exists)
             {
                 ModelState.AddModelError("", "Email Already Exists!");
                 return View("ManageProfessors", model);
             }
+
             Professor professor = new Professor();
             professor.Email = model.Email;
             professor.Name = model.Name;
 
             var hasher = new PasswordHasher<Professor>();
-            professor.Password = hasher.HashPassword(professor,model.Password);
+            professor.Password = hasher.HashPassword(professor, model.Password);
 
             _context.Professors.Add(professor);
             _context.SaveChanges();
+
             return RedirectToAction("AdminDashboard");
         }
+
         // ================= UPDATE PROFESSOR =================
         [HttpPost]
         public IActionResult UpdateProfessor(UpdateProfessorViewModel model)
@@ -55,31 +64,34 @@ namespace CollegeSystem.Controllers
             if (!ModelState.IsValid)
             {
                 ModelState.AddModelError("", "Invalid Data");
-                return View("ManageProfessors",model);
+                return View("ManageProfessors", model);
             }
+
             var professor = _context.Professors.Find(model.ID);
 
-            if(professor == null)
+            if (professor == null)
             {
                 ModelState.AddModelError("", "Professor not found!");
-                return View("ManageProfessors",model);
+                return View("ManageProfessors", model);
             }
-            if(!String.IsNullOrEmpty(model.Email)){ 
-                professor.Email=model.Email;
-            }
-            if (!String.IsNullOrEmpty(model.Name)){
+
+            if (!String.IsNullOrEmpty(model.Email))
+                professor.Email = model.Email;
+
+            if (!String.IsNullOrEmpty(model.Name))
                 professor.Name = model.Name;
-            }
-            if (!String.IsNullOrEmpty(model.Password)){
+
+            if (!String.IsNullOrEmpty(model.Password))
+            {
                 var hasher = new PasswordHasher<Professor>();
                 professor.Password = hasher.HashPassword(professor, model.Password);
             }
+
             _context.SaveChanges();
             return RedirectToAction("AdminDashboard");
         }
 
-
-                                //Delete Professor
+        // ================= DELETE PROFESSOR =================
         [HttpPost]
         public IActionResult DeleteProfessor(DeleteProfessorViewModel model)
         {
@@ -96,31 +108,37 @@ namespace CollegeSystem.Controllers
                 ModelState.AddModelError("", "professor not found!");
                 return View("ManageProfessors", model);
             }
+
             _context.Professors.Remove(professor);
             _context.SaveChanges();
+
             return RedirectToAction("ManageProfessors");
         }
+
+        // ================= ADD COURSE =================
         [HttpPost]
         public IActionResult AddCourse(AddCourseViewModel model)
         {
-            
             if (!ModelState.IsValid)
             {
                 ModelState.AddModelError("", "Invalid Data!");
                 return View("ManageCourses", model);
             }
-            
+
             Course course = new Course();
             course.Name = model.Name;
             course.Description = model.Description;
             course.CoursePrerequisites = model.CoursePrerequisites;
             course.Duration = model.Duration;
-            course.ProfessorID = model.ProfessorID; 
-            
+            course.ProfessorID = model.ProfessorID;
+
             _context.Courses.Add(course);
             _context.SaveChanges();
+
             return RedirectToAction("ManageCourses");
         }
+
+        // ================= UPDATE COURSE =================
         [HttpPost]
         public IActionResult UpdateCourse(UpdateCourseViewModel model)
         {
@@ -137,32 +155,28 @@ namespace CollegeSystem.Controllers
                 ModelState.AddModelError("", "Course not found!");
                 return View("AdminDashboard");
             }
-            if (!string.IsNullOrEmpty(model.Name)){
+
+            if (!string.IsNullOrEmpty(model.Name))
                 course.Name = model.Name;
-            }
+
             if (!string.IsNullOrEmpty(model.Description))
-            {
                 course.Description = model.Description;
-            }
+
             if (!string.IsNullOrEmpty(model.CoursePrerequisites))
-            {
                 course.CoursePrerequisites = model.CoursePrerequisites;
-            }
-            if(model.Duration.HasValue && model.Duration > 0)
-            {
+
+            if (model.Duration.HasValue && model.Duration > 0)
                 course.Duration = model.Duration.Value;
-            }
+
             if (model.ProfessorID.HasValue && model.ProfessorID > 0)
-            {
                 course.ProfessorID = model.ProfessorID.Value;
-            }
 
             _context.SaveChanges();
 
             return RedirectToAction("ManageCourses");
         }
 
-        //Delete Course
+        // ================= DELETE COURSE =================
         [HttpPost]
         public IActionResult DeleteCourse(DeleteCourseViewModel model)
         {
@@ -171,6 +185,7 @@ namespace CollegeSystem.Controllers
                 ModelState.AddModelError("", "Invalid Data");
                 return View("ManageCourses", model);
             }
+
             var course = _context.Courses.Find(model.ID);
 
             if (course == null)
@@ -178,8 +193,10 @@ namespace CollegeSystem.Controllers
                 ModelState.AddModelError("", "Course not found!");
                 return View("ManageCourses", model);
             }
+
             _context.Courses.Remove(course);
             _context.SaveChanges();
+
             return RedirectToAction("ManageCourses");
         }
 
@@ -187,11 +204,12 @@ namespace CollegeSystem.Controllers
         {
             return View("ManageCourses");
         }
+
         public IActionResult ManageStudents()
         {
             return View("ManageStudents");
-
         }
+
         // ================= ADD STUDENT =================
         [HttpPost]
         public IActionResult AddStudent(StudentViewModel model)
@@ -201,16 +219,18 @@ namespace CollegeSystem.Controllers
                 ModelState.AddModelError("", "Invalid Email");
                 return View("ManageStudents");
             }
+
             var _exists = _context.Students.Any(s => s.Email == model.Email);
             if (_exists)
             {
                 ModelState.AddModelError("", "Email Already Exists!");
                 return View("ManageStudents");
             }
+
             Student student = new Student();
             student.Email = model.Email;
             student.Name = model.Name;
-            student.Level= model.Level;
+            student.Level = model.Level;
             student.Phone = model.Phone;
             student.DepartmentID = model.DepartmentID;
 
@@ -219,8 +239,11 @@ namespace CollegeSystem.Controllers
 
             _context.Students.Add(student);
             _context.SaveChanges();
+
             return RedirectToAction("AdminDashboard");
         }
+
+        // ================= UPDATE STUDENT =================
         [HttpPost]
         public IActionResult UpdateStudent(StudentViewModel model)
         {
@@ -237,28 +260,30 @@ namespace CollegeSystem.Controllers
                 ModelState.AddModelError("", "Student not found!");
                 return View("ManageStudents");
             }
+
             if (!String.IsNullOrEmpty(model.Name))
-            {
                 student.Name = model.Name;
-            }
+
             if (!String.IsNullOrEmpty(model.Email))
-            {
                 student.Email = model.Email;
-            }
+
             if (!String.IsNullOrEmpty(model.Phone))
-            {
                 student.Phone = model.Phone;
-            }
+
             student.DepartmentID = model.DepartmentID;
             student.Level = model.Level;
+
             if (!String.IsNullOrEmpty(model.Password))
             {
                 var hasher = new PasswordHasher<Student>();
                 student.Password = hasher.HashPassword(student, model.Password);
             }
+
             _context.SaveChanges();
             return RedirectToAction("ManageStudents");
         }
+
+        // ================= DELETE STUDENT =================
         [HttpPost]
         public IActionResult DeleteStudent(StudentViewModel model)
         {
@@ -275,123 +300,48 @@ namespace CollegeSystem.Controllers
                 ModelState.AddModelError("", "Student not found!");
                 return View("ManageStudents");
             }
+
             _context.Students.Remove(student);
             _context.SaveChanges();
+
             return RedirectToAction("ManageStudents");
         }
+
         public IActionResult CollegeCourses()
         {
             return View("CollegeCourses");
         }
 
-        public IActionResult AssignCourseToStudent()
-        {
-            return View("AssignCourseToStudent");
-        }
-
+        // ================= ⭐ NEW FEATURE =================
         public IActionResult AssignCourseToProfessor()
         {
+            ViewBag.Professors = _context.Professors.ToList();
+            ViewBag.Courses = _context.Courses.ToList();
+
             return View("AssignCourseToProfessor");
         }
+
+        [HttpPost]
+        public IActionResult AssignCourseToProfessor(int professorId, int courseId)
+        {
+            var course = _context.Courses.FirstOrDefault(c => c.ID == courseId);
+
+            if (course == null)
+            {
+                ModelState.AddModelError("", "Course not found!");
+                return RedirectToAction("AssignCourseToProfessor");
+            }
+
+            course.ProfessorID = professorId;
+
+            _context.SaveChanges();
+
+            return RedirectToAction("AssignCourseToProfessor");
+        }
+
         public IActionResult ManageDepartments()
         {
             return View("ManageDepartments");
-        }
-
-        /*
-         * Title: DEPI Graduation Project - Task 3
-         * Author: Ziad
-         * Role: Admin Dashboard -> Department Card -> Add Department, Update Department
-         * Date: 22-06-2026
-         * DeadLine: 23-06-2026 At 8:00 PM
-        */
-
-        [HttpPost]
-        public IActionResult AddDepartment(AddDepartmentViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                ModelState.AddModelError("", "Invalid Data");
-                return View("ManageDepartments", model);
-            }
-
-            var departmentName = model.Name.Trim();
-            var exists = _context.Departments.Any(d => d.Name == departmentName);
-
-            if (exists)
-            {
-                ModelState.AddModelError("", "Department already exists!");
-                return View("ManageDepartments", model);
-            }
-
-            var department = new Department
-            {
-                Name = departmentName,
-                GPARequired = model.GPARequired
-            };
-
-            _context.Departments.Add(department);
-            _context.SaveChanges();
-
-            return RedirectToAction("ManageDepartments");
-        }
-
-        [HttpPost]
-        public IActionResult UpdateDepartment(UpdateDepartmentViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                ModelState.AddModelError("", "Invalid Data");
-                return View("ManageDepartments", model);
-            }
-
-            var department = _context.Departments.Find(model.ID);
-
-            if (department == null)
-            {
-                ModelState.AddModelError("", "Department not found!");
-                return View("ManageDepartments", model);
-            }
-
-            if (!string.IsNullOrWhiteSpace(model.Name))
-            {
-                var departmentName = model.Name.Trim();
-                var exists = _context.Departments.Any(d => d.ID != model.ID && d.Name == departmentName);
-
-                if (exists)
-                {
-                    ModelState.AddModelError("", "Department already exists!");
-                    return View("ManageDepartments", model);
-                }
-
-                department.Name = departmentName;
-            }
-
-            if (model.GPARequired.HasValue)
-            {
-                department.GPARequired = model.GPARequired.Value;
-            }
-
-            _context.SaveChanges();
-
-            return RedirectToAction("ManageDepartments");
-        }
-
-        [HttpPost]
-        public IActionResult DeleteDepartment(int Id)
-        {
-            var department = _context.Departments.Find(Id);
-
-            if (department == null)
-            {
-                ModelState.AddModelError("", "Department Not Found");
-                return View("ManageDepartments");
-            }
-
-            _context.Departments.Remove(department);
-            _context.SaveChanges();
-
-            return RedirectToAction("ManageDepartments");
         }
     }
 }

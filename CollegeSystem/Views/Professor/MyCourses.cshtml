@@ -1,1 +1,99 @@
-<h1>this is my courses page</h1>
+@model IEnumerable<CollegeSystem.Models.Course>
+
+<style>
+    body {
+        background-color: #f4f8ff;
+    }
+
+    .page-title {
+        text-align: center;
+        margin: 20px 0;
+        color: #1f4aa8;
+        font-weight: bold;
+    }
+
+    .courses-container {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 20px;
+        padding: 20px;
+    }
+
+    .course-card {
+        width: 260px;
+        background: white;
+        border-radius: 12px;
+        padding: 15px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        cursor: pointer;
+        transition: 0.3s;
+        border-left: 5px solid #1f4aa8;
+    }
+
+        .course-card:hover {
+            transform: translateY(-5px);
+            background-color: #eaf2ff;
+        }
+
+    .course-title {
+        color: #1f4aa8;
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    .course-desc {
+        color: #555;
+        font-size: 14px;
+        margin-top: 5px;
+    }
+
+    .course-duration {
+        margin-top: 10px;
+        font-size: 13px;
+        color: #333;
+        font-weight: bold;
+    }
+
+    /* لما يتداس عليه */
+    .course-card.active {
+        background-color: #1f4aa8;
+        color: white;
+    }
+
+        .course-card.active .course-title,
+        .course-card.active .course-desc,
+        .course-card.active .course-duration {
+            color: white;
+        }
+</style>
+
+<h2 class="page-title">My Courses</h2>
+
+<div class="courses-container">
+
+    @foreach (var item in Model)
+    {
+        <div class="course-card" onclick="showDetails(@item.ID, this)">
+            <div class="course-title">@item.Name</div>
+            <div class="course-desc">@item.Description</div>
+            <div class="course-duration">Duration: @item.Duration</div>
+        </div>
+    }
+
+</div>
+
+<script>
+    function showDetails(id, element) {
+
+        // remove active from all
+        document.querySelectorAll('.course-card')
+            .forEach(c => c.classList.remove('active'));
+
+        // add active to clicked
+        element.classList.add('active');
+
+        // redirect to details page
+        window.location.href = '/Professor/CourseDetails?id=' + id;
+    }
+</script>
