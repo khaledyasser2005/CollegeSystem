@@ -104,6 +104,32 @@
                                 College Courses
                         </a>
                     }
+                    else if (Role == "Student")
+                    {
+                        <a asp-controller="Home" asp-action="Index"
+                            class="flex items-center px-4 py-3 text-white/80 hover:text-white hover:bg-white/10 rounded-lg">
+                            <span class="material-symbols-outlined mr-3">home</span>
+                            Home
+                        </a>
+
+                        <a asp-controller="Student" asp-action="MyCourses"
+                            class="flex items-center px-4 py-3 text-white/80 hover:text-white hover:bg-white/10 rounded-lg">
+                            <span class="material-symbols-outlined mr-3">home</span>
+                            My Courses
+                        </a>
+
+                        <a asp-controller="Student" asp-action="Professors"
+                            class="flex items-center px-4 py-3 text-white/80 hover:text-white hover:bg-white/10 rounded-lg">
+                            <span class="material-symbols-outlined mr-3">school</span>
+                            Professors
+                        </a>
+
+                        <a asp-controller="Student" asp-action="CollegeCourses"
+                            class="flex items-center px-4 py-3 text-white/80 hover:text-white hover:bg-white/10 rounded-lg">
+                            <span class="material-symbols-outlined mr-3">menu_book</span>
+                            College Courses
+                        </a>
+                    }
 
             </nav>
 

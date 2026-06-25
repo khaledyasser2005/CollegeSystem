@@ -1,1 +1,72 @@
-﻿<h1>this is professors page</h1>
+@model IEnumerable<CollegeSystem.Models.Professor>
+
+@{
+    ViewData["Title"] = "Professors";
+}
+
+<section class="p-10 bg-surface-container-low min-h-screen">
+
+    <div class="text-center mb-10">
+        <h1 class="text-4xl font-bold text-on-surface">
+            Professors
+        </h1>
+
+        <p class="text-sm text-on-surface-variant mt-2">
+            View all professors in the college
+        </p>
+    </div>
+
+    <div class="bg-white rounded-2xl shadow-md border border-gray-200 overflow-hidden max-w-5xl mx-auto">
+
+        <div class="p-6 border-b border-gray-200 flex items-center gap-3">
+            <span class="material-symbols-outlined text-4xl text-purple-600">
+                school
+            </span>
+
+            <h2 class="text-2xl font-semibold">
+                Professors List
+            </h2>
+        </div>
+
+        @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+        {
+            <div class="m-6 rounded-xl border border-red-200 bg-red-50 px-5 py-4 text-red-700">
+                @ViewBag.ErrorMessage
+            </div>
+        }
+        else if (!Model.Any())
+        {
+            <div class="px-6 py-10 text-center text-gray-500">
+                No professors are available yet.
+            </div>
+        }
+        else
+        {
+            <table class="w-full">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-4 text-left">Name</th>
+                        <th class="px-6 py-4 text-left">Email</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var professor in Model)
+                    {
+                        <tr class="border-t hover:bg-gray-50">
+                            <td class="px-6 py-4">
+                                @professor.Name
+                            </td>
+
+                            <td class="px-6 py-4">
+                                @professor.Email
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+
+    </div>
+
+</section>
