@@ -1,2 +1,74 @@
-﻿<h2>Assign Course To Student</h2>
-<p>Assigning logic UI</p>
+﻿@using CollegeSystem.Models
+@{
+    ViewData["Title"] = "Assign Course To Student";
+    var students = ViewBag.Students as List<Student>;
+    var courses = ViewBag.Courses as List<Course>;
+}
+
+<section class="min-h-full flex flex-col items-center justify-start bg-surface-container-low px-10 pt-10">
+
+    <div class="text-center mb-10 -mt-2">
+        <h1 class="text-4xl font-bold text-on-surface">
+            Assign Course To Student
+        </h1>
+        <p class="text-sm text-on-surface-variant mt-2">
+            Select a student and a course to assign
+        </p>
+    </div>
+
+    <div class="w-full max-w-2xl bg-white rounded-3xl shadow-lg border border-outline-variant p-8">
+
+        @if (!ViewData.ModelState.IsValid)
+        {
+            <div class="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl text-red-600 text-sm">
+                @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                {
+                    <p>@error.ErrorMessage</p>
+                }
+            </div>
+        }
+
+        <form method="post" asp-action="AssignCourseToStudent" asp-controller="Admin">
+
+            <!-- Student -->
+            <div class="mb-6">
+                <label class="block text-sm font-medium text-on-surface mb-2">Student</label>
+                <select name="StudentID"
+                        class="w-full rounded-xl border border-outline-variant px-4 py-3 text-on-surface focus:ring-2 focus:ring-primary focus:outline-none">
+                    <option value="">-- Select Student --</option>
+                    @if (students != null)
+                    {
+                        @foreach (var student in students)
+                        {
+                            <option value="@student.ID">@student.Name</option>
+                        }
+                    }
+                </select>
+            </div>
+
+            <!-- Course -->
+            <div class="mb-8">
+                <label class="block text-sm font-medium text-on-surface mb-2">Course</label>
+                <select name="CourseID"
+                        class="w-full rounded-xl border border-outline-variant px-4 py-3 text-on-surface focus:ring-2 focus:ring-primary focus:outline-none">
+                    <option value="">-- Select Course --</option>
+                    @if (courses != null)
+                    {
+                        @foreach (var course in courses)
+                        {
+                            <option value="@course.ID">@course.Name</option>
+                        }
+                    }
+                </select>
+            </div>
+
+            <!-- Submit -->
+            <button type="submit"
+                    class="w-full bg-primary text-white font-semibold py-3 rounded-xl hover:opacity-90 transition">
+                Assign Course
+            </button>
+
+        </form>
+    </div>
+
+</section>  

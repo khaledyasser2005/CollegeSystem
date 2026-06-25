@@ -51,7 +51,9 @@ namespace CollegeSystem.Controllers
 
         public IActionResult CollegeCourses()
         {
-            return View("CollegeCourses");
+            var context = HttpContext.RequestServices.GetService<AppDbContext>();
+            var courses = context.Courses.ToList();
+            return View("CollegeCourses", courses);
         }
     }
 }
