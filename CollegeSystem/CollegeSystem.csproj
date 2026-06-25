@@ -7,11 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="Views\Student\ColeegeCourses.cshtml" />
+    <Content Remove="Views\Student\CollegeCourses.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="Views\Student\ColeegeCourses.cshtml" />
+    <None Include="Views\Student\CollegeCourses.cshtml" />
   </ItemGroup>
 
   <ItemGroup>

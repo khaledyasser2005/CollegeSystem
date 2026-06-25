@@ -212,11 +212,11 @@ namespace CollegeSystem.Controllers
 
         // ================= ADD STUDENT =================
         [HttpPost]
-        public IActionResult AddStudent(StudentViewModel model)
+        public IActionResult AddStudent(AddStudentViewModel model)
         {
             if (!ModelState.IsValid)
             {
-                ModelState.AddModelError("", "Invalid Email");
+                ModelState.AddModelError("", "Invalid Data");
                 return View("ManageStudents");
             }
 
@@ -228,6 +228,7 @@ namespace CollegeSystem.Controllers
             }
 
             Student student = new Student();
+            
             student.Email = model.Email;
             student.Name = model.Name;
             student.Level = model.Level;
@@ -240,17 +241,17 @@ namespace CollegeSystem.Controllers
             _context.Students.Add(student);
             _context.SaveChanges();
 
-            return RedirectToAction("AdminDashboard");
+            return RedirectToAction("ManageStudents");
         }
 
         // ================= UPDATE STUDENT =================
         [HttpPost]
-        public IActionResult UpdateStudent(StudentViewModel model)
+        public IActionResult UpdateStudent(UpdateStudentViewModel model)
         {
             if (!ModelState.IsValid)
             {
-                ModelState.AddModelError("", "Invalid Email");
-                return View("ManageStudents");
+                ModelState.AddModelError("", "Invalid Data");
+                return View("ManageStudents", model);
             }
 
             var student = _context.Students.Find(model.ID);
@@ -258,7 +259,7 @@ namespace CollegeSystem.Controllers
             if (student == null)
             {
                 ModelState.AddModelError("", "Student not found!");
-                return View("ManageStudents");
+                return View("ManageStudents", model);
             }
 
             if (!String.IsNullOrEmpty(model.Name))
@@ -270,8 +271,11 @@ namespace CollegeSystem.Controllers
             if (!String.IsNullOrEmpty(model.Phone))
                 student.Phone = model.Phone;
 
-            student.DepartmentID = model.DepartmentID;
-            student.Level = model.Level;
+            if(model.DepartmentID.HasValue)
+            student.DepartmentID = model.DepartmentID.Value;
+
+            if(model.Level.HasValue)
+            student.Level = model.Level.Value;
 
             if (!String.IsNullOrEmpty(model.Password))
             {
@@ -285,12 +289,12 @@ namespace CollegeSystem.Controllers
 
         // ================= DELETE STUDENT =================
         [HttpPost]
-        public IActionResult DeleteStudent(StudentViewModel model)
+        public IActionResult DeleteStudent(DeleteStudentViewModel model)
         {
             if (!ModelState.IsValid)
             {
-                ModelState.AddModelError("", "Invalid Email");
-                return View("ManageStudents");
+                ModelState.AddModelError("", "Invalid Data");
+                return View("ManageStudents", model);
             }
 
             var student = _context.Students.Find(model.ID);
@@ -298,7 +302,7 @@ namespace CollegeSystem.Controllers
             if (student == null)
             {
                 ModelState.AddModelError("", "Student not found!");
-                return View("ManageStudents");
+                return View("ManageStudents", model);
             }
 
             _context.Students.Remove(student);

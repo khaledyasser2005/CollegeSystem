@@ -3,6 +3,7 @@ using CollegeSystem.Models;
 using CollegeSystem.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace CollegeSystem.Controllers
@@ -27,12 +28,18 @@ namespace CollegeSystem.Controllers
         {
             if(model.Role == "Student")
             {
-                var student = _context.Students.FirstOrDefault(s => s.Email == model.Email && s.Password == model.Password);
+                var student = _context.Students.FirstOrDefault(s => s.Email == model.Email);
                 if (student != null)
                 {
-                    HttpContext.Session.SetString("UserId",student.ID.ToString());
-                    HttpContext.Session.SetString("Role", "Student");
-                    return RedirectToAction("Index", "Student");
+                    var hasher = new PasswordHasher<Student>();
+                    var result = hasher.VerifyHashedPassword(student, student.Password, model.Password);
+
+                    if(result == PasswordVerificationResult.Success)
+                    {
+                        HttpContext.Session.SetString("UserId",student.ID.ToString());
+                        HttpContext.Session.SetString("Role", "Student");
+                        return RedirectToAction("MyCourses", "Student");
+                    }
                 }
             }
             else if(model.Role == "Professor")
