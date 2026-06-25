@@ -1,10 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Conventions;
+using Microsoft.Identity.Client;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace CollegeSystem.ViewModels
 {
     public class AddDepartmentViewModel
     {
+        [Required(ErrorMessage = "Department ID is required")]
+        public int ID { get; set; }
         [Required(ErrorMessage = "Department name is required")]
         public string Name { get; set; }
         [Required(ErrorMessage = "Department GPA is required")]
