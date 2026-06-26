@@ -28,19 +28,24 @@ namespace CollegeSystem.Controllers
 
             return View(courses);
         }
-        public IActionResult CourseDetails(int id)
+        public IActionResult CourseDetails(int id, string tab = "materials")
         {
             var context = HttpContext.RequestServices.GetService<AppDbContext>();
+
+            var course = context.Courses.FirstOrDefault(c => c.ID == id);
+
+            if (course == null)
+                return NotFound();
 
             ViewBag.Materials = context.Materials
                 .Where(m => m.CourseID == id)
                 .OrderByDescending(m => m.UploadDate)
                 .ToList();
 
-            var course = context.Courses.FirstOrDefault(c => c.ID == id);
-
-            if (course == null)
-                return NotFound();
+            ViewBag.Reports = context.Reports
+                .Where(r => r.CourseID == id)
+                .OrderByDescending(r => r.GeneratedDate)
+                .ToList();
 
             return View(course);
         }
@@ -139,9 +144,7 @@ namespace CollegeSystem.Controllers
             var context = HttpContext.RequestServices.GetService<AppDbContext>();
 
             if (file == null || file.Length == 0)
-            {
                 return RedirectToAction("CourseDetails", new { id = courseId });
-            }
 
             using (var ms = new MemoryStream())
             {
@@ -150,16 +153,13 @@ namespace CollegeSystem.Controllers
                 var report = new Report
                 {
                     Title = title,
-
                     Type = "PDF",
-
                     Status = "Pending",
-
                     GeneratedDate = DateTime.Now,
+                    GeneratedBy = "Professor",
 
-                    GeneratedBy = User.FindFirstValue(ClaimTypes.NameIdentifier),
-
-                    AdminID = 1, // مؤقتًا لحد ما نربطها بالـ admin login
+                    AdminID = 2, // ممكن نربطها بعدين بالـ login
+                    CourseID = courseId,
 
                     FileName = file.FileName,
                     ContentType = file.ContentType,
@@ -170,8 +170,34 @@ namespace CollegeSystem.Controllers
                 await context.SaveChangesAsync();
             }
 
-            return RedirectToAction("CourseDetails", new { id = courseId });
+            return RedirectToAction("CourseDetails", new { id = courseId, tab = "reports" });
         }
+        public IActionResult DownloadReport(int id)
+        {
+            var context = HttpContext.RequestServices.GetService<AppDbContext>();
+
+            var report = context.Reports.FirstOrDefault(r => r.ID == id);
+
+            if (report == null)
+                return NotFound();
+
+            return File(report.Data, report.ContentType, report.FileName);
+        }
+        public IActionResult DeleteReport(int id, int courseId)
+        {
+            var context = HttpContext.RequestServices.GetService<AppDbContext>();
+
+            var report = context.Reports.FirstOrDefault(r => r.ID == id);
+
+            if (report != null)
+            {
+                context.Reports.Remove(report);
+                context.SaveChanges();
+            }
+
+            return RedirectToAction("CourseDetails", new { id = courseId, tab = "reports" });
+        }
+       
     }
 
 }
