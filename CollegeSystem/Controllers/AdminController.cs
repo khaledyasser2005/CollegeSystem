@@ -440,5 +440,10 @@ namespace CollegeSystem.Controllers
             _context.SaveChanges();
             return RedirectToAction("AssignCourseToStudent");
         }
+        public IActionResult Reports()
+        {
+            var reports = _context.Reports.ToList();
+            return View(reports);
+        }
     }
 }

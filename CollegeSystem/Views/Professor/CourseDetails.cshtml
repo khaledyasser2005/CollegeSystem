@@ -1,180 +1,254 @@
 ﻿@model CollegeSystem.Models.Course
 
+@{
+    ViewData["Title"] = "Course Details";
+    var materials = ViewBag.Materials as List<CollegeSystem.Models.Material>;
+}
+
 <style>
-    .course-header {
-        margin-bottom: 25px;
+
+    body {
+        background: #f4f8ff;
     }
 
-        .course-header h2 {
-            color: #1f4aa8;
-            font-weight: bold;
-        }
+    .course-title {
+        color: #1f4aa8;
+        font-weight: bold;
+        margin-bottom: 25px;
+    }
 
     .tabs {
         display: flex;
         gap: 10px;
+        margin-bottom: 20px;
         border-bottom: 2px solid #ddd;
-        margin-bottom: 25px;
     }
 
     .tab-btn {
-        background: transparent;
         border: none;
-        padding: 12px 20px;
+        background: white;
+        padding: 12px 22px;
         cursor: pointer;
-        font-size: 15px;
+        border-radius: 10px 10px 0 0;
         font-weight: bold;
-        color: #666;
-        border-bottom: 3px solid transparent;
         transition: .3s;
     }
 
         .tab-btn:hover {
-            color: #1f4aa8;
+            background: #dbe8ff;
         }
 
         .tab-btn.active {
-            color: #1f4aa8;
-            border-bottom: 3px solid #1f4aa8;
+            background: #1f4aa8;
+            color: white;
         }
 
     .tab-content {
         display: none;
-        background: white;
-        border-radius: 10px;
-        padding: 25px;
-        box-shadow: 0 3px 10px rgba(0,0,0,.1);
     }
 
         .tab-content.active {
             display: block;
         }
 
-    .coming-soon {
-        text-align: center;
-        color: #777;
-        padding: 40px;
-        font-size: 18px;
+    .card-box {
+        background: white;
+        border-radius: 12px;
+        padding: 25px;
+        box-shadow: 0 3px 10px rgba(0,0,0,.1);
     }
+
 </style>
 
-<div class="course-header">
+<h2 class="course-title">@Model.Name</h2>
 
-    <h2>@Model.Name</h2>
-
-    <p>@Model.Description</p>
-
-</div>
-
+<!-- ================= TABS ================= -->
 <div class="tabs">
 
-    <button class="tab-btn active"
-            onclick="openTab(event,'materials')">
+    <button class="tab-btn active" onclick="showTab(event,'materials')">
         Materials
     </button>
 
-    <button class="tab-btn"
-            onclick="openTab(event,'assignments')">
+    <button class="tab-btn" onclick="showTab(event,'assignments')">
         Assignments / Quizzes
     </button>
 
-    <button class="tab-btn"
-            onclick="openTab(event,'students')">
+    <button class="tab-btn" onclick="showTab(event,'students')">
         Students
     </button>
 
-    <button class="tab-btn"
-            onclick="openTab(event,'reports')">
+    <button class="tab-btn" onclick="showTab(event,'reports')">
         Reports
     </button>
 
 </div>
 
-
+<!-- ================= MATERIALS ================= -->
 <div id="materials" class="tab-content active">
 
-    <div class="coming-soon">
+    <div class="card-box">
 
-        📚 Materials Section
+        <h3>Materials</h3>
 
-        <br><br>
+        <form asp-action="UploadMaterial"
+              asp-controller="Professor"
+              method="post"
+              enctype="multipart/form-data">
 
-        Content will be added later.
+            <input type="hidden" name="courseId" value="@Model.ID" />
+
+            <div class="mb-3">
+                <label>Title</label>
+                <input class="form-control" type="text" name="title" />
+            </div>
+
+            <div class="mb-3">
+                <label>Description</label>
+                <textarea class="form-control" name="description" rows="3"></textarea>
+            </div>
+
+            <div class="mb-3">
+                <label>Choose PDF</label>
+                <input class="form-control" type="file" name="pdfFile" accept=".pdf" />
+            </div>
+
+            <button class="btn btn-primary" type="submit">
+                Upload Material
+            </button>
+
+        </form>
+
+        <hr />
+
+        <h4>Uploaded Materials</h4>
+
+        @if (materials != null && materials.Any())
+        {
+            foreach (var item in materials)
+            {
+                <div class="d-flex justify-content-between align-items-center border rounded p-3 mb-3">
+
+                    <div>
+                        <span>📄</span>
+
+                        <a href="@item.FileUrl" target="_blank" style="font-weight:bold;">
+                            @item.Title
+                        </a>
+
+                        <br />
+
+                        <small>@item.Description</small>
+                        <br />
+                        <small class="text-muted">@item.UploadDate.ToString("dd/MM/yyyy")</small>
+                    </div>
+
+                    <div>
+                        <a asp-action="DeleteMaterial"
+                               asp-controller="Professor"
+                               asp-route-id="@item.ID"
+                               asp-route-courseId="@Model.ID"
+                               class="btn btn-danger">
+                            🗑 Delete
+                        </a>
+                    </div>
+
+                </div>
+            }
+        }
+        else
+        {
+            <div class="alert alert-info">No Materials Yet</div>
+        }
 
     </div>
-
 </div>
 
-
+<!-- ================= ASSIGNMENTS ================= -->
 <div id="assignments" class="tab-content">
 
-    <div class="coming-soon">
-
-        📝 Assignments / Quizzes Section
-
-        <br><br>
-
-        Content will be added later.
-
+    <div class="card-box">
+        <h3>Assignments / Quizzes</h3>
+        <hr />
+        <div class="alert alert-secondary">
+            Assignment section will be added here.
+        </div>
     </div>
 
 </div>
 
-
+<!-- ================= STUDENTS ================= -->
 <div id="students" class="tab-content">
 
-    <div class="coming-soon">
-
-        👨‍🎓 Students Section
-
-        <br><br>
-
-        Content will be added later.
-
+    <div class="card-box">
+        <h3>Students</h3>
+        <hr />
+        <div class="alert alert-secondary">
+            Students section will be added here.
+        </div>
     </div>
 
 </div>
 
-
+<!-- ================= REPORTS ================= -->
 <div id="reports" class="tab-content">
 
-    <div class="coming-soon">
+    <div class="card-box">
 
-        📊 Reports Section
+        <h3>Reports</h3>
 
-        <br><br>
+        <hr />
 
-        Content will be added later.
+        <!-- Upload Report Form -->
+        <form asp-action="UploadReport"
+              asp-controller="Professor"
+              method="post"
+              enctype="multipart/form-data">
+
+            <input type="hidden" name="courseId" value="@Model.ID" />
+
+            <div class="mb-3">
+                <label>Title</label>
+                <input type="text" name="title" class="form-control" />
+            </div>
+
+            <div class="mb-3">
+                <label>Upload PDF</label>
+                <input type="file" name="file" class="form-control" accept="application/pdf" />
+            </div>
+
+            <button type="submit" class="btn btn-primary">
+                Upload Report
+            </button>
+
+        </form>
+
+        <hr />
+
+        <div class="alert alert-secondary">
+            Reports will appear here.
+        </div>
 
     </div>
 
 </div>
 
-
+<!-- ================= SCRIPT ================= -->
 <script>
 
-    function openTab(evt,id){
+    function showTab(event, tabId) {
 
-        var contents=document.getElementsByClassName("tab-content");
-
-        for(var i=0;i<contents.length;i++){
-
-            contents[i].classList.remove("active");
-
-        }
-
-        var tabs=document.getElementsByClassName("tab-btn");
-
-        for(var i=0;i<tabs.length;i++){
-
+        var tabs = document.getElementsByClassName("tab-content");
+        for (var i = 0; i < tabs.length; i++) {
             tabs[i].classList.remove("active");
-
         }
 
-        document.getElementById(id).classList.add("active");
+        var buttons = document.getElementsByClassName("tab-btn");
+        for (var i = 0; i < buttons.length; i++) {
+            buttons[i].classList.remove("active");
+        }
 
-        evt.currentTarget.classList.add("active");
-
+        document.getElementById(tabId).classList.add("active");
+        event.currentTarget.classList.add("active");
     }
 
 </script>
