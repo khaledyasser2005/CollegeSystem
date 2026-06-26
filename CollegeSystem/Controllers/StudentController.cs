@@ -14,13 +14,36 @@ namespace CollegeSystem.Controllers
         }
         public IActionResult MyCourses()
         {
-            return View();
+            var context = HttpContext.RequestServices.GetService<AppDbContext>();
+
+            var studentID = HttpContext.Session.GetString("UserId");
+
+            if (string.IsNullOrEmpty(studentID))
+                return RedirectToAction("Login", "Account");
+
+            int id = int.Parse(studentID);
+
+            var courses = context.Enrollments
+                .Where(c => c.StudentID == id)
+                .ToList();
+
+            return View(courses);
+        }
+        public IActionResult CourseDetails(int id)
+        {
+            var context = HttpContext.RequestServices.GetService<AppDbContext>();
+
+            var course = context.Courses.FirstOrDefault(c => c.ID == id);
+
+            if (course == null)
+                return NotFound();
+
+            return View(course);
         }
         public IActionResult CollegeCourses()
         {
-            var courses = _context.Courses.ToList();
-
-            return View(courses);
+            //var courses = _context.Courses.ToList();
+            return View("CollegeCourses");
         }
         public IActionResult Students()
         {
