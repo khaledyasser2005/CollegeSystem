@@ -1,10 +1,10 @@
-﻿@{
+﻿@model IEnumerable<CollegeSystem.Models.Course>
+@{
     ViewData["Title"] = "College Courses";
 }
 
 <section class="min-h-full flex flex-col items-center justify-start bg-surface-container-low px-10 pt-10">
 
-    <!-- Title -->
     <div class="text-center mb-10 -mt-2">
         <h1 class="text-4xl font-bold text-on-surface">
             College Courses
@@ -14,9 +14,7 @@
         </p>
     </div>
 
-    <!-- Courses Table -->
     <div class="w-full max-w-6xl bg-white rounded-3xl shadow-lg border border-outline-variant p-8">
-
         <table class="w-full text-left border-collapse">
             <thead>
                 <tr class="bg-surface-container text-on-surface-variant text-sm uppercase">
@@ -29,33 +27,19 @@
                 </tr>
             </thead>
             <tbody class="divide-y divide-outline-variant text-on-surface text-sm">
-                <tr class="hover:bg-surface-container-low transition">
-                    <td class="px-6 py-4">1</td>
-                    <td class="px-6 py-4 font-medium">Introduction to Programming</td>
-                    <td class="px-6 py-4">Basics of programming using C#</td>
-                    <td class="px-6 py-4">3 Months</td>
-                    <td class="px-6 py-4">Semester 1</td>
-                    <td class="px-6 py-4">None</td>
-                </tr>
-                <tr class="hover:bg-surface-container-low transition">
-                    <td class="px-6 py-4">2</td>
-                    <td class="px-6 py-4 font-medium">Database Systems</td>
-                    <td class="px-6 py-4">Relational databases and SQL</td>
-                    <td class="px-6 py-4">3 Months</td>
-                    <td class="px-6 py-4">Semester 2</td>
-                    <td class="px-6 py-4">Intro to Programming</td>
-                </tr>
-                <tr class="hover:bg-surface-container-low transition">
-                    <td class="px-6 py-4">3</td>
-                    <td class="px-6 py-4 font-medium">Web Development</td>
-                    <td class="px-6 py-4">ASP.NET Core MVC</td>
-                    <td class="px-6 py-4">4 Months</td>
-                    <td class="px-6 py-4">Semester 3</td>
-                    <td class="px-6 py-4">Database Systems</td>
-                </tr>
+                @foreach (var course in Model)
+                {
+                    <tr class="hover:bg-surface-container-low transition">
+                        <td class="px-6 py-4">@course.ID</td>
+                        <td class="px-6 py-4 font-medium">@course.Name</td>
+                        <td class="px-6 py-4">@course.Description</td>
+                        <td class="px-6 py-4">@course.Duration</td>
+                        <td class="px-6 py-4">@course.Semesters</td>
+                        <td class="px-6 py-4">@course.CoursePrerequisites</td>
+                    </tr>
+                }
             </tbody>
         </table>
-
     </div>
 
 </section>

@@ -1,37 +1,254 @@
 ﻿@model CollegeSystem.Models.Course
 
+@{
+    ViewData["Title"] = "Course Details";
+    var materials = ViewBag.Materials as List<CollegeSystem.Models.Material>;
+}
+
 <style>
-    .details-box {
-        width: 60%;
-        margin: 50px auto;
-        background: white;
-        padding: 25px;
-        border-radius: 12px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        border-top: 6px solid #1f4aa8;
+
+    body {
+        background: #f4f8ff;
     }
 
-    h2 {
+    .course-title {
         color: #1f4aa8;
-        text-align: center;
-    }
-
-    .info {
-        margin: 10px 0;
-        font-size: 16px;
-    }
-
-    .label {
         font-weight: bold;
-        color: #1f4aa8;
+        margin-bottom: 25px;
     }
+
+    .tabs {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+        border-bottom: 2px solid #ddd;
+    }
+
+    .tab-btn {
+        border: none;
+        background: white;
+        padding: 12px 22px;
+        cursor: pointer;
+        border-radius: 10px 10px 0 0;
+        font-weight: bold;
+        transition: .3s;
+    }
+
+        .tab-btn:hover {
+            background: #dbe8ff;
+        }
+
+        .tab-btn.active {
+            background: #1f4aa8;
+            color: white;
+        }
+
+    .tab-content {
+        display: none;
+    }
+
+        .tab-content.active {
+            display: block;
+        }
+
+    .card-box {
+        background: white;
+        border-radius: 12px;
+        padding: 25px;
+        box-shadow: 0 3px 10px rgba(0,0,0,.1);
+    }
+
 </style>
 
-<div class="details-box">
-    <h2>@Model.Name</h2>
+<h2 class="course-title">@Model.Name</h2>
 
-    <div class="info"><span class="label">Description:</span> @Model.Description</div>
-    <div class="info"><span class="label">Duration:</span> @Model.Duration</div>
-    <div class="info"><span class="label">Semesters:</span> @Model.Semesters</div>
-    <div class="info"><span class="label">Prerequisites:</span> @Model.CoursePrerequisites</div>
+<!-- ================= TABS ================= -->
+<div class="tabs">
+
+    <button class="tab-btn active" onclick="showTab(event,'materials')">
+        Materials
+    </button>
+
+    <button class="tab-btn" onclick="showTab(event,'assignments')">
+        Assignments / Quizzes
+    </button>
+
+    <button class="tab-btn" onclick="showTab(event,'students')">
+        Students
+    </button>
+
+    <button class="tab-btn" onclick="showTab(event,'reports')">
+        Reports
+    </button>
+
 </div>
+
+<!-- ================= MATERIALS ================= -->
+<div id="materials" class="tab-content active">
+
+    <div class="card-box">
+
+        <h3>Materials</h3>
+
+        <form asp-action="UploadMaterial"
+              asp-controller="Professor"
+              method="post"
+              enctype="multipart/form-data">
+
+            <input type="hidden" name="courseId" value="@Model.ID" />
+
+            <div class="mb-3">
+                <label>Title</label>
+                <input class="form-control" type="text" name="title" />
+            </div>
+
+            <div class="mb-3">
+                <label>Description</label>
+                <textarea class="form-control" name="description" rows="3"></textarea>
+            </div>
+
+            <div class="mb-3">
+                <label>Choose PDF</label>
+                <input class="form-control" type="file" name="pdfFile" accept=".pdf" />
+            </div>
+
+            <button class="btn btn-primary" type="submit">
+                Upload Material
+            </button>
+
+        </form>
+
+        <hr />
+
+        <h4>Uploaded Materials</h4>
+
+        @if (materials != null && materials.Any())
+        {
+            foreach (var item in materials)
+            {
+                <div class="d-flex justify-content-between align-items-center border rounded p-3 mb-3">
+
+                    <div>
+                        <span>📄</span>
+
+                        <a href="@item.FileUrl" target="_blank" style="font-weight:bold;">
+                            @item.Title
+                        </a>
+
+                        <br />
+
+                        <small>@item.Description</small>
+                        <br />
+                        <small class="text-muted">@item.UploadDate.ToString("dd/MM/yyyy")</small>
+                    </div>
+
+                    <div>
+                        <a asp-action="DeleteMaterial"
+                               asp-controller="Professor"
+                               asp-route-id="@item.ID"
+                               asp-route-courseId="@Model.ID"
+                               class="btn btn-danger">
+                            🗑 Delete
+                        </a>
+                    </div>
+
+                </div>
+            }
+        }
+        else
+        {
+            <div class="alert alert-info">No Materials Yet</div>
+        }
+
+    </div>
+</div>
+
+<!-- ================= ASSIGNMENTS ================= -->
+<div id="assignments" class="tab-content">
+
+    <div class="card-box">
+        <h3>Assignments / Quizzes</h3>
+        <hr />
+        <div class="alert alert-secondary">
+            Assignment section will be added here.
+        </div>
+    </div>
+
+</div>
+
+<!-- ================= STUDENTS ================= -->
+<div id="students" class="tab-content">
+
+    <div class="card-box">
+        <h3>Students</h3>
+        <hr />
+        <div class="alert alert-secondary">
+            Students section will be added here.
+        </div>
+    </div>
+
+</div>
+
+<!-- ================= REPORTS ================= -->
+<div id="reports" class="tab-content">
+
+    <div class="card-box">
+
+        <h3>Reports</h3>
+
+        <hr />
+
+        <!-- Upload Report Form -->
+        <form asp-action="UploadReport"
+              asp-controller="Professor"
+              method="post"
+              enctype="multipart/form-data">
+
+            <input type="hidden" name="courseId" value="@Model.ID" />
+
+            <div class="mb-3">
+                <label>Title</label>
+                <input type="text" name="title" class="form-control" />
+            </div>
+
+            <div class="mb-3">
+                <label>Upload PDF</label>
+                <input type="file" name="file" class="form-control" accept="application/pdf" />
+            </div>
+
+            <button type="submit" class="btn btn-primary">
+                Upload Report
+            </button>
+
+        </form>
+
+        <hr />
+
+        <div class="alert alert-secondary">
+            Reports will appear here.
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= SCRIPT ================= -->
+<script>
+
+    function showTab(event, tabId) {
+
+        var tabs = document.getElementsByClassName("tab-content");
+        for (var i = 0; i < tabs.length; i++) {
+            tabs[i].classList.remove("active");
+        }
+
+        var buttons = document.getElementsByClassName("tab-btn");
+        for (var i = 0; i < buttons.length; i++) {
+            buttons[i].classList.remove("active");
+        }
+
+        document.getElementById(tabId).classList.add("active");
+        event.currentTarget.classList.add("active");
+    }
+
+</script>

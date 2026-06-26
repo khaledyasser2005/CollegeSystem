@@ -228,7 +228,7 @@ namespace CollegeSystem.Controllers
             }
 
             Student student = new Student();
-            
+
             student.Email = model.Email;
             student.Name = model.Name;
             student.Level = model.Level;
@@ -271,11 +271,11 @@ namespace CollegeSystem.Controllers
             if (!String.IsNullOrEmpty(model.Phone))
                 student.Phone = model.Phone;
 
-            if(model.DepartmentID.HasValue)
-            student.DepartmentID = model.DepartmentID.Value;
+            if (model.DepartmentID.HasValue)
+                student.DepartmentID = model.DepartmentID.Value;
 
-            if(model.Level.HasValue)
-            student.Level = model.Level.Value;
+            if (model.Level.HasValue)
+                student.Level = model.Level.Value;
 
             if (!String.IsNullOrEmpty(model.Password))
             {
@@ -313,10 +313,11 @@ namespace CollegeSystem.Controllers
 
         public IActionResult CollegeCourses()
         {
-            return View("CollegeCourses");
+            var courses = _context.Courses.ToList();
+            return View("CollegeCourses", courses);
         }
 
-       
+
         public IActionResult ManageDepartments()
         {
             return View("ManageDepartments");
@@ -342,7 +343,7 @@ namespace CollegeSystem.Controllers
             {
                 department.Name = model.Name;
             }
-            if(model.GPARequired > 0.00)
+            if (model.GPARequired > 0.00)
             {
                 department.GPARequired = model.GPARequired;
             }
@@ -401,6 +402,48 @@ namespace CollegeSystem.Controllers
             _context.SaveChanges();
 
             return RedirectToAction("ManageDepartments");
+        }
+        public IActionResult AssignCourseToStudent()
+        {
+            var students = _context.Students.ToList();
+            var courses = _context.Courses.ToList();
+            ViewBag.Students = students;
+            ViewBag.Courses = courses;
+            return View("AssignCourseToStudent");
+        }
+
+        [HttpPost]
+        public IActionResult AssignCourseToStudent(int StudentID, int CourseID)
+        {
+            var exists = _context.Enrollments
+                .Any(e => e.StudentID == StudentID && e.CourseID == CourseID);
+
+            if (exists)
+            {
+                ModelState.AddModelError("", "Student is already enrolled in this course!");
+                var students = _context.Students.ToList();
+                var courses = _context.Courses.ToList();
+                ViewBag.Students = students;
+                ViewBag.Courses = courses;
+                return View("AssignCourseToStudent");
+            }
+
+            var enrollment = new Enrollment
+            {
+                StudentID = StudentID,
+                CourseID = CourseID,
+                Grade = "N/A",
+                Semester = "Current"
+            };
+
+            _context.Enrollments.Add(enrollment);
+            _context.SaveChanges();
+            return RedirectToAction("AssignCourseToStudent");
+        }
+        public IActionResult Reports()
+        {
+            var reports = _context.Reports.ToList();
+            return View(reports);
         }
     }
 }
