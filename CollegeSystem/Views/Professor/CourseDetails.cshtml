@@ -1,37 +1,180 @@
 ﻿@model CollegeSystem.Models.Course
 
 <style>
-    .details-box {
-        width: 60%;
-        margin: 50px auto;
-        background: white;
-        padding: 25px;
-        border-radius: 12px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        border-top: 6px solid #1f4aa8;
+    .course-header {
+        margin-bottom: 25px;
     }
 
-    h2 {
-        color: #1f4aa8;
-        text-align: center;
+        .course-header h2 {
+            color: #1f4aa8;
+            font-weight: bold;
+        }
+
+    .tabs {
+        display: flex;
+        gap: 10px;
+        border-bottom: 2px solid #ddd;
+        margin-bottom: 25px;
     }
 
-    .info {
-        margin: 10px 0;
-        font-size: 16px;
-    }
-
-    .label {
+    .tab-btn {
+        background: transparent;
+        border: none;
+        padding: 12px 20px;
+        cursor: pointer;
+        font-size: 15px;
         font-weight: bold;
-        color: #1f4aa8;
+        color: #666;
+        border-bottom: 3px solid transparent;
+        transition: .3s;
+    }
+
+        .tab-btn:hover {
+            color: #1f4aa8;
+        }
+
+        .tab-btn.active {
+            color: #1f4aa8;
+            border-bottom: 3px solid #1f4aa8;
+        }
+
+    .tab-content {
+        display: none;
+        background: white;
+        border-radius: 10px;
+        padding: 25px;
+        box-shadow: 0 3px 10px rgba(0,0,0,.1);
+    }
+
+        .tab-content.active {
+            display: block;
+        }
+
+    .coming-soon {
+        text-align: center;
+        color: #777;
+        padding: 40px;
+        font-size: 18px;
     }
 </style>
 
-<div class="details-box">
+<div class="course-header">
+
     <h2>@Model.Name</h2>
 
-    <div class="info"><span class="label">Description:</span> @Model.Description</div>
-    <div class="info"><span class="label">Duration:</span> @Model.Duration</div>
-    <div class="info"><span class="label">Semesters:</span> @Model.Semesters</div>
-    <div class="info"><span class="label">Prerequisites:</span> @Model.CoursePrerequisites</div>
+    <p>@Model.Description</p>
+
 </div>
+
+<div class="tabs">
+
+    <button class="tab-btn active"
+            onclick="openTab(event,'materials')">
+        Materials
+    </button>
+
+    <button class="tab-btn"
+            onclick="openTab(event,'assignments')">
+        Assignments / Quizzes
+    </button>
+
+    <button class="tab-btn"
+            onclick="openTab(event,'students')">
+        Students
+    </button>
+
+    <button class="tab-btn"
+            onclick="openTab(event,'reports')">
+        Reports
+    </button>
+
+</div>
+
+
+<div id="materials" class="tab-content active">
+
+    <div class="coming-soon">
+
+        📚 Materials Section
+
+        <br><br>
+
+        Content will be added later.
+
+    </div>
+
+</div>
+
+
+<div id="assignments" class="tab-content">
+
+    <div class="coming-soon">
+
+        📝 Assignments / Quizzes Section
+
+        <br><br>
+
+        Content will be added later.
+
+    </div>
+
+</div>
+
+
+<div id="students" class="tab-content">
+
+    <div class="coming-soon">
+
+        👨‍🎓 Students Section
+
+        <br><br>
+
+        Content will be added later.
+
+    </div>
+
+</div>
+
+
+<div id="reports" class="tab-content">
+
+    <div class="coming-soon">
+
+        📊 Reports Section
+
+        <br><br>
+
+        Content will be added later.
+
+    </div>
+
+</div>
+
+
+<script>
+
+    function openTab(evt,id){
+
+        var contents=document.getElementsByClassName("tab-content");
+
+        for(var i=0;i<contents.length;i++){
+
+            contents[i].classList.remove("active");
+
+        }
+
+        var tabs=document.getElementsByClassName("tab-btn");
+
+        for(var i=0;i<tabs.length;i++){
+
+            tabs[i].classList.remove("active");
+
+        }
+
+        document.getElementById(id).classList.add("active");
+
+        evt.currentTarget.classList.add("active");
+
+    }
+
+</script>
