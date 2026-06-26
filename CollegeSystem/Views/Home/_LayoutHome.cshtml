@@ -1,0 +1,31 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header class="h-16 flex items-center justify-between px-8 bg-white border-b">
+        <div class="text-lg font-semibold">
+            DEPI College
+        </div>
+
+        <a asp-controller="Account" asp-action="Login"
+           class="text-blue-600 font-medium">
+            Login
+        </a>
+    </header>
+
+    <!-- PAGE CONTENT -->
+    <main>
+        @RenderBody()
+    </main>
+
+</body>
+</html>
