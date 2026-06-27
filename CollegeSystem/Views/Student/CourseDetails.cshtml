@@ -1,6 +1,226 @@
-﻿namespace CollegeSystem.Views.Student
-{
-    public class CourseDetails
+@model CollegeSystem.Models.Course
+
+@{
+    ViewData["Title"] = "Course Details";
+    var materials = ViewBag.Materials as List<CollegeSystem.Models.Material>;
+    var assignments = ViewBag.Assignments as List<CollegeSystem.Models.Assignment>;
+    var quizzes = ViewBag.Quizzes as List<CollegeSystem.Models.Quiz>;
+}
+
+@functions {
+    private bool IsExternalLink(string? value)
     {
+        return !string.IsNullOrWhiteSpace(value)
+            && (value.StartsWith("http://") || value.StartsWith("https://"));
     }
 }
+
+<style>
+    body {
+        background: #f4f8ff;
+    }
+
+    .course-title {
+        color: #1f4aa8;
+        font-weight: bold;
+        margin-bottom: 25px;
+    }
+
+    .course-details {
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    .content-box {
+        background: white;
+        border-radius: 12px;
+        padding: 25px;
+        box-shadow: 0 3px 10px rgba(0,0,0,.1);
+    }
+
+    .section-box {
+        border: 1px solid #dbe4f0;
+        border-radius: 12px;
+        margin-bottom: 15px;
+        overflow: hidden;
+    }
+
+    .section-title {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 16px 18px;
+        color: #1f4aa8;
+        font-weight: bold;
+        cursor: pointer;
+        list-style: none;
+    }
+
+    .section-title::-webkit-details-marker {
+        display: none;
+    }
+
+    .section-arrow,
+    .item-arrow {
+        color: #1f4aa8;
+        font-size: 16px;
+        font-weight: bold;
+    }
+
+    details[open] .section-arrow {
+        transform: rotate(90deg);
+    }
+
+    .section-content {
+        border-top: 1px solid #dbe4f0;
+        padding: 15px;
+        background: #f9fbff;
+    }
+
+    .item-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 15px;
+        background: white;
+        border: 1px solid #e3eaf5;
+        border-radius: 10px;
+        padding: 14px 16px;
+        margin-bottom: 12px;
+        text-decoration: none;
+        color: #333;
+    }
+
+    .item-row:last-child {
+        margin-bottom: 0;
+    }
+
+    .item-title {
+        color: #1f4aa8;
+        font-weight: bold;
+        margin-bottom: 4px;
+    }
+
+    .item-desc {
+        color: #555;
+        font-size: 14px;
+    }
+
+    .item-meta {
+        color: #777;
+        font-size: 13px;
+        margin-top: 5px;
+    }
+
+    .empty-message {
+        color: #555;
+        background: #eef4ff;
+        border-radius: 10px;
+        padding: 14px 16px;
+    }
+</style>
+
+<div class="course-details">
+    <h2 class="course-title">@Model.Name</h2>
+
+    <div class="content-box">
+        <details class="section-box" open>
+            <summary class="section-title">
+                <span>Materials</span>
+                <span class="section-arrow">&rsaquo;</span>
+            </summary>
+
+            <div class="section-content">
+                @if (materials != null && materials.Any())
+                {
+                    foreach (var item in materials)
+                    {
+                        <a class="item-row" href="@item.FileUrl" target="_blank">
+                            <span>
+                                <span class="item-title">@item.Title</span>
+                                <span class="item-desc">@item.Description</span>
+                                <span class="item-meta">@item.UploadDate.ToString("dd/MM/yyyy")</span>
+                            </span>
+                            <span class="item-arrow">&rsaquo;</span>
+                        </a>
+                    }
+                }
+                else
+                {
+                    <div class="empty-message">No Materials Yet</div>
+                }
+            </div>
+        </details>
+
+        <details class="section-box">
+            <summary class="section-title">
+                <span>Assignments</span>
+                <span class="section-arrow">&rsaquo;</span>
+            </summary>
+
+            <div class="section-content">
+                @if (assignments != null && assignments.Any())
+                {
+                    foreach (var item in assignments)
+                    {
+                        <div class="item-row">
+                            <span>
+                                <span class="item-title">@item.Title</span>
+                                <span class="item-desc">@item.Description</span>
+                                <span class="item-meta">Due: @item.DueDate.ToString("dd/MM/yyyy") | Max Marks: @item.MaxMarks</span>
+                            </span>
+                            <span class="item-arrow">&rsaquo;</span>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="empty-message">No Assignments Yet</div>
+                }
+            </div>
+        </details>
+
+        <details class="section-box">
+            <summary class="section-title">
+                <span>Quiz</span>
+                <span class="section-arrow">&rsaquo;</span>
+            </summary>
+
+            <div class="section-content">
+                @if (quizzes != null && quizzes.Any())
+                {
+                    foreach (var item in quizzes)
+                    {
+                        if (IsExternalLink(item.Description))
+                        {
+                            <a class="item-row" href="@item.Description" target="_blank">
+                                <span>
+                                    <span class="item-title">@item.Title</span>
+                                    <span class="item-desc">Open quiz form</span>
+                                    <span class="item-meta">Duration: @item.Duration minutes | Attempts: @item.AttemptsAllowed</span>
+                                </span>
+                                <span class="item-arrow">&rsaquo;</span>
+                            </a>
+                        }
+                        else
+                        {
+                            <div class="item-row">
+                                <span>
+                                    <span class="item-title">@item.Title</span>
+                                    <span class="item-desc">@item.Description</span>
+                                    <span class="item-meta">Duration: @item.Duration minutes | Attempts: @item.AttemptsAllowed</span>
+                                </span>
+                                <span class="item-arrow">&rsaquo;</span>
+                            </div>
+                        }
+                    }
+                }
+                else
+                {
+                    <div class="empty-message">No Quizzes Yet</div>
+                }
+            </div>
+        </details>
+    </div>
+</div>
+

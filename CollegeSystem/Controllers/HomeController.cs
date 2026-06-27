@@ -24,5 +24,15 @@ namespace CollegeSystem.Controllers
 
             return View();
         }
+        public IActionResult AllCourses()
+        {
+            var courses = _context.Courses.Include(c=>c.Professor).ToList();
+            return View(courses);
+        }
+        public IActionResult AllProfessors()
+        {
+            var professors = _context.Professors.ToList();
+            return View(professors);
+        }
     }
 }

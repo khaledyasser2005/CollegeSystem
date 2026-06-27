@@ -21,8 +21,8 @@ namespace CollegeSystem.Controllers
         {
             return View();
         }
-        //Login --Post
 
+        //Login --Post
         [HttpPost] 
         public IActionResult Login(LoginViewModel model)
         {

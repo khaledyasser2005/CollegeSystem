@@ -1,0 +1,114 @@
+﻿@model IEnumerable<CollegeSystem.Models.Professor>
+
+@{
+    Layout = "_LayoutHome";
+    ViewData["Title"] = "All Professors";
+}
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+.page-header {
+    background: #00174d;
+    color: white;
+    padding: 40px;
+    text-align: center;
+}
+.page-header h1 { font-size: 36px; margin-bottom: 8px; }
+.page-header p { opacity: 0.8; font-size: 16px; }
+
+.section {
+    padding: 60px 40px;
+    max-width: 1100px;
+    margin: auto;
+}
+
+.profs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 24px;
+}
+
+.prof-card {
+    background: white;
+    border: 1px solid #eee;
+    border-radius: 16px;
+    padding: 28px 20px;
+    text-align: center;
+    transition: 0.3s;
+}
+.prof-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+.prof-avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #00174d, #0033aa);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 16px;
+    font-size: 24px;
+    font-weight: bold;
+}
+.prof-card h3 {
+    font-size: 17px;
+    color: #00174d;
+    margin-bottom: 8px;
+}
+.prof-card p {
+    font-size: 13px;
+    color: #777;
+}
+
+.no-data {
+    text-align: center;
+    color: gray;
+    font-size: 16px;
+    padding: 40px;
+}
+.back-link {
+    display: inline-block;
+    margin-bottom: 30px;
+    color: #00174d;
+    font-weight: bold;
+    text-decoration: none;
+}
+.back-link:hover { text-decoration: underline; }
+</style>
+
+<div class="page-header">
+    <h1>Our Professors</h1>
+    <p>Meet the dedicated faculty at DEPI College</p>
+</div>
+
+<div class="section">
+    <a asp-controller="Home" asp-action="Index" class="back-link">← Back to Home</a>
+
+    @if (Model != null && Model.Any())
+    {
+            <div class="profs-grid">
+            @foreach (var prof in Model)
+            {
+                        <div class="prof-card">
+                            <div class="prof-avatar">
+                        @prof.Name?.FirstOrDefault()
+                            </div>
+                            <h3>@prof.Name</h3>
+                            <p>@prof.Email</p>
+                        </div>
+            }
+            </div>
+    }
+    else
+    {
+            <p class="no-data">No professors available at the moment.</p>
+    }
+</div>
+
+<div style="background:#00174d; color:white; text-align:center; padding:20px;">
+    <p>© 2026 DEPI College</p>
+</div>

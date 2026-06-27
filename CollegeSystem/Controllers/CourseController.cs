@@ -8,5 +8,13 @@ namespace CollegeSystem.Controllers
         {
             return View();
         }
+        public IActionResult AllCourses()
+        {
+            return View();
+        }
+        public IActionResult AllProfessors()
+        {
+            return View();
+        }
     }
 }

@@ -164,12 +164,18 @@ body {
 
 <!-- COURSES -->
 <div class="section">
-    <p class="section-title">Courses</p>
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <p class="section-title" style="margin:0;">Courses</p>
+        <a asp-controller="Home" asp-action="AllCourses" 
+           style="color:#00174d; font-weight:bold; text-decoration:none;">
+            Show All →
+        </a>
+    </div>
 
     <div class="courses-grid">
         @if (ViewBag.Courses != null && ((IEnumerable<Course>)ViewBag.Courses).Any())
         {
-            foreach (var course in (IEnumerable<Course>)ViewBag.Courses)
+            foreach (var course in ((IEnumerable<Course>)ViewBag.Courses).Take(3))
             {
                         <div class="course-card">
                             <h3>@course.Name</h3>
@@ -193,12 +199,18 @@ body {
 
 <!-- PROFESSORS -->
 <div class="section">
-    <p class="section-title">Professors</p>
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <p class="section-title" style="margin:0;">Professors</p>
+        <a asp-controller="Home" asp-action="AllProfessors"
+           style="color:#00174d; font-weight:bold; text-decoration:none;">
+            Show All →
+        </a>
+    </div>
 
     <div class="profs-grid">
         @if (ViewBag.Professors != null && ((IEnumerable<Professor>)ViewBag.Professors).Any())
         {
-            foreach (var prof in (IEnumerable<Professor>)ViewBag.Professors)
+            foreach (var prof in ((IEnumerable<Professor>)ViewBag.Professors).Take(3))
             {
                         <div class="prof-card">
                             <div class="prof-avatar">@prof.Name?.FirstOrDefault()</div>

@@ -1,0 +1,149 @@
+﻿@model IEnumerable<CollegeSystem.Models.Course>
+
+@{
+    Layout = "_LayoutHome";
+    ViewData["Title"] = "All Courses";
+}
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+.page-header {
+    background: #00174d;
+    color: white;
+    padding: 40px;
+    text-align: center;
+}
+.page-header h1 { font-size: 36px; margin-bottom: 8px; }
+.page-header p { opacity: 0.8; font-size: 16px; }
+
+.section {
+    padding: 60px 40px;
+    max-width: 1100px;
+    margin: auto;
+}
+
+.courses-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 24px;
+}
+
+.course-card {
+    background: white;
+    border: 1px solid #eee;
+    border-radius: 16px;
+    padding: 24px;
+    transition: 0.3s;
+}
+.course-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+.course-card h3 {
+    font-size: 18px;
+    color: #00174d;
+    margin-bottom: 10px;
+}
+.course-card p {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 6px;
+    line-height: 1.6;
+}
+.course-badge {
+    display: inline-block;
+    background: #e8edf7;
+    color: #00174d;
+    font-size: 12px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    margin-bottom: 12px;
+}
+.course-meta {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: #777;
+    margin-top: 8px;
+}
+.no-data {
+    text-align: center;
+    color: gray;
+    font-size: 16px;
+    padding: 40px;
+}
+.back-link {
+    display: inline-block;
+    margin-bottom: 30px;
+    color: #00174d;
+    font-weight: bold;
+    text-decoration: none;
+}
+.back-link:hover { text-decoration: underline; }
+</style>
+
+<div class="page-header">
+    <h1>All Courses</h1>
+    <p>Explore all available courses at DEPI College</p>
+</div>
+
+<div class="section">
+    <a asp-controller="Home" asp-action="Index" class="back-link">← Back to Home</a>
+
+    @if (Model != null && Model.Any())
+    {
+            <div class="courses-grid">
+            @foreach (var course in Model)
+            {
+                        <div class="course-card">
+                            <span class="course-badge">Course</span>
+                            <h3>@course.Name</h3>
+
+                    @if (!string.IsNullOrEmpty(course.Description))
+                    {
+                                    <p>@course.Description</p>
+                    }
+
+                            <div class="course-meta">
+                                <span>⏱</span>
+                                <span>Duration: @course.Duration</span>
+                            </div>
+
+                    @if (!string.IsNullOrEmpty(course.Semesters))
+                    {
+                                    <div class="course-meta">
+                                        <span>📅</span>
+                                        <span>Semesters: @course.Semesters</span>
+                                    </div>
+                    }
+
+                    @if (!string.IsNullOrEmpty(course.CoursePrerequisites))
+                    {
+                                    <div class="course-meta">
+                                        <span>📋</span>
+                                        <span>Prerequisites: @course.CoursePrerequisites</span>
+                                    </div>
+                    }
+
+                    @if (course.Professor != null)
+                    {
+                                    <div class="course-meta">
+                                        <span>👨‍🏫</span>
+                                        <span>Professor: @course.Professor.Name</span>
+                                    </div>
+                    }
+                        </div>
+            }
+            </div>
+    }
+    else
+    {
+            <p class="no-data">No courses available at the moment.</p>
+    }
+</div>
+
+<div style="background:#00174d; color:white; text-align:center; padding:20px;">
+    <p>© 2026 DEPI College</p>
+</div>

@@ -5,7 +5,7 @@
     var courses = ViewBag.Courses as List<Course>;
 }
 
-<section class="min-h-full flex flex-col items-center justify-start bg-surface-container-low px-10 pt-10">
+<section class="min-h-screen flex flex-col items-center justify-start bg-surface-container-low px-10 pt-10">
 
     <div class="text-center mb-10 -mt-2">
         <h1 class="text-4xl font-bold text-on-surface">
@@ -20,12 +20,12 @@
 
         @if (!ViewData.ModelState.IsValid)
         {
-            <div class="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl text-red-600 text-sm">
+                <div class="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl text-red-600 text-sm">
                 @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
                 {
-                    <p>@error.ErrorMessage</p>
+                            <p>@error.ErrorMessage</p>
                 }
-            </div>
+                </div>
         }
 
         <form method="post" asp-action="AssignCourseToStudent" asp-controller="Admin">
@@ -40,7 +40,7 @@
                     {
                         @foreach (var student in students)
                         {
-                            <option value="@student.ID">@student.Name</option>
+                                    <option value="@student.ID">@student.Name</option>
                         }
                     }
                 </select>
@@ -56,19 +56,19 @@
                     {
                         @foreach (var course in courses)
                         {
-                            <option value="@course.ID">@course.Name</option>
+                                    <option value="@course.ID">@course.Name</option>
                         }
                     }
                 </select>
             </div>
 
             <!-- Submit -->
-            <button type="submit"
-                    class="w-full bg-primary text-white font-semibold py-3 rounded-xl hover:opacity-90 transition">
-                Assign Course
-            </button>
+        <button type="submit"
+                class="w-full bg-[#00174d] text-white font-semibold py-3 rounded-xl hover:bg-[#002080] transition">
+            Assign Course
+        </button>
 
         </form>
     </div>
 
-</section>  
+</section>
