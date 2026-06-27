@@ -20,6 +20,11 @@
         public string FileName { get; set; }
         public string ContentType { get; set; }
         public byte[] Data { get; set; }
+        public int CourseID { get; set; }
+
+        public Course Course { get; set; }
+
+   
 
         public Admin Admin { get; set; }
     }

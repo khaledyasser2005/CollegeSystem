@@ -62,7 +62,6 @@
 
 <h2 class="course-title">@Model.Name</h2>
 
-<!-- ================= TABS ================= -->
 <div class="tabs">
 
     <button class="tab-btn active" onclick="showTab(event,'materials')">
@@ -83,7 +82,6 @@
 
 </div>
 
-<!-- ================= MATERIALS ================= -->
 <div id="materials" class="tab-content active">
 
     <div class="card-box">
@@ -112,15 +110,28 @@
                 <input class="form-control" type="file" name="pdfFile" accept=".pdf" />
             </div>
 
-            <button class="btn btn-primary" type="submit">
-                Upload Material
-            </button>
+            <div style="margin-top:20px;margin-bottom:35px;">
+                <button type="submit"
+                        style="background:#0d6efd;
+                    color:white;
+                    border:none;
+                    padding:10px 25px;
+                    border-radius:6px;
+                    cursor:pointer;
+                    font-size:16px;
+                    font-weight:bold;">
+                    Upload Material
+                </button>
+            </div>
 
         </form>
 
         <hr />
 
         <h4>Uploaded Materials</h4>
+        @{
+            var reports = ViewBag.Reports as List<CollegeSystem.Models.Report>;
+        }
 
         @if (materials != null && materials.Any())
         {
@@ -161,8 +172,8 @@
         }
 
     </div>
-</div>
 
+</div>
 <!-- ================= ASSIGNMENTS ================= -->
 <div id="assignments" class="tab-content">
 
@@ -196,9 +207,6 @@
 
         <h3>Reports</h3>
 
-        <hr />
-
-        <!-- Upload Report Form -->
         <form asp-action="UploadReport"
               asp-controller="Professor"
               method="post"
@@ -216,7 +224,14 @@
                 <input type="file" name="file" class="form-control" accept="application/pdf" />
             </div>
 
-            <button type="submit" class="btn btn-primary">
+            <button type="submit"
+                    style="background:#0d6efd;
+                color:white;
+                border:none;
+                padding:10px 25px;
+                border-radius:6px;
+                font-weight:bold;
+                cursor:pointer;">
                 Upload Report
             </button>
 
@@ -224,25 +239,68 @@
 
         <hr />
 
-        <div class="alert alert-secondary">
-            Reports will appear here.
-        </div>
+       
+
+        @if (reports != null && reports.Any())
+        {
+            foreach (var item in reports)
+            {
+                <div class="d-flex justify-content-between align-items-center border rounded p-3 mb-3">
+
+                    <div>
+                        <span>📄</span>
+
+                        <a asp-action="DownloadReport"
+                               asp-controller="Professor"
+                               asp-route-id="@item.ID"
+                               style="font-weight:bold;">
+                            @item.Title
+                        </a>
+
+                        <br />
+
+                        <small class="text-muted">
+                            @item.GeneratedDate.ToString("dd/MM/yyyy")
+                        </small>
+                    </div>
+
+                    <div>
+                        <a asp-action="DeleteReport"
+                               asp-controller="Professor"
+                               asp-route-id="@item.ID"
+                               asp-route-courseId="@Model.ID"
+                               class="btn btn-danger">
+                            🗑
+                        </a>
+                    </div>
+
+                </div>
+            }
+        }
+        else
+        {
+            <div class="alert alert-info">
+                No Reports Yet
+            </div>
+        }
 
     </div>
 
 </div>
-
+<!-- ================= SCRIPT ================= -->
 <!-- ================= SCRIPT ================= -->
 <script>
 
     function showTab(event, tabId) {
 
         var tabs = document.getElementsByClassName("tab-content");
+
         for (var i = 0; i < tabs.length; i++) {
             tabs[i].classList.remove("active");
         }
 
         var buttons = document.getElementsByClassName("tab-btn");
+
         for (var i = 0; i < buttons.length; i++) {
             buttons[i].classList.remove("active");
         }
@@ -250,5 +308,17 @@
         document.getElementById(tabId).classList.add("active");
         event.currentTarget.classList.add("active");
     }
+
+    window.onload = function () {
+
+        var activeTab = '@ViewBag.ActiveTab';
+
+        if (activeTab) {
+            var btn = document.querySelector("[onclick*='" + activeTab + "']");
+            if (btn) {
+                btn.click();
+            }
+        }
+    };
 
 </script>
