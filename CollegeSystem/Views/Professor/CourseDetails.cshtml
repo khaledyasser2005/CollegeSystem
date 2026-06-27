@@ -189,15 +189,47 @@
 
 <!-- ================= STUDENTS ================= -->
 <div id="students" class="tab-content">
-
     <div class="card-box">
-        <h3>Students</h3>
+        <h3>Students Enrolled in this Course</h3>
         <hr />
-        <div class="alert alert-secondary">
-            Students section will be added here.
-        </div>
+        @{
+            var enrolledStudents = ViewBag.Students as List<CollegeSystem.Models.Student>;
+        }
+        @if (enrolledStudents != null && enrolledStudents.Any())
+        {
+            <table class="table table-hover">
+                <thead class="table-primary">
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Grade</th>
+                        <th>Level</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var student in enrolledStudents)
+                    {
+                        <tr>
+                            <td>@student.Name</td>
+                            <td>@student.Email</td>
+                            <td>
+                                @{
+                                    var enrollment = (ViewBag.Enrollments as List<CollegeSystem.Models.Enrollment>)
+                                        ?.FirstOrDefault(e => e.StudentID == student.ID);
+                                }
+                                @(enrollment?.Grade ?? "N/A")
+                            </td>
+                            <td>@student.Level</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <div class="alert alert-info">No Students Enrolled Yet</div>
+        }
     </div>
-
 </div>
 
 <!-- ================= REPORTS ================= -->

@@ -31,9 +31,7 @@ namespace CollegeSystem.Controllers
         public IActionResult CourseDetails(int id, string tab = "materials")
         {
             var context = HttpContext.RequestServices.GetService<AppDbContext>();
-
             var course = context.Courses.FirstOrDefault(c => c.ID == id);
-
             if (course == null)
                 return NotFound();
 
@@ -47,9 +45,21 @@ namespace CollegeSystem.Controllers
                 .OrderByDescending(r => r.GeneratedDate)
                 .ToList();
 
+            var enrollments = context.Enrollments
+                .Where(e => e.CourseID == id)
+                .ToList();
+
+            var studentIds = enrollments.Select(e => e.StudentID).ToList();
+
+            ViewBag.Students = context.Students
+                .Where(s => studentIds.Contains(s.ID))
+                .ToList();
+
+            ViewBag.Enrollments = enrollments;
+
             return View(course);
         }
-
+       
         public IActionResult Professors()
         {
             var context = HttpContext.RequestServices.GetService<AppDbContext>();
