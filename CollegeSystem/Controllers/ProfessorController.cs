@@ -45,7 +45,7 @@ namespace CollegeSystem.Controllers
                 .Where(r => r.CourseID == id)
                 .OrderByDescending(r => r.GeneratedDate)
                 .ToList();
-             */           
+              */      
 
             var enrollments = context.Enrollments
                 .Where(e => e.CourseID == id)
