@@ -1,4 +1,4 @@
-@model CollegeSystem.Models.Course
+﻿@model CollegeSystem.Models.Course
 
 @{
     ViewData["Title"] = "Course Details";
@@ -20,10 +20,12 @@
         background: #f4f8ff;
     }
 
+    /* 🔥 اسم الكورس = نفس لون الـ sidebar */
     .course-title {
-        color: #1f4aa8;
+        color: #00174d;
         font-weight: bold;
         margin-bottom: 25px;
+        font-size: 36px;
     }
 
     .course-details {
@@ -50,7 +52,7 @@
         align-items: center;
         justify-content: space-between;
         padding: 16px 18px;
-        color: #1f4aa8;
+        color: #00174d; /* 👈 نفس sidebar */
         font-weight: bold;
         cursor: pointer;
         list-style: none;
@@ -62,7 +64,7 @@
 
     .section-arrow,
     .item-arrow {
-        color: #1f4aa8;
+        color: #00174d;
         font-size: 16px;
         font-weight: bold;
     }
@@ -89,16 +91,23 @@
         margin-bottom: 12px;
         text-decoration: none;
         color: #333;
+        transition: 0.2s;
     }
 
     .item-row:last-child {
         margin-bottom: 0;
     }
 
+    /* 🔥 لون أفتح لكل العناصر */
     .item-title {
-        color: #1f4aa8;
+        color: #4da6ff;
         font-weight: bold;
         margin-bottom: 4px;
+    }
+
+    /* 🔥 hover موحد */
+    .item-row:hover .item-title {
+        color: #00174d;
     }
 
     .item-desc {
@@ -124,6 +133,8 @@
     <h2 class="course-title">@Model.Name</h2>
 
     <div class="content-box">
+
+        <!-- ================= MATERIALS ================= -->
         <details class="section-box" open>
             <summary class="section-title">
                 <span>Materials</span>
@@ -135,23 +146,24 @@
                 {
                     foreach (var item in materials)
                     {
-                        <a class="item-row" href="@item.FileUrl" target="_blank">
-                            <span>
-                                <span class="item-title">@item.Title</span>
-                                <span class="item-desc">@item.Description</span>
-                                <span class="item-meta">@item.UploadDate.ToString("dd/MM/yyyy")</span>
-                            </span>
-                            <span class="item-arrow">&rsaquo;</span>
-                        </a>
+                                <a class="item-row" href="@item.FileUrl" target="_blank">
+                                    <span>
+                                        <span class="item-title">@item.Title</span>
+                                        <span class="item-desc">@item.Description</span>
+                                        <span class="item-meta">@item.UploadDate.ToString("dd/MM/yyyy")</span>
+                                    </span>
+                                    <span class="item-arrow">&rsaquo;</span>
+                                </a>
                     }
                 }
                 else
                 {
-                    <div class="empty-message">No Materials Yet</div>
+                        <div class="empty-message">No Materials Yet</div>
                 }
             </div>
         </details>
 
+        <!-- ================= ASSIGNMENTS ================= -->
         <details class="section-box">
             <summary class="section-title">
                 <span>Assignments</span>
@@ -163,23 +175,26 @@
                 {
                     foreach (var item in assignments)
                     {
-                        <div class="item-row">
-                            <span>
-                                <span class="item-title">@item.Title</span>
-                                <span class="item-desc">@item.Description</span>
-                                <span class="item-meta">Due: @item.DueDate.ToString("dd/MM/yyyy") | Max Marks: @item.MaxMarks</span>
-                            </span>
-                            <span class="item-arrow">&rsaquo;</span>
-                        </div>
+                                <a class="item-row" href="#" onclick="return false;">
+                                    <span>
+                                        <span class="item-title">@item.Title</span>
+                                        <span class="item-desc">@item.Description</span>
+                                        <span class="item-meta">
+                                            Due: @item.DueDate.ToString("dd/MM/yyyy") | Max Marks: @item.MaxMarks
+                                        </span>
+                                    </span>
+                                    <span class="item-arrow">&rsaquo;</span>
+                                </a>
                     }
                 }
                 else
                 {
-                    <div class="empty-message">No Assignments Yet</div>
+                        <div class="empty-message">No Assignments Yet</div>
                 }
             </div>
         </details>
 
+        <!-- ================= QUIZ ================= -->
         <details class="section-box">
             <summary class="section-title">
                 <span>Quiz</span>
@@ -193,34 +208,38 @@
                     {
                         if (IsExternalLink(item.Description))
                         {
-                            <a class="item-row" href="@item.Description" target="_blank">
-                                <span>
-                                    <span class="item-title">@item.Title</span>
-                                    <span class="item-desc">Open quiz form</span>
-                                    <span class="item-meta">Duration: @item.Duration minutes | Attempts: @item.AttemptsAllowed</span>
-                                </span>
-                                <span class="item-arrow">&rsaquo;</span>
-                            </a>
+                                        <a class="item-row" href="@item.Description" target="_blank">
+                                            <span>
+                                                <span class="item-title">@item.Title</span>
+                                                <span class="item-desc">Open quiz form</span>
+                                                <span class="item-meta">
+                                                    Duration: @item.Duration minutes | Attempts: @item.AttemptsAllowed
+                                                </span>
+                                            </span>
+                                            <span class="item-arrow">&rsaquo;</span>
+                                        </a>
                         }
                         else
                         {
-                            <div class="item-row">
-                                <span>
-                                    <span class="item-title">@item.Title</span>
-                                    <span class="item-desc">@item.Description</span>
-                                    <span class="item-meta">Duration: @item.Duration minutes | Attempts: @item.AttemptsAllowed</span>
-                                </span>
-                                <span class="item-arrow">&rsaquo;</span>
-                            </div>
+                                        <a class="item-row" href="#" onclick="return false;">
+                                            <span>
+                                                <span class="item-title">@item.Title</span>
+                                                <span class="item-desc">@item.Description</span>
+                                                <span class="item-meta">
+                                                    Duration: @item.Duration minutes | Attempts: @item.AttemptsAllowed
+                                                </span>
+                                            </span>
+                                            <span class="item-arrow">&rsaquo;</span>
+                                        </a>
                         }
                     }
                 }
                 else
                 {
-                    <div class="empty-message">No Quizzes Yet</div>
+                        <div class="empty-message">No Quizzes Yet</div>
                 }
             </div>
         </details>
+
     </div>
 </div>
-

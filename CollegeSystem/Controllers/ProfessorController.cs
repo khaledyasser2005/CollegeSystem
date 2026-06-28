@@ -45,7 +45,7 @@ namespace CollegeSystem.Controllers
                 .Where(r => r.CourseID == id)
                 .OrderByDescending(r => r.GeneratedDate)
                 .ToList();
-            */
+             */           
 
             var enrollments = context.Enrollments
                 .Where(e => e.CourseID == id)
@@ -62,22 +62,6 @@ namespace CollegeSystem.Controllers
             return View(course);
         }
        
-        public IActionResult Professors()
-        {
-            var context = HttpContext.RequestServices.GetService<AppDbContext>();
-
-            var professors = context.Professors.ToList();
-
-            return View("Professors", professors);
-        }
-
-        public IActionResult CollegeCourses()
-        {
-            var context = HttpContext.RequestServices.GetService<AppDbContext>();
-            var courses = context.Courses.ToList();
-            return View("CollegeCourses", courses);
-        }
-
         [HttpPost]
         public IActionResult UploadMaterial(int courseId, IFormFile pdfFile, string title, string description)
         {
