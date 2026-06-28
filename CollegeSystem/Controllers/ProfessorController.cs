@@ -59,9 +59,34 @@ namespace CollegeSystem.Controllers
 
             ViewBag.Enrollments = enrollments;
 
+            ViewBag.Assignments = context.Assignments
+                .Where(a => a.CourseID == id)
+                .OrderByDescending(a => a.CreatedAt)
+                .ToList();
+
+            ViewBag.Quizzes = context.Quizzes
+                .Where(q => q.CourseID == id)
+                .OrderByDescending(q => q.CreatedAt)
+                .ToList();
+
             return View(course);
         }
-       
+        public IActionResult Professors()
+        {
+            var context = HttpContext.RequestServices.GetService<AppDbContext>();
+
+            var professors = context.Professors.ToList();
+
+            return View("Professors", professors);
+        }
+
+        public IActionResult CollegeCourses()
+        {
+            var context = HttpContext.RequestServices.GetService<AppDbContext>();
+            var courses = context.Courses.ToList();
+            return View("CollegeCourses", courses);
+        }
+
         [HttpPost]
         public IActionResult UploadMaterial(int courseId, IFormFile pdfFile, string title, string description)
         {
@@ -127,8 +152,80 @@ namespace CollegeSystem.Controllers
 
             return RedirectToAction("CourseDetails", new { id = courseId });
         }
+        [HttpPost]
+        public IActionResult CreateAssignment(int courseId, string title, string description, DateTime dueDate, int maxMarks)
+        {
+            var context = HttpContext.RequestServices.GetService<AppDbContext>();
 
+            Assignment assignment = new Assignment
+            {
+                Title = title,
+                Description = description,
+                DueDate = dueDate,
+                MaxMarks = maxMarks,
+                CreatedAt = DateTime.Now,
+                CourseID = courseId
+            };
 
+            context.Assignments.Add(assignment);
+            context.SaveChanges();
+
+            return RedirectToAction("CourseDetails", new { id = courseId, tab = "assignments" });
+        }
+
+        public IActionResult DeleteAssignment(int id, int courseId)
+        {
+            var context = HttpContext.RequestServices.GetService<AppDbContext>();
+
+            var assignment = context.Assignments.FirstOrDefault(a => a.ID == id);
+
+            if (assignment != null)
+            {
+                context.Assignments.Remove(assignment);
+                context.SaveChanges();
+            }
+
+            return RedirectToAction("CourseDetails", new { id = courseId, tab = "assignments" });
+        }
+        [HttpPost]
+        public IActionResult CreateQuiz(int courseId, string title, string description, int totalMarks, int duration, int attemptsAllowed, DateTime startTime, DateTime endTime)
+        {
+            var context = HttpContext.RequestServices.GetService<AppDbContext>();
+
+            Quiz quiz = new Quiz
+            {
+                Title = title,
+                Description = description,
+                TotalMarks = totalMarks,
+                MaxScore = totalMarks,
+                Duration = duration,
+                AttemptsAllowed = attemptsAllowed,
+                StartTime = startTime,
+                EndTime = endTime,
+                CreatedAt = DateTime.Now,
+                CourseID = courseId
+            };
+
+            context.Quizzes.Add(quiz);
+            context.SaveChanges();
+
+            return RedirectToAction("CourseDetails", new { id = courseId, tab = "assignments" });
+        }
+
+        public IActionResult DeleteQuiz(int id, int courseId)
+        {
+            var context = HttpContext.RequestServices.GetService<AppDbContext>();
+
+            var quiz = context.Quizzes.FirstOrDefault(q => q.ID == id);
+
+            if (quiz != null)
+            {
+                context.Quizzes.Remove(quiz);
+                context.SaveChanges();
+            }
+
+            return RedirectToAction("CourseDetails", new { id = courseId, tab = "assignments" });
+        }
         public IActionResult UploadReport(int courseId)
         {
             ViewBag.CourseId = courseId;
