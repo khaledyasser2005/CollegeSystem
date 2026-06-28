@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace CollegeSystem.Views.Admin
 {
-    public class ReportsModel : PageModel
+    public class AllProfessorsModel : PageModel
     {
         public void OnGet()
         {

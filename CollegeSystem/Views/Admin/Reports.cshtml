@@ -35,4 +35,18 @@
                             </span>
                         </td>
                         <td>
-                            <a
+                            <a asp-action="DownloadReport" asp-controller="Admin" asp-route-id="@report.ID"
+                               class="btn btn-sm btn-primary">
+                                Download
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <div class="alert alert-info">No Reports Found</div>
+    }
+</div>

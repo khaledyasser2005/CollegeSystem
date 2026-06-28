@@ -26,6 +26,19 @@ namespace CollegeSystem.Controllers
         {
             return View("ManageProfessors");
         }
+        public IActionResult AllProfessors(string searchName)
+        {
+            var professors = _context.Professors.AsQueryable();
+
+            if (!String.IsNullOrEmpty(searchName))
+            {
+                professors = professors.Where(p => p.Name.Contains(searchName));
+            }
+
+            ViewBag.SearchName = searchName;
+
+            return View("AllProfessors", professors.ToList());
+        }
 
         // ================= ADD PROFESSOR =================
         [HttpPost]
