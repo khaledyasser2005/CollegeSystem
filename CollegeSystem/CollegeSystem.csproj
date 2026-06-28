@@ -8,12 +8,10 @@
 
   <ItemGroup>
     <Content Remove="Views\Student\CollegeCourses.cshtml" />
-    <Content Remove="Views\Student\CourseDetails.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
     <None Include="Views\Student\CollegeCourses.cshtml" />
-    <None Include="Views\Student\CourseDetails.cshtml" />
   </ItemGroup>
 
   <ItemGroup>

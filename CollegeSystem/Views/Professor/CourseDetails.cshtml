@@ -3,13 +3,14 @@
 @{
     ViewData["Title"] = "Course Details";
     var materials = ViewBag.Materials as List<CollegeSystem.Models.Material>;
+    var reports = ViewBag.Reports as List<CollegeSystem.Models.Report>;
+    var assignments = ViewBag.Assignments as List<CollegeSystem.Models.Assignment>;
+    var quizzes = ViewBag.Quizzes as List<CollegeSystem.Models.Quiz>;
+    var enrolledStudents = ViewBag.Students as List<CollegeSystem.Models.Student>;
 }
 
 <style>
-
-    body {
-        background: #f4f8ff;
-    }
+    body { background: #f4f8ff; }
 
     .course-title {
         color: #1f4aa8;
@@ -34,22 +35,11 @@
         transition: .3s;
     }
 
-        .tab-btn:hover {
-            background: #dbe8ff;
-        }
+    .tab-btn:hover { background: #dbe8ff; }
+    .tab-btn.active { background: #1f4aa8; color: white; }
 
-        .tab-btn.active {
-            background: #1f4aa8;
-            color: white;
-        }
-
-    .tab-content {
-        display: none;
-    }
-
-        .tab-content.active {
-            display: block;
-        }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
 
     .card-box {
         background: white;
@@ -57,42 +47,23 @@
         padding: 25px;
         box-shadow: 0 3px 10px rgba(0,0,0,.1);
     }
-
 </style>
 
 <h2 class="course-title">@Model.Name</h2>
 
 <div class="tabs">
-
-    <button class="tab-btn active" onclick="showTab(event,'materials')">
-        Materials
-    </button>
-
-    <button class="tab-btn" onclick="showTab(event,'assignments')">
-        Assignments / Quizzes
-    </button>
-
-    <button class="tab-btn" onclick="showTab(event,'students')">
-        Students
-    </button>
-
-    <button class="tab-btn" onclick="showTab(event,'reports')">
-        Reports
-    </button>
-
+    <button class="tab-btn active" onclick="showTab(event,'materials')">Materials</button>
+    <button class="tab-btn" onclick="showTab(event,'assignments')">Assignments / Quizzes</button>
+    <button class="tab-btn" onclick="showTab(event,'students')">Students</button>
+    <button class="tab-btn" onclick="showTab(event,'reports')">Reports</button>
 </div>
 
+<!-- ================= MATERIALS ================= -->
 <div id="materials" class="tab-content active">
-
     <div class="card-box">
-
         <h3>Materials</h3>
 
-        <form asp-action="UploadMaterial"
-              asp-controller="Professor"
-              method="post"
-              enctype="multipart/form-data">
-
+        <form asp-action="UploadMaterial" asp-controller="Professor" method="post" enctype="multipart/form-data">
             <input type="hidden" name="courseId" value="@Model.ID" />
 
             <div class="mb-3">
@@ -111,58 +82,33 @@
             </div>
 
             <div style="margin-top:20px;margin-bottom:35px;">
-                <button type="submit"
-                        style="background:#0d6efd;
-                    color:white;
-                    border:none;
-                    padding:10px 25px;
-                    border-radius:6px;
-                    cursor:pointer;
-                    font-size:16px;
-                    font-weight:bold;">
+                <button type="submit" style="background:#0d6efd;color:white;border:none;padding:10px 25px;border-radius:6px;cursor:pointer;font-size:16px;font-weight:bold;">
                     Upload Material
                 </button>
             </div>
-
         </form>
 
         <hr />
-
         <h4>Uploaded Materials</h4>
-        @{
-            var reports = ViewBag.Reports as List<CollegeSystem.Models.Report>;
-        }
 
         @if (materials != null && materials.Any())
         {
             foreach (var item in materials)
             {
                 <div class="d-flex justify-content-between align-items-center border rounded p-3 mb-3">
-
                     <div>
                         <span>📄</span>
-
-                        <a href="@item.FileUrl" target="_blank" style="font-weight:bold;">
-                            @item.Title
-                        </a>
-
+                        <a href="@item.FileUrl" target="_blank" style="font-weight:bold;">@item.Title</a>
                         <br />
-
                         <small>@item.Description</small>
                         <br />
                         <small class="text-muted">@item.UploadDate.ToString("dd/MM/yyyy")</small>
                     </div>
-
                     <div>
-                        <a asp-action="DeleteMaterial"
-                               asp-controller="Professor"
-                               asp-route-id="@item.ID"
-                               asp-route-courseId="@Model.ID"
-                               class="btn btn-danger">
-                            🗑 Delete
-                        </a>
+                        <a asp-action="DeleteMaterial" asp-controller="Professor"
+                           asp-route-id="@item.ID" asp-route-courseId="@Model.ID"
+                           class="btn btn-danger">🗑 Delete</a>
                     </div>
-
                 </div>
             }
         }
@@ -170,20 +116,15 @@
         {
             <div class="alert alert-info">No Materials Yet</div>
         }
-
     </div>
-
 </div>
+
 <!-- ================= ASSIGNMENTS ================= -->
 <div id="assignments" class="tab-content">
-
     <div class="card-box">
         <h3>Assignments</h3>
 
-        <form asp-action="CreateAssignment"
-              asp-controller="Professor"
-              method="post">
-
+        <form asp-action="CreateAssignment" asp-controller="Professor" method="post">
             <input type="hidden" name="courseId" value="@Model.ID" />
 
             <div class="mb-3">
@@ -208,59 +149,35 @@
             </div>
 
             <div style="margin-top:10px;margin-bottom:35px;">
-                <button type="submit"
-                        style="background:#0d6efd;
-                    color:white;
-                    border:none;
-                    padding:10px 25px;
-                    border-radius:6px;
-                    cursor:pointer;
-                    font-size:16px;
-                    font-weight:bold;">
+                <button type="submit" style="background:#0d6efd;color:white;border:none;padding:10px 25px;border-radius:6px;cursor:pointer;font-size:16px;font-weight:bold;">
                     Add Assignment
                 </button>
             </div>
-
         </form>
 
         <hr />
-
         <h4>Assignments List</h4>
-
-        @{
-            var assignments = ViewBag.Assignments as List<CollegeSystem.Models.Assignment>;
-        }
 
         @if (assignments != null && assignments.Any())
         {
             foreach (var item in assignments)
             {
                 <div class="d-flex justify-content-between align-items-center border rounded p-3 mb-3">
-
                     <div>
                         <span>📝</span>
-
                         <span style="font-weight:bold;">@item.Title</span>
-
                         <br />
-
                         <small>@item.Description</small>
                         <br />
                         <small class="text-muted">
                             Due: @item.DueDate.ToString("dd/MM/yyyy HH:mm") &nbsp;|&nbsp; Max Marks: @item.MaxMarks
                         </small>
                     </div>
-
                     <div>
-                        <a asp-action="DeleteAssignment"
-                           asp-controller="Professor"
-                           asp-route-id="@item.ID"
-                           asp-route-courseId="@Model.ID"
-                           class="btn btn-danger">
-                            🗑 Delete
-                        </a>
+                        <a asp-action="DeleteAssignment" asp-controller="Professor"
+                           asp-route-id="@item.ID" asp-route-courseId="@Model.ID"
+                           class="btn btn-danger">🗑 Delete</a>
                     </div>
-
                 </div>
             }
         }
@@ -268,15 +185,13 @@
         {
             <div class="alert alert-info">No Assignments Yet</div>
         }
-
     </div>
+
+    <!-- QUIZZES -->
     <div class="card-box" style="margin-top:25px;">
         <h3>Quizzes</h3>
 
-        <form asp-action="CreateQuiz"
-              asp-controller="Professor"
-              method="post">
-
+        <form asp-action="CreateQuiz" asp-controller="Professor" method="post">
             <input type="hidden" name="courseId" value="@Model.ID" />
 
             <div class="mb-3">
@@ -316,21 +231,14 @@
             </div>
 
             <div style="margin-top:10px;margin-bottom:35px;">
-                <button type="submit"
-                        style="background:#0d6efd;color:white;border:none;padding:10px 25px;border-radius:6px;cursor:pointer;font-size:16px;font-weight:bold;">
+                <button type="submit" style="background:#0d6efd;color:white;border:none;padding:10px 25px;border-radius:6px;cursor:pointer;font-size:16px;font-weight:bold;">
                     Add Quiz
                 </button>
             </div>
-
         </form>
 
         <hr />
-
         <h4>Quizzes List</h4>
-
-        @{
-            var quizzes = ViewBag.Quizzes as List<CollegeSystem.Models.Quiz>;
-        }
 
         @if (quizzes != null && quizzes.Any())
         {
@@ -351,9 +259,9 @@
                         </small>
                     </div>
                     <div>
-                        <a asp-action="DeleteQuiz" asp-controller="Professor" asp-route-id="@item.ID" asp-route-courseId="@Model.ID" class="btn btn-danger">
-                            🗑 Delete
-                        </a>
+                        <a asp-action="DeleteQuiz" asp-controller="Professor"
+                           asp-route-id="@item.ID" asp-route-courseId="@Model.ID"
+                           class="btn btn-danger">🗑 Delete</a>
                     </div>
                 </div>
             }
@@ -362,10 +270,7 @@
         {
             <div class="alert alert-info">No Quizzes Yet</div>
         }
-
     </div>
-</div>
-
 </div>
 
 <!-- ================= STUDENTS ================= -->
@@ -373,9 +278,7 @@
     <div class="card-box">
         <h3>Students Enrolled in this Course</h3>
         <hr />
-        @{
-            var enrolledStudents = ViewBag.Students as List<CollegeSystem.Models.Student>;
-        }
+
         @if (enrolledStudents != null && enrolledStudents.Any())
         {
             <table class="table table-hover">
@@ -415,16 +318,10 @@
 
 <!-- ================= REPORTS ================= -->
 <div id="reports" class="tab-content">
-
     <div class="card-box">
-
         <h3>Reports</h3>
 
-        <form asp-action="UploadReport"
-              asp-controller="Professor"
-              method="post"
-              enctype="multipart/form-data">
-
+        <form asp-action="UploadReport" asp-controller="Professor" method="post" enctype="multipart/form-data">
             <input type="hidden" name="courseId" value="@Model.ID" />
 
             <div class="mb-3">
@@ -437,82 +334,51 @@
                 <input type="file" name="file" class="form-control" accept="application/pdf" />
             </div>
 
-            <button type="submit"
-                    style="background:#0d6efd;
-                color:white;
-                border:none;
-                padding:10px 25px;
-                border-radius:6px;
-                font-weight:bold;
-                cursor:pointer;">
+            <button type="submit" style="background:#0d6efd;color:white;border:none;padding:10px 25px;border-radius:6px;font-weight:bold;cursor:pointer;">
                 Upload Report
             </button>
-
         </form>
 
         <hr />
-
-       
 
         @if (reports != null && reports.Any())
         {
             foreach (var item in reports)
             {
                 <div class="d-flex justify-content-between align-items-center border rounded p-3 mb-3">
-
                     <div>
                         <span>📄</span>
-
-                        <a asp-action="DownloadReport"
-                               asp-controller="Professor"
-                               asp-route-id="@item.ID"
-                               style="font-weight:bold;">
+                        <a asp-action="DownloadReport" asp-controller="Professor"
+                           asp-route-id="@item.ID" style="font-weight:bold;">
                             @item.Title
                         </a>
-
                         <br />
-
-                        <small class="text-muted">
-                            @item.GeneratedDate.ToString("dd/MM/yyyy")
-                        </small>
+                        <small class="text-muted">@item.GeneratedDate.ToString("dd/MM/yyyy")</small>
                     </div>
-
                     <div>
-                        <a asp-action="DeleteReport"
-                               asp-controller="Professor"
-                               asp-route-id="@item.ID"
-                               asp-route-courseId="@Model.ID"
-                               class="btn btn-danger">
-                            🗑
-                        </a>
+                        <a asp-action="DeleteReport" asp-controller="Professor"
+                           asp-route-id="@item.ID" asp-route-courseId="@Model.ID"
+                           class="btn btn-danger">🗑</a>
                     </div>
-
                 </div>
             }
         }
         else
         {
-            <div class="alert alert-info">
-                No Reports Yet
-            </div>
+            <div class="alert alert-info">No Reports Yet</div>
         }
-
     </div>
-
 </div>
+
 <!-- ================= SCRIPT ================= -->
 <script>
-
     function showTab(event, tabId) {
-
         var tabs = document.getElementsByClassName("tab-content");
-
         for (var i = 0; i < tabs.length; i++) {
             tabs[i].classList.remove("active");
         }
 
         var buttons = document.getElementsByClassName("tab-btn");
-
         for (var i = 0; i < buttons.length; i++) {
             buttons[i].classList.remove("active");
         }
@@ -522,15 +388,10 @@
     }
 
     window.onload = function () {
-
         var activeTab = '@ViewBag.ActiveTab';
-
         if (activeTab) {
             var btn = document.querySelector("[onclick*='" + activeTab + "']");
-            if (btn) {
-                btn.click();
-            }
+            if (btn) { btn.click(); }
         }
     };
-
 </script>

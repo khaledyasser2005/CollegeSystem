@@ -453,5 +453,21 @@ namespace CollegeSystem.Controllers
                 return NotFound();
             return File(report.Data, report.ContentType, report.FileName);
         }
+
+
+        public IActionResult StudentsByLevel()
+        {
+            var students = _context.Students
+                .Include(s => s.Enrollments)
+                .ThenInclude(e => e.Course)
+                .ToList();
+
+            var grouped = students
+                .GroupBy(s => s.Level)
+                .OrderBy(g => g.Key)
+                .ToDictionary(g => g.Key, g => g.ToList());
+
+            return View(grouped);
+        }
     }
 }

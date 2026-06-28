@@ -35,4 +35,18 @@
                             </span>
                         </td>
                         <td>
-                            <a
+                            <a href="@Url.Action("Download", "Reports", new { id = report.ID })"
+                                   class="btn btn-sm btn-primary">
+                                ⬇ Download
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <div class="alert alert-info">No reports found.</div>
+    }
+</div>

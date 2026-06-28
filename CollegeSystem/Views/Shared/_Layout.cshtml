@@ -11,131 +11,129 @@
 
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
 </head>
 
 <body class="h-screen m-0">
 
-<div class="flex h-screen">
+    <div class="flex h-screen">
 
-    <!-- SIDEBAR -->
-    <aside class="w-64 bg-[#00174d] flex flex-col justify-between shrink-0">
+        <!-- SIDEBAR -->
+        <aside class="w-64 bg-[#00174d] flex flex-col justify-between shrink-0">
 
-        <div class="p-6">
+            <div class="p-6">
 
-            <h1 class="text-white font-bold text-xl uppercase">
-                College CMS
-            </h1>
+                <h1 class="text-white font-bold text-xl uppercase">
+                    College CMS
+                </h1>
 
-            <nav class="mt-6 space-y-1">
+                <nav class="mt-6 space-y-1">
 
                     @if (Role == "Super Admin")
                     {
                         <a asp-controller="Home" asp-action="Index"
-                           class="flex items-center px-4 py-3 text-white/80 hover:text-white hover:bg-white/10 rounded-lg">
+                               class="flex items-center px-4 py-3 text-white/80 hover:text-white hover:bg-white/10 rounded-lg">
                             <span class="material-symbols-outlined mr-3">home</span>
                             Home
                         </a>
 
                         <a asp-controller="SuperAdmin" asp-action="SuperAdminDashboard"
-                           class="flex items-center px-4 py-3 text-white/80 hover:text-white hover:bg-white/10 rounded-lg">
+                               class="flex items-center px-4 py-3 text-white/80 hover:text-white hover:bg-white/10 rounded-lg">
                             <span class="material-symbols-outlined mr-3">shield</span>
                             Super Admin Dashboard
                         </a>
                     }
-                    else if(Role == "Admin")
-                    {
-                            <a asp-controller="Home" asp-action="Index"
-                                class="flex items-center px-4 py-3 text-white/80 hover:text-white hover:bg-white/10 rounded-lg">
-                                <span class="material-symbols-outlined mr-3">home</span>
-                                Home
-                            </a>
-
-                            <a asp-controller="Admin" asp-action="AdminDashboard"
-                               class="flex items-center px-4 py-3 text-white/80 hover:text-white hover:bg-white/10 rounded-lg">
-                                <span class="material-symbols-outlined mr-3">shield</span>
-                                Admin Dashboard
-                            </a>
-
-                            <a asp-controller="Admin" asp-action="CollegeCourses"
-                                class="flex items-center px-4 py-3 text-white/80 hover:text-white hover:bg-white/10 rounded-lg">
-                                <span class="material-symbols-outlined mr-3">shield</span>
-                                College Courses
-                            </a>
-
-                            
-
-                            <a asp-controller="Admin" asp-action="AssignCourseToStudent"
-                                class="flex items-center px-4 py-3 text-white/80 hover:text-white hover:bg-white/10 rounded-lg">
-                                <span class="material-symbols-outlined mr-3">shield</span>
-                                Assign Course To Student
-                            </a>
-                    }
-
-                    else if(Role == "Professor")
+                    else if (Role == "Admin")
                     {
                         <a asp-controller="Home" asp-action="Index"
-                            class="flex items-center px-4 py-3 text-white/80 hover:text-white hover:bg-white/10 rounded-lg">
+                               class="flex items-center px-4 py-3 text-white/80 hover:text-white hover:bg-white/10 rounded-lg">
+                            <span class="material-symbols-outlined mr-3">shield</span>
+                            Home
+                        </a>
+                        <a asp-controller="Admin" asp-action="AdminDashboard"
+                               class="flex items-center px-4 py-3 text-white/80 hover:text-white hover:bg-white/10 rounded-lg">
+                            <span class="material-symbols-outlined mr-3">shield</span>
+                            Admin Dashboard
+                        </a>
+                        <a asp-controller="Admin" asp-action="CollegeCourses"
+                               class="flex items-center px-4 py-3 text-white/80 hover:text-white hover:bg-white/10 rounded-lg">
+                            <span class="material-symbols-outlined mr-3">shield</span>
+                            College Courses
+                        </a>
+                        <a asp-controller="Admin" asp-action="AssignCourseToStudent"
+                               class="flex items-center px-4 py-3 text-white/80 hover:text-white hover:bg-white/10 rounded-lg">
+                            <span class="material-symbols-outlined mr-3">shield</span>
+                            Assign Course To Student
+                        </a>
+                        <a asp-controller="Admin" asp-action="StudentsByLevel"
+                               class="flex items-center px-4 py-3 text-white/80 hover:text-white hover:bg-white/10 rounded-lg">
+                            <span class="material-symbols-outlined mr-3">shield</span>
+                            Students By Level
+                        </a>
+                    }
+                    else if (Role == "Professor")
+                    {
+                        <a asp-controller="Home" asp-action="Index"
+                               class="flex items-center px-4 py-3 text-white/80 hover:text-white hover:bg-white/10 rounded-lg">
                             <span class="material-symbols-outlined mr-3">home</span>
                             Home
                         </a>
 
                         <a asp-controller="Professor" asp-action="MyCourses"
-                            class="flex items-center px-4 py-3 text-white/80 hover:text-white hover:bg-white/10 rounded-lg">
+                               class="flex items-center px-4 py-3 text-white/80 hover:text-white hover:bg-white/10 rounded-lg">
                             <span class="material-symbols-outlined mr-3">home</span>
                             My Courses
                         </a>
-
                     }
                     else if (Role == "Student")
                     {
                         <a asp-controller="Home" asp-action="Index"
-                            class="flex items-center px-4 py-3 text-white/80 hover:text-white hover:bg-white/10 rounded-lg">
+                               class="flex items-center px-4 py-3 text-white/80 hover:text-white hover:bg-white/10 rounded-lg">
                             <span class="material-symbols-outlined mr-3">home</span>
                             Home
                         </a>
 
                         <a asp-controller="Student" asp-action="MyCourses"
-                            class="flex items-center px-4 py-3 text-white/80 hover:text-white hover:bg-white/10 rounded-lg">
+                               class="flex items-center px-4 py-3 text-white/80 hover:text-white hover:bg-white/10 rounded-lg">
                             <span class="material-symbols-outlined mr-3">home</span>
                             My Courses
                         </a>
                     }
 
-            </nav>
+                </nav>
 
-        </div>
-
-        <div class="p-4 border-t border-white/10">
-            <p class="text-xs text-white/40 text-center">
-                © 2026 College CMS
-            </p>
-        </div>
-
-    </aside>
-
-    <!-- MAIN AREA -->
-    <div class="flex-1 flex flex-col">
-
-        <header class="h-16 flex items-center justify-between px-8 bg-white border-b">
-            <div class="text-lg font-semibold">
-                Welcome
             </div>
 
-            <a asp-controller="Account" asp-action="Logout"
-               class="text-gray-600 hover:text-red-500 font-medium">
-                Log out
-            </a>
-        </header>
+            <div class="p-4 border-t border-white/10">
+                <p class="text-xs text-white/40 text-center">
+                    © 2026 College CMS
+                </p>
+            </div>
 
-        <main class="flex-1 overflow-y-auto p-8 bg-gray-50">
+        </aside>
+
+        <!-- MAIN AREA -->
+        <div class="flex-1 flex flex-col">
+
+            <header class="h-16 flex items-center justify-between px-8 bg-white border-b">
+                <div class="text-lg font-semibold">
+                    Welcome
+                </div>
+
+                <a asp-controller="Account" asp-action="Logout"
+                       class="text-gray-600 hover:text-red-500 font-medium">
+                    Log out
+                </a>
+            </header>
+
+            <main class="flex-1 overflow-y-auto p-8 bg-gray-50">
                 @RenderBody()
-        </main>
+            </main>
+
+        </div>
 
     </div>
-
-</div>
 
 </body>
 </html>

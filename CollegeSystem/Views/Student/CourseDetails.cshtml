@@ -1,4 +1,4 @@
-@model CollegeSystem.Models.Course
+﻿@model CollegeSystem.Models.Course
 
 @{
     ViewData["Title"] = "Course Details";
@@ -56,9 +56,9 @@
         list-style: none;
     }
 
-    .section-title::-webkit-details-marker {
-        display: none;
-    }
+        .section-title::-webkit-details-marker {
+            display: none;
+        }
 
     .section-arrow,
     .item-arrow {
@@ -91,25 +91,28 @@
         color: #333;
     }
 
-    .item-row:last-child {
-        margin-bottom: 0;
-    }
+        .item-row:last-child {
+            margin-bottom: 0;
+        }
 
     .item-title {
         color: #1f4aa8;
         font-weight: bold;
         margin-bottom: 4px;
+        display: block;
     }
 
     .item-desc {
         color: #555;
         font-size: 14px;
+        display: block;
     }
 
     .item-meta {
         color: #777;
         font-size: 13px;
         margin-top: 5px;
+        display: block;
     }
 
     .empty-message {
@@ -124,12 +127,13 @@
     <h2 class="course-title">@Model.Name</h2>
 
     <div class="content-box">
+
+        <!-- MATERIALS -->
         <details class="section-box" open>
             <summary class="section-title">
-                <span>Materials</span>
+                <span>📄 Materials</span>
                 <span class="section-arrow">&rsaquo;</span>
             </summary>
-
             <div class="section-content">
                 @if (materials != null && materials.Any())
                 {
@@ -152,12 +156,12 @@
             </div>
         </details>
 
+        <!-- ASSIGNMENTS -->
         <details class="section-box">
             <summary class="section-title">
-                <span>Assignments</span>
+                <span>📝 Assignments</span>
                 <span class="section-arrow">&rsaquo;</span>
             </summary>
-
             <div class="section-content">
                 @if (assignments != null && assignments.Any())
                 {
@@ -167,7 +171,7 @@
                             <span>
                                 <span class="item-title">@item.Title</span>
                                 <span class="item-desc">@item.Description</span>
-                                <span class="item-meta">Due: @item.DueDate.ToString("dd/MM/yyyy") | Max Marks: @item.MaxMarks</span>
+                                <span class="item-meta">Due: @item.DueDate.ToString("dd/MM/yyyy") &nbsp;|&nbsp; Max Marks: @item.MaxMarks</span>
                             </span>
                             <span class="item-arrow">&rsaquo;</span>
                         </div>
@@ -180,12 +184,12 @@
             </div>
         </details>
 
+        <!-- QUIZZES -->
         <details class="section-box">
             <summary class="section-title">
-                <span>Quiz</span>
+                <span>🧩 Quizzes</span>
                 <span class="section-arrow">&rsaquo;</span>
             </summary>
-
             <div class="section-content">
                 @if (quizzes != null && quizzes.Any())
                 {
@@ -197,7 +201,7 @@
                                 <span>
                                     <span class="item-title">@item.Title</span>
                                     <span class="item-desc">Open quiz form</span>
-                                    <span class="item-meta">Duration: @item.Duration minutes | Attempts: @item.AttemptsAllowed</span>
+                                    <span class="item-meta">Duration: @item.Duration min &nbsp;|&nbsp; Attempts: @item.AttemptsAllowed</span>
                                 </span>
                                 <span class="item-arrow">&rsaquo;</span>
                             </a>
@@ -208,7 +212,7 @@
                                 <span>
                                     <span class="item-title">@item.Title</span>
                                     <span class="item-desc">@item.Description</span>
-                                    <span class="item-meta">Duration: @item.Duration minutes | Attempts: @item.AttemptsAllowed</span>
+                                    <span class="item-meta">Duration: @item.Duration min &nbsp;|&nbsp; Attempts: @item.AttemptsAllowed</span>
                                 </span>
                                 <span class="item-arrow">&rsaquo;</span>
                             </div>
@@ -221,6 +225,6 @@
                 }
             </div>
         </details>
+
     </div>
 </div>
-
