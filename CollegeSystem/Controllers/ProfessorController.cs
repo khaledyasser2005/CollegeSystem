@@ -45,7 +45,7 @@ namespace CollegeSystem.Controllers
                 .Where(r => r.CourseID == id)
                 .OrderByDescending(r => r.GeneratedDate)
                 .ToList();
-            */
+              */      
 
             var enrollments = context.Enrollments
                 .Where(e => e.CourseID == id)
@@ -71,7 +71,6 @@ namespace CollegeSystem.Controllers
 
             return View(course);
         }
-
         public IActionResult Professors()
         {
             var context = HttpContext.RequestServices.GetService<AppDbContext>();

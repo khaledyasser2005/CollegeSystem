@@ -1,0 +1,317 @@
+@model Dictionary<int, List<CollegeSystem.Models.Student>>
+
+@{
+    ViewData["Title"] = "Students By Level";
+    var levelNames = new Dictionary<int, string>
+    {
+        { 1, "First Year" },
+        { 2, "Second Year" },
+        { 3, "Third Year" },
+        { 4, "Fourth Year" }
+    };
+
+    foreach (var key in levelNames.Keys)
+    {
+        if (!Model.ContainsKey(key))
+            Model[key] = new List<CollegeSystem.Models.Student>();
+    }
+}
+
+<style>
+    .page-title {
+        color: #1f4aa8;
+        font-weight: bold;
+        margin-bottom: 25px;
+        font-size: 24px;
+    }
+
+    .search-box {
+        max-width: 400px;
+        margin-bottom: 20px;
+        position: relative;
+    }
+
+    .search-box input {
+        width: 100%;
+        padding: 10px 15px;
+        border: 2px solid #dbe8ff;
+        border-radius: 10px;
+        font-size: 15px;
+        outline: none;
+        transition: .3s;
+    }
+
+    .search-box input:focus {
+        border-color: #1f4aa8;
+    }
+
+    .tabs {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+        border-bottom: 2px solid #ddd;
+        flex-wrap: wrap;
+    }
+
+    .tab-btn {
+        border: none;
+        background: white;
+        padding: 12px 22px;
+        cursor: pointer;
+        border-radius: 10px 10px 0 0;
+        font-weight: bold;
+        transition: .3s;
+        font-size: 15px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .tab-btn:hover { background: #dbe8ff; }
+    .tab-btn.active { background: #1f4aa8; color: white; }
+
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    .card-box {
+        background: white;
+        border-radius: 12px;
+        padding: 25px;
+        box-shadow: 0 3px 10px rgba(0,0,0,.1);
+    }
+
+    .badge-level {
+        background: #1f4aa8;
+        color: white;
+        border-radius: 20px;
+        padding: 2px 10px;
+        font-size: 12px;
+    }
+
+    .tab-btn.active .badge-level {
+        background: white;
+        color: #1f4aa8;
+    }
+
+    .no-results {
+        text-align: center;
+        color: #888;
+        padding: 30px;
+        font-size: 15px;
+    }
+
+    /* ???? ???? */
+    .students-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        margin-top: 10px;
+    }
+
+    .students-table thead tr {
+        background: #1f4aa8;
+        color: white;
+    }
+
+    .students-table thead th {
+        padding: 14px 18px;
+        font-weight: 600;
+        font-size: 14px;
+        text-align: left;
+        white-space: nowrap;
+    }
+
+    .students-table thead th:first-child {
+        border-radius: 10px 0 0 0;
+    }
+
+    .students-table thead th:last-child {
+        border-radius: 0 10px 0 0;
+    }
+
+    .students-table tbody tr {
+        border-bottom: 1px solid #eef2ff;
+        transition: background .2s;
+    }
+
+    .students-table tbody tr:hover {
+        background: #f0f5ff;
+    }
+
+    .students-table tbody td {
+        padding: 14px 18px;
+        font-size: 14px;
+        color: #333;
+        vertical-align: middle;
+    }
+
+    .students-table tbody tr:last-child td {
+        border-bottom: none;
+    }
+
+    .level-badge {
+        background: #eef2ff;
+        color: #1f4aa8;
+        border-radius: 20px;
+        padding: 4px 12px;
+        font-size: 12px;
+        font-weight: bold;
+    }
+
+    .course-tag {
+        display: inline-block;
+        background: #f0f5ff;
+        color: #1f4aa8;
+        border-radius: 6px;
+        padding: 3px 9px;
+        font-size: 12px;
+        margin: 2px;
+    }
+
+    .num-cell {
+        color: #888;
+        font-weight: bold;
+        width: 40px;
+    }
+</style>
+
+<h2 class="page-title">?? Students By Level</h2>
+
+<!-- Search -->
+<div class="search-box">
+    <input type="text" id="searchInput" placeholder="?? Search by name..." onkeyup="searchStudents()" />
+</div>
+
+<!-- Tabs -->
+<div class="tabs">
+    @foreach (var level in levelNames.Keys)
+    {
+        var count = Model.ContainsKey(level) ? Model[level].Count : 0;
+            <button class="tab-btn @(level == 1 ? "active" : "")"
+                    onclick="showTab(event, 'level-@level')">
+            @levelNames[level]
+                <span class="badge-level">@count</span>
+            </button>
+    }
+</div>
+
+<!-- Tab Contents -->
+@foreach (var level in levelNames.Keys)
+{
+    var students = Model.ContainsKey(level) ? Model[level] : new List<CollegeSystem.Models.Student>();
+        <div id="level-@level" class="tab-content @(level == 1 ? "active" : "")">
+            <div class="card-box">
+                <h4 style="color:#1f4aa8; margin-bottom:20px; font-size:17px;">
+                @levelNames[level] — <span style="color:#555;">@students.Count Students</span>
+                </h4>
+
+            @if (students.Any())
+            {
+                        <table class="students-table" id="table-@level">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Grade</th>
+                                    <th>Level</th>
+                                    <th>Courses</th>
+                                    <th>Department</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                        @{
+                            int i = 1;
+                        }
+                        @foreach (var student in students)
+                        {
+                            var grades = student.Enrollments?
+                                .Where(e => e.Grade != null)
+                                .Select(e => e.Grade)
+                                .ToList();
+
+                            var courses = student.Enrollments?
+                                .Select(e => e.Course?.Name)
+                                .Where(n => n != null)
+                                .ToList();
+
+                                        <tr class="student-row">
+                                            <td class="num-cell">@student.ID</td>
+                                            <td class="student-name" style="font-weight:600;">@student.Name</td>
+                                            <td style="color:#555;">@student.Email</td>
+                                            <td>
+                                    @if (grades != null && grades.Any())
+                                    {
+                                                        <span style="font-weight:bold; color:#1f4aa8;">@string.Join(", ", grades)</span>
+                                    }
+                                    else
+                                    {
+                                                        <span style="color:#aaa;">N/A</span>
+                                    }
+                                            </td>
+                                            <td>
+                                                <span class="level-badge">@student.Level</span>
+                                            </td>
+                                            <td>
+                                    @if (courses != null && courses.Any())
+                                    {
+                                        foreach (var c in courses)
+                                        {
+                                                                <span class="course-tag">@c</span>
+                                        }
+                                    }
+                                    else
+                                    {
+                                                        <span style="color:#aaa;">No Courses</span>
+                                    }
+                                            </td>
+                                        </tr>
+                            i++;
+                        }
+                            </tbody>
+                        </table>
+                        <div class="no-results" id="noResults-@level" style="display:none;">
+                            ?? No students found matching your search.
+                        </div>
+            }
+            else
+            {
+                        <div class="alert alert-info">No Students in this Level Yet</div>
+            }
+            </div>
+        </div>
+}
+
+<script>
+    function showTab(event, tabId) {
+        document.querySelectorAll(".tab-content").forEach(t => t.classList.remove("active"));
+        document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+        document.getElementById(tabId).classList.add("active");
+        event.currentTarget.classList.add("active");
+        searchStudents();
+    }
+
+    function searchStudents() {
+        var query = document.getElementById("searchInput").value.toLowerCase();
+        var activeTab = document.querySelector(".tab-content.active");
+        if (!activeTab) return;
+
+        var rows = activeTab.querySelectorAll(".student-row");
+        var visibleCount = 0;
+
+        rows.forEach(function (row) {
+            var name = row.querySelector(".student-name").textContent.toLowerCase();
+            if (name.includes(query)) {
+                row.style.display = "";
+                visibleCount++;
+            } else {
+                row.style.display = "none";
+            }
+        });
+
+        var noResults = activeTab.querySelector("[id^='noResults-']");
+        if (noResults) {
+            noResults.style.display = visibleCount === 0 && rows.length > 0 ? "block" : "none";
+        }
+    }
+</script>
