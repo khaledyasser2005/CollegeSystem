@@ -1,0 +1,38 @@
+﻿@model IEnumerable<CollegeSystem.Models.Report>
+@{
+    ViewData["Title"] = "Reports";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4" style="color:#1f4aa8; font-weight:bold;">
+        📋 Received Reports
+    </h2>
+
+    @if (Model != null && Model.Any())
+    {
+        <table class="table table-hover table-bordered">
+            <thead class="table-primary">
+                <tr>
+                    <th>#</th>
+                    <th>Title</th>
+                    <th>Sent By</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th>Download</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var report in Model)
+                {
+                    <tr>
+                        <td>@report.ID</td>
+                        <td>@report.Title</td>
+                        <td>@report.GeneratedBy</td>
+                        <td>@report.GeneratedDate.ToString("dd/MM/yyyy")</td>
+                        <td>
+                            <span class="badge bg-warning text-dark">
+                                @report.Status
+                            </span>
+                        </td>
+                        <td>
+                            <a
