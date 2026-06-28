@@ -430,6 +430,7 @@ namespace CollegeSystem.Controllers
 
             var enrollment = new Enrollment
             {
+
                 StudentID = StudentID,
                 CourseID = CourseID,
                 Grade = "N/A",
@@ -444,6 +445,35 @@ namespace CollegeSystem.Controllers
         {
             var reports = _context.Reports.ToList();
             return View(reports);
+        }
+        public IActionResult DownloadReport(int id)
+        {
+            var report = _context.Reports.FirstOrDefault(r => r.ID == id);
+            if (report == null)
+                return NotFound();
+            return File(report.Data, report.ContentType, report.FileName);
+        }
+
+
+        public IActionResult StudentsByLevel()
+        {
+            var students = _context.Students
+                .Include(s => s.Enrollments)
+                .ThenInclude(e => e.Course)
+                .ToList();
+
+            var grouped = students
+                .GroupBy(s => s.Level)
+                .OrderBy(g => g.Key)
+                .ToDictionary(g => g.Key, g => g.ToList());
+
+            return View(grouped);
+        }
+        
+        public IActionResult CollegeDepartments()
+        {
+            var departments = _context.Departments.ToList();
+            return View(departments);
         }
     }
 }

@@ -1,0 +1,251 @@
+﻿@model IEnumerable<CollegeSystem.Models.Department>
+
+@{
+    ViewData["Title"] = "College Departments";
+    var departments = Model?.OrderBy(d => d.Name).ToList() ?? new List<CollegeSystem.Models.Department>();
+}
+
+<style>
+    .page-header {
+        text-align: center;
+        margin-bottom: 28px;
+    }
+
+    .page-header h1 {
+        color: #00174d;
+        font-size: 32px;
+        font-weight: 700;
+        margin-bottom: 8px;
+    }
+
+    .page-header p {
+        color: #667085;
+        font-size: 14px;
+    }
+
+    .search-box {
+        max-width: 420px;
+        margin-bottom: 20px;
+        position: relative;
+    }
+
+    .search-box input {
+        width: 100%;
+        padding: 11px 15px;
+        border: 2px solid #dbe8ff;
+        border-radius: 10px;
+        font-size: 15px;
+        outline: none;
+        transition: .3s;
+    }
+
+    .search-box input:focus {
+        border-color: #00174d;
+        box-shadow: 0 0 0 3px rgba(0, 23, 77, .08);
+    }
+
+    .tabs {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+        border-bottom: 2px solid #ddd;
+        flex-wrap: wrap;
+    }
+
+    .tab-btn {
+        border: none;
+        background: #00174d;
+        color: white;
+        padding: 12px 22px;
+        border-radius: 10px 10px 0 0;
+        font-weight: bold;
+        font-size: 15px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .badge-level {
+        background: white;
+        color: #00174d;
+        border-radius: 20px;
+        padding: 2px 10px;
+        font-size: 12px;
+    }
+
+    .card-box {
+        background: white;
+        border-radius: 12px;
+        padding: 25px;
+        box-shadow: 0 3px 10px rgba(0,0,0,.1);
+    }
+
+    .table-wrap {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    .dept-table {
+        width: 100%;
+        min-width: 600px;
+        border-collapse: separate;
+        border-spacing: 0;
+        margin-top: 10px;
+    }
+
+    .dept-table thead tr {
+        background: #00174d;
+        color: white;
+    }
+
+    .dept-table thead th {
+        padding: 14px 18px;
+        font-weight: 600;
+        font-size: 14px;
+        text-align: left;
+    }
+
+    .dept-table tbody tr {
+        border-bottom: 1px solid #eef2ff;
+        transition: background .2s;
+    }
+
+    .dept-table tbody tr:hover {
+        background: #f0f5ff;
+    }
+
+    .dept-table tbody td {
+        padding: 14px 18px;
+        font-size: 14px;
+        color: #333;
+    }
+
+    .dept-name {
+        color: #1f4aa8;
+        font-weight: bold;
+    }
+
+    .gpa-badge {
+        background: #eef2ff;
+        color: #00174d;
+        border-radius: 20px;
+        padding: 4px 12px;
+        font-size: 12px;
+        font-weight: bold;
+    }
+
+    .num-cell {
+        color: #888;
+        font-weight: bold;
+        width: 40px;
+    }
+
+    .no-results {
+        text-align: center;
+        color: #888;
+        padding: 30px;
+        font-size: 15px;
+    }
+</style>
+
+<section class="min-h-full px-4 sm:px-10 pt-4">
+
+    <div class="page-header">
+        <h1>Departments</h1>
+        <p>Browse all departments in the college</p>
+    </div>
+
+    <div class="search-box">
+        <input type="text"
+               id="searchInput"
+               placeholder="Search departments by name"
+               onkeyup="searchDepartments()" />
+    </div>
+
+    <div class="tabs">
+        <button class="tab-btn">
+            Departments
+            <span class="badge-level">@departments.Count</span>
+        </button>
+    </div>
+
+    <div class="card-box">
+
+        <h4 style="color:#00174d; margin-bottom:20px; font-size:17px;">
+            All Departments -
+            <span style="color:#555;">@departments.Count</span>
+        </h4>
+
+        @if (departments.Any())
+        {
+                <div class="table-wrap">
+                    <table class="dept-table">
+                        <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th>Department Name</th>
+                                <th>GPA Required</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                        @{
+                            int i = 1;
+                        }
+
+                        @foreach (var dept in departments)
+                        {
+                                    <tr class="dept-row">
+                                        <td class="num-cell">@dept.ID</td>
+                                        <td class="dept-name">@dept.Name</td>
+                                        <td>
+                                            <span class="gpa-badge">
+                                        @dept.GPARequired
+                                            </span>
+                                        </td>
+                                    </tr>
+                            i++;
+                        }
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="no-results" id="noResults" style="display:none;">
+                    No departments found matching your search.
+                </div>
+        }
+        else
+        {
+                <div class="no-results">
+                    No departments found.
+                </div>
+        }
+
+    </div>
+</section>
+
+<script>
+    function searchDepartments() {
+        var input = document.getElementById("searchInput");
+        var query = input.value.toLowerCase();
+        var rows = document.querySelectorAll(".dept-row");
+        var visibleCount = 0;
+
+        rows.forEach(function (row) {
+            var name = row.querySelector(".dept-name").textContent.toLowerCase();
+
+            if (name.includes(query)) {
+                row.style.display = "";
+                visibleCount++;
+            } else {
+                row.style.display = "none";
+            }
+        });
+
+        var noResults = document.getElementById("noResults");
+
+        if (noResults) {
+            noResults.style.display = visibleCount === 0 ? "block" : "none";
+        }
+    }
+</script>
