@@ -71,10 +71,15 @@
                             <span class="material-symbols-outlined mr-3">shield</span>
                             Students By Level
                         </a>
-                            <a asp-controller="Admin" asp-action="CollegeDepartments"
-                                class="flex items-center px-4 py-3 text-white/80 hover:text-white hover:bg-white/10 rounded-lg">
+                        <a asp-controller="Admin" asp-action="CollegeDepartments"
+                               class="flex items-center px-4 py-3 text-white/80 hover:text-white hover:bg-white/10 rounded-lg">
                             <span class="material-symbols-outlined mr-3">shield</span>
                             College Departments
+                        </a>
+                        <a asp-controller="Admin" asp-action="Reports"
+                               class="flex items-center px-4 py-3 text-white/80 hover:text-white hover:bg-white/10 rounded-lg">
+                            <span class="material-symbols-outlined mr-3">shield</span>
+                            Reports
                         </a>
                     }
                     else if (Role == "Professor")
