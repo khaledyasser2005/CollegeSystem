@@ -24,7 +24,7 @@
 
         public Course Course { get; set; }
 
-   
+
 
         public Admin Admin { get; set; }
     }

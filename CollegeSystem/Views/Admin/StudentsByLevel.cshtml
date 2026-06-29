@@ -100,7 +100,6 @@
         font-size: 15px;
     }
 
-    /* ???? ???? */
     .students-table {
         width: 100%;
         border-collapse: separate;
@@ -175,11 +174,11 @@
     }
 </style>
 
-<h2 class="page-title">?? Students By Level</h2>
+<h2 class="page-title">Students By Level</h2>
 
 <!-- Search -->
 <div class="search-box">
-    <input type="text" id="searchInput" placeholder="?? Search by name..." onkeyup="searchStudents()" />
+    <input type="text" id="searchInput" placeholder="Search by name..." onkeyup="searchStudents()" />
 </div>
 
 <!-- Tabs -->
@@ -187,11 +186,11 @@
     @foreach (var level in levelNames.Keys)
     {
         var count = Model.ContainsKey(level) ? Model[level].Count : 0;
-            <button class="tab-btn @(level == 1 ? "active" : "")"
-                    onclick="showTab(event, 'level-@level')">
+        <button class="tab-btn @(level == 1 ? "active" : "")"
+                onclick="showTab(event, 'level-@level')">
             @levelNames[level]
-                <span class="badge-level">@count</span>
-            </button>
+            <span class="badge-level">@count</span>
+        </button>
     }
 </div>
 
@@ -199,30 +198,27 @@
 @foreach (var level in levelNames.Keys)
 {
     var students = Model.ContainsKey(level) ? Model[level] : new List<CollegeSystem.Models.Student>();
-        <div id="level-@level" class="tab-content @(level == 1 ? "active" : "")">
-            <div class="card-box">
-                <h4 style="color:#1f4aa8; margin-bottom:20px; font-size:17px;">
+    <div id="level-@level" class="tab-content @(level == 1 ? "active" : "")">
+        <div class="card-box">
+            <h4 style="color:#1f4aa8; margin-bottom:20px; font-size:17px;">
                 @levelNames[level] — <span style="color:#555;">@students.Count Students</span>
-                </h4>
+            </h4>
 
             @if (students.Any())
             {
-                        <table class="students-table" id="table-@level">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Name</th>
-                                    <th>Email</th>
-                                    <th>Grade</th>
-                                    <th>Level</th>
-                                    <th>Courses</th>
-                                    <th>Department</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                        @{
-                            int i = 1;
-                        }
+                <table class="students-table" id="table-@level">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Grade</th>
+                            <th>Level</th>
+                            <th>Courses</th>
+                            <th>Department</th>
+                        </tr>
+                    </thead>
+                    <tbody>
                         @foreach (var student in students)
                         {
                             var grades = student.Enrollments?
@@ -235,51 +231,62 @@
                                 .Where(n => n != null)
                                 .ToList();
 
-                                        <tr class="student-row">
-                                            <td class="num-cell">@student.ID</td>
-                                            <td class="student-name" style="font-weight:600;">@student.Name</td>
-                                            <td style="color:#555;">@student.Email</td>
-                                            <td>
+                            <tr class="student-row">
+                                <td class="num-cell">@student.ID</td>
+                                <td class="student-name" style="font-weight:600;">@student.Name</td>
+                                <td style="color:#555;">@student.Email</td>
+                                <td>
                                     @if (grades != null && grades.Any())
                                     {
-                                                        <span style="font-weight:bold; color:#1f4aa8;">@string.Join(", ", grades)</span>
+                                        <span style="font-weight:bold; color:#1f4aa8;">@string.Join(", ", grades)</span>
                                     }
                                     else
                                     {
-                                                        <span style="color:#aaa;">N/A</span>
+                                        <span style="color:#aaa;">N/A</span>
                                     }
-                                            </td>
-                                            <td>
-                                                <span class="level-badge">@student.Level</span>
-                                            </td>
-                                            <td>
+                                </td>
+                                <td>
+                                    <span class="level-badge">@student.Level</span>
+                                </td>
+                                <td>
                                     @if (courses != null && courses.Any())
                                     {
                                         foreach (var c in courses)
                                         {
-                                                                <span class="course-tag">@c</span>
+                                            <span class="course-tag">@c</span>
                                         }
                                     }
                                     else
                                     {
-                                                        <span style="color:#aaa;">No Courses</span>
+                                        <span style="color:#aaa;">No Courses</span>
                                     }
-                                            </td>
-                                        </tr>
-                            i++;
+                                </td>
+                                <td>
+                                    @if (student.Department != null)
+                                    {
+                                        <div style="font-weight:600; color:#1f4aa8;">
+                                            @student.Department.Name
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <span style="color:#aaa;">No Department</span>
+                                    }
+                                </td>
+                            </tr>
                         }
-                            </tbody>
-                        </table>
-                        <div class="no-results" id="noResults-@level" style="display:none;">
-                            ?? No students found matching your search.
-                        </div>
+                    </tbody>
+                </table>
+                <div class="no-results" id="noResults-@level" style="display:none;">
+                    No students found matching your search.
+                </div>
             }
             else
             {
-                        <div class="alert alert-info">No Students in this Level Yet</div>
+                <div class="alert alert-info">No Students in this Level Yet</div>
             }
-            </div>
         </div>
+    </div>
 }
 
 <script>
@@ -293,25 +300,47 @@
 
     function searchStudents() {
         var query = document.getElementById("searchInput").value.toLowerCase();
-        var activeTab = document.querySelector(".tab-content.active");
-        if (!activeTab) return;
 
-        var rows = activeTab.querySelectorAll(".student-row");
-        var visibleCount = 0;
+        if (query === "") {
+            document.querySelectorAll(".student-row").forEach(r => r.style.display = "");
+            document.querySelectorAll("[id^='noResults-']").forEach(n => n.style.display = "none");
+            return;
+        }
 
-        rows.forEach(function (row) {
-            var name = row.querySelector(".student-name").textContent.toLowerCase();
-            if (name.includes(query)) {
-                row.style.display = "";
-                visibleCount++;
-            } else {
-                row.style.display = "none";
+        var firstMatchTab = null;
+
+        document.querySelectorAll(".tab-content").forEach(function (tab) {
+            var rows = tab.querySelectorAll(".student-row");
+            var visibleCount = 0;
+
+            rows.forEach(function (row) {
+                var name = row.querySelector(".student-name").textContent.toLowerCase();
+                if (name.includes(query)) {
+                    row.style.display = "";
+                    visibleCount++;
+                    if (!firstMatchTab) {
+                        firstMatchTab = tab;
+                    }
+                } else {
+                    row.style.display = "none";
+                }
+            });
+
+            var noResults = tab.querySelector("[id^='noResults-']");
+            if (noResults) {
+                noResults.style.display = visibleCount === 0 && rows.length > 0 ? "block" : "none";
             }
         });
 
-        var noResults = activeTab.querySelector("[id^='noResults-']");
-        if (noResults) {
-            noResults.style.display = visibleCount === 0 && rows.length > 0 ? "block" : "none";
+        // ÇÝÊÍ ÇáÊÇÈ Çááí Ýíå Ãæá äÊíÌÉ
+        if (firstMatchTab) {
+            document.querySelectorAll(".tab-content").forEach(t => t.classList.remove("active"));
+            document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+            firstMatchTab.classList.add("active");
+
+            var tabId = firstMatchTab.id;
+            var matchingBtn = document.querySelector(`[onclick="showTab(event, '${tabId}')"]`);
+            if (matchingBtn) matchingBtn.classList.add("active");
         }
     }
 </script>

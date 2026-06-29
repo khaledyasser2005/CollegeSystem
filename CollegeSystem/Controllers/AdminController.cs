@@ -476,6 +476,7 @@ namespace CollegeSystem.Controllers
         public IActionResult StudentsByLevel()
         {
             var students = _context.Students
+                .Include(s => s.Department)
                 .Include(s => s.Enrollments)
                 .ThenInclude(e => e.Course)
                 .ToList();
