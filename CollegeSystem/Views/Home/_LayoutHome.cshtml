@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -26,6 +26,9 @@
     <main>
         @RenderBody()
     </main>
+
+    @* AI Chat Widget — shown for all authenticated users *@
+    @await Html.PartialAsync("_ChatWidget")
 
 </body>
 </html>

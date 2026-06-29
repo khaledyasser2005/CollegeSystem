@@ -1,4 +1,4 @@
-﻿@{
+@{
     var Role = Context.Session.GetString("Role");
 }
 
@@ -157,6 +157,9 @@
         </div>
 
     </div>
+
+    @* AI Chat Widget — shown for all authenticated users *@
+    @await Html.PartialAsync("_ChatWidget")
 
 </body>
 </html>

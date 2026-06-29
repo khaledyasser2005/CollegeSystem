@@ -1,0 +1,527 @@
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
+@{
+    var Role = Context.Session.GetString("Role");
+    var isLoggedIn = !string.IsNullOrEmpty(Role);
+    var tokenSet = Antiforgery.GetAndStoreTokens(Context);
+    var csrfToken = tokenSet.RequestToken ?? string.Empty;
+}
+
+@if (isLoggedIn)
+{
+    <!-- ============================================================
+         CHAT WIDGET — floating AI assistant, visible when logged in
+         ============================================================ -->
+
+    <!-- Floating toggle button -->
+    <button id="chat-toggle-btn"
+            aria-label="Open AI Assistant"
+            title="AI Assistant"
+            onclick="toggleChat()"
+            style="
+                position: fixed;
+                bottom: 28px;
+                right: 28px;
+                z-index: 9999;
+                width: 56px;
+                height: 56px;
+                border-radius: 50%;
+                border: none;
+                background: linear-gradient(135deg, #1f4aa8 0%, #3b74e8 100%);
+                color: white;
+                cursor: pointer;
+                box-shadow: 0 4px 20px rgba(31,74,168,0.45);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: transform 0.2s, box-shadow 0.2s;
+            "
+            onmouseenter="this.style.transform='scale(1.1)';this.style.boxShadow='0 6px 28px rgba(31,74,168,0.6)'"
+            onmouseleave="this.style.transform='scale(1)';this.style.boxShadow='0 4px 20px rgba(31,74,168,0.45)'">
+        <span id="chat-toggle-icon" class="material-symbols-outlined" style="font-size:26px;">smart_toy</span>
+    </button>
+
+    <!-- Chat panel -->
+    <div id="chat-panel"
+         role="dialog"
+         aria-label="AI Assistant"
+         style="
+             position: fixed;
+             bottom: 96px;
+             right: 28px;
+             z-index: 9998;
+             width: 380px;
+             max-width: calc(100vw - 40px);
+             height: 560px;
+             max-height: calc(100vh - 120px);
+             background: white;
+             border-radius: 20px;
+             box-shadow: 0 12px 48px rgba(0,0,0,0.18);
+             display: none;
+             flex-direction: column;
+             overflow: hidden;
+             border: 1px solid #e2e8f0;
+             transform-origin: bottom right;
+         ">
+
+        <!-- Header -->
+        <div style="
+             background: linear-gradient(135deg, #00174d 0%, #1f4aa8 100%);
+             padding: 16px 18px;
+             display: flex;
+             align-items: center;
+             justify-content: space-between;
+             flex-shrink: 0;
+             ">
+            <div style="display:flex;align-items:center;gap:10px;">
+                <div style="
+                     width: 36px;
+                     height: 36px;
+                     border-radius: 50%;
+                     background: rgba(255,255,255,0.15);
+                     display: flex;
+                     align-items: center;
+                     justify-content: center;
+                     ">
+                    <span class="material-symbols-outlined" style="color:white;font-size:20px;">smart_toy</span>
+                </div>
+                <div>
+                    <div style="color:white;font-weight:700;font-size:15px;line-height:1.2;">College AI Assistant</div>
+                    <div style="color:rgba(255,255,255,0.7);font-size:11px;">Powered by Gemini</div>
+                </div>
+            </div>
+            <div style="display:flex;gap:6px;">
+                <button onclick="clearChat()"
+                        title="Clear conversation"
+                        style="
+                            background:rgba(255,255,255,0.12);
+                            border:none;
+                            color:rgba(255,255,255,0.8);
+                            border-radius:8px;
+                            padding:6px;
+                            cursor:pointer;
+                            display:flex;
+                            align-items:center;
+                            transition: background 0.15s;
+                        "
+                        onmouseenter="this.style.background='rgba(255,255,255,0.22)'"
+                        onmouseleave="this.style.background='rgba(255,255,255,0.12)'">
+                    <span class="material-symbols-outlined" style="font-size:18px;">delete_sweep</span>
+                </button>
+                <button onclick="toggleChat()"
+                        title="Close"
+                        style="
+                            background:rgba(255,255,255,0.12);
+                            border:none;
+                            color:rgba(255,255,255,0.8);
+                            border-radius:8px;
+                            padding:6px;
+                            cursor:pointer;
+                            display:flex;
+                            align-items:center;
+                            transition: background 0.15s;
+                        "
+                        onmouseenter="this.style.background='rgba(255,255,255,0.22)'"
+                        onmouseleave="this.style.background='rgba(255,255,255,0.12)'">
+                    <span class="material-symbols-outlined" style="font-size:18px;">close</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Messages area -->
+        <div id="chat-messages"
+             style="
+                 flex: 1;
+                 overflow-y: auto;
+                 padding: 16px;
+                 display: flex;
+                 flex-direction: column;
+                 gap: 12px;
+                 background: #f8faff;
+                 scroll-behavior: smooth;
+             ">
+            <!-- Welcome message -->
+            <div id="chat-welcome" style="text-align:center;padding:20px 10px;">
+                <div style="
+                     width:52px;height:52px;
+                     border-radius:50%;
+                     background:linear-gradient(135deg,#00174d,#3b74e8);
+                     display:flex;align-items:center;justify-content:center;
+                     margin:0 auto 12px;
+                     ">
+                    <span class="material-symbols-outlined" style="color:white;font-size:26px;">smart_toy</span>
+                </div>
+                <div style="font-weight:700;color:#00174d;font-size:15px;margin-bottom:6px;">
+                    Hi, I'm your College AI Assistant!
+                </div>
+                <div style="color:#64748b;font-size:13px;line-height:1.5;">
+                    Ask me anything about your courses, assignments, grades, or academic topics.
+                </div>
+            </div>
+        </div>
+
+        <!-- Typing indicator (hidden by default) -->
+        <div id="chat-typing"
+             style="
+                 display: none;
+                 padding: 6px 16px 2px;
+                 background: #f8faff;
+                 flex-shrink: 0;
+             ">
+            <div style="
+                 display: inline-flex;
+                 align-items: center;
+                 gap: 8px;
+                 background: white;
+                 border: 1px solid #e2e8f0;
+                 border-radius: 16px;
+                 padding: 8px 14px;
+                 ">
+                <div style="display:flex;gap:4px;align-items:center;">
+                    <span class="chat-dot" style="width:6px;height:6px;border-radius:50%;background:#1f4aa8;display:inline-block;"></span>
+                    <span class="chat-dot" style="width:6px;height:6px;border-radius:50%;background:#1f4aa8;display:inline-block;animation-delay:0.2s"></span>
+                    <span class="chat-dot" style="width:6px;height:6px;border-radius:50%;background:#1f4aa8;display:inline-block;animation-delay:0.4s"></span>
+                </div>
+                <span style="font-size:12px;color:#64748b;">AI is thinking...</span>
+            </div>
+        </div>
+
+        <!-- Error banner (hidden by default) -->
+        <div id="chat-error"
+             style="
+                 display: none;
+                 margin: 0 12px 8px;
+                 padding: 10px 14px;
+                 background: #fef2f2;
+                 border: 1px solid #fecaca;
+                 border-radius: 10px;
+                 color: #dc2626;
+                 font-size: 13px;
+                 flex-shrink: 0;
+             ">
+        </div>
+
+        <!-- Input area -->
+        <div style="
+             padding: 12px 14px;
+             border-top: 1px solid #e2e8f0;
+             background: white;
+             flex-shrink: 0;
+             display: flex;
+             gap: 8px;
+             align-items: flex-end;
+             ">
+            <textarea id="chat-input"
+                      placeholder="Ask me anything..."
+                      rows="1"
+                      maxlength="2000"
+                      onkeydown="handleChatKey(event)"
+                      oninput="autoResizeTextarea(this)"
+                      style="
+                          flex: 1;
+                          border: 1.5px solid #cbd5e1;
+                          border-radius: 12px;
+                          padding: 10px 14px;
+                          font-size: 14px;
+                          font-family: inherit;
+                          resize: none;
+                          outline: none;
+                          line-height: 1.4;
+                          max-height: 120px;
+                          overflow-y: auto;
+                          transition: border-color 0.15s;
+                          background: #f8faff;
+                      "
+                      onfocus="this.style.borderColor='#1f4aa8';this.style.background='white'"
+                      onblur="this.style.borderColor='#cbd5e1';this.style.background='#f8faff'">
+            </textarea>
+            <button id="chat-send-btn"
+                    onclick="sendChatMessage()"
+                    title="Send message (Enter)"
+                    style="
+                        width: 40px;
+                        height: 40px;
+                        border-radius: 12px;
+                        border: none;
+                        background: linear-gradient(135deg, #1f4aa8 0%, #3b74e8 100%);
+                        color: white;
+                        cursor: pointer;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        flex-shrink: 0;
+                        transition: opacity 0.15s, transform 0.15s;
+                        box-shadow: 0 2px 8px rgba(31,74,168,0.3);
+                    "
+                    onmouseenter="this.style.transform='scale(1.05)'"
+                    onmouseleave="this.style.transform='scale(1)'">
+                <span class="material-symbols-outlined" style="font-size:20px;">send</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Animations and scrollbar styling -->
+    <style>
+        .chat-dot {
+            animation: chatBounce 1.2s infinite;
+        }
+
+        @@keyframes chatBounce {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-5px); }
+        }
+
+        @@keyframes chatSlideUp {
+            from { opacity: 0; transform: translateY(16px) scale(0.97); }
+            to   { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        @@keyframes chatFadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        #chat-panel.open {
+            display: flex !important;
+            animation: chatSlideUp 0.22s ease;
+        }
+
+        #chat-messages::-webkit-scrollbar { width: 5px; }
+        #chat-messages::-webkit-scrollbar-track { background: transparent; }
+        #chat-messages::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 8px; }
+    </style>
+
+    <script>
+        // ─── Chat Widget — scoped IIFE to avoid global namespace pollution ─────
+        (function() {
+
+        // ─── Constants ────────────────────────────────────────────────────
+        var ANTIFORGERY_TOKEN = '@Html.Raw(csrfToken)';
+
+        // ─── State ────────────────────────────────────────────────────────
+        var chatOpen = false;
+        var chatLoading = false;
+        var chatHistoryLoaded = false;
+
+        // ─── Open / close ─────────────────────────────────────────────────
+        function toggleChat() {
+            chatOpen = !chatOpen;
+            var panel = document.getElementById('chat-panel');
+            var icon  = document.getElementById('chat-toggle-icon');
+
+            if (chatOpen) {
+                panel.classList.add('open');
+                icon.textContent = 'close';
+                if (!chatHistoryLoaded) { loadHistory(); }
+                setTimeout(function() {
+                    var inp = document.getElementById('chat-input');
+                    if (inp) inp.focus();
+                }, 250);
+            } else {
+                panel.classList.remove('open');
+                icon.textContent = 'smart_toy';
+            }
+        }
+
+        // ─── Load history from server ─────────────────────────────────────
+        function loadHistory() {
+            fetch('/Chat/History', { credentials: 'same-origin' })
+                .then(function(r) { return r.json(); })
+                .then(function(messages) {
+                    chatHistoryLoaded = true;
+                    if (!messages || messages.error || messages.length === 0) { return; }
+
+                    var welcome = document.getElementById('chat-welcome');
+                    if (welcome) { welcome.style.display = 'none'; }
+
+                    messages.forEach(function(m) { appendMessage(m.role, m.content, false); });
+                    scrollChatToBottom();
+                })
+                .catch(function() { chatHistoryLoaded = true; });
+        }
+
+        // ─── Send message ─────────────────────────────────────────────────
+        function sendChatMessage() {
+            if (chatLoading) { return; }
+
+            var input   = document.getElementById('chat-input');
+            var message = input.value.trim();
+            if (!message) { return; }
+
+            var welcome = document.getElementById('chat-welcome');
+            if (welcome) { welcome.style.display = 'none'; }
+
+            appendMessage('user', message, true);
+            input.value = '';
+            input.style.height = '';
+            hideChatError();
+            setChatLoading(true);
+
+            fetch('/Chat/Send', {
+                method: 'POST',
+                credentials: 'same-origin',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'RequestVerificationToken': ANTIFORGERY_TOKEN
+                },
+                body: JSON.stringify({ message: message })
+            })
+            .then(function(r) {
+                if (!r.ok) { throw new Error('Network error ' + r.status); }
+                return r.json();
+            })
+            .then(function(data) {
+                setChatLoading(false);
+                if (data.error) {
+                    showChatError(data.error);
+                    return;
+                }
+                if (data.success && data.reply) {
+                    appendMessage('assistant', data.reply, true);
+                }
+            })
+            .catch(function() {
+                setChatLoading(false);
+                showChatError('Could not reach the AI service. Please try again.');
+            });
+        }
+
+        // ─── Key handler ──────────────────────────────────────────────────
+        function handleChatKey(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendChatMessage();
+            }
+        }
+
+        // ─── Clear conversation ───────────────────────────────────────────
+        function clearChat() {
+            if (!confirm('Clear your entire conversation history?')) { return; }
+
+            fetch('/Chat/Clear', {
+                method: 'POST',
+                credentials: 'same-origin',
+                headers: { 'RequestVerificationToken': ANTIFORGERY_TOKEN }
+            })
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+                if (data.success) {
+                    var container = document.getElementById('chat-messages');
+                    container.innerHTML =
+                        '<div id="chat-welcome" style="text-align:center;padding:20px 10px;">' +
+                        '<div style="width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#00174d,#3b74e8);' +
+                        'display:flex;align-items:center;justify-content:center;margin:0 auto 12px;">' +
+                        '<span class="material-symbols-outlined" style="color:white;font-size:26px;">smart_toy</span></div>' +
+                        '<div style="font-weight:700;color:#00174d;font-size:15px;margin-bottom:6px;">Conversation cleared!</div>' +
+                        '<div style="color:#64748b;font-size:13px;line-height:1.5;">Start a new conversation below.</div>' +
+                        '</div>';
+                    hideChatError();
+                }
+            })
+            .catch(function() { showChatError('Failed to clear conversation.'); });
+        }
+
+        // ─── Append bubble ────────────────────────────────────────────────
+        function appendMessage(role, content, animate) {
+            var container = document.getElementById('chat-messages');
+            var isUser = (role === 'user');
+
+            var wrapper = document.createElement('div');
+            wrapper.style.cssText =
+                'display:flex;flex-direction:column;' +
+                (isUser ? 'align-items:flex-end;' : 'align-items:flex-start;') +
+                (animate ? 'animation:chatFadeIn 0.2s ease;' : '');
+
+            var bubble = document.createElement('div');
+            bubble.style.cssText =
+                'max-width:82%;padding:10px 14px;word-break:break-word;font-size:14px;line-height:1.55;' +
+                'border-radius:' + (isUser ? '16px 16px 4px 16px' : '16px 16px 16px 4px') + ';' +
+                (isUser
+                    ? 'background:linear-gradient(135deg,#1f4aa8,#3b74e8);color:white;'
+                    : 'background:white;color:#1e293b;border:1px solid #e2e8f0;box-shadow:0 1px 4px rgba(0,0,0,0.06);');
+
+            if (isUser) {
+                bubble.textContent = content;
+            } else {
+                bubble.innerHTML = renderChatMarkdown(content);
+            }
+
+            wrapper.appendChild(bubble);
+            container.appendChild(wrapper);
+            scrollChatToBottom();
+        }
+
+        // ─── Lightweight markdown renderer ────────────────────────────────
+        function renderChatMarkdown(text) {
+            if (!text) { return ''; }
+            var s = text
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;');
+
+            // Fenced code blocks
+            s = s.replace(/```([\s\S]*?)```/g,
+                '<pre style="background:#f1f5f9;border-radius:8px;padding:10px;font-size:12px;overflow-x:auto;margin:6px 0;"><code>$1</code></pre>');
+            // Inline code
+            s = s.replace(/`([^`]+)`/g,
+                '<code style="background:#f1f5f9;padding:2px 5px;border-radius:4px;font-size:12.5px;">$1</code>');
+            // Bold
+            s = s.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+            // Italic
+            s = s.replace(/\*([^*\n]+)\*/g, '<em>$1</em>');
+            // Headers
+            s = s.replace(/^### (.+)$/gm, '<h4 style="margin:8px 0 4px;font-size:14px;color:#00174d;">$1</h4>');
+            s = s.replace(/^## (.+)$/gm,  '<h3 style="margin:8px 0 4px;font-size:15px;color:#00174d;">$1</h3>');
+            s = s.replace(/^# (.+)$/gm,   '<h2 style="margin:8px 0 4px;font-size:16px;color:#00174d;">$1</h2>');
+            // Bullet lists
+            s = s.replace(/^[\*\-] (.+)$/gm,
+                '<div style="display:flex;gap:6px;margin:2px 0;"><span style="color:#1f4aa8;font-weight:bold;flex-shrink:0;">&#x2022;</span><span>$1</span></div>');
+            // Newlines
+            s = s.replace(/\n/g, '<br>');
+            return s;
+        }
+
+        // ─── Loading state ────────────────────────────────────────────────
+        function setChatLoading(loading) {
+            chatLoading = loading;
+            var typing = document.getElementById('chat-typing');
+            var btn    = document.getElementById('chat-send-btn');
+            typing.style.display  = loading ? 'block' : 'none';
+            btn.disabled          = loading;
+            btn.style.opacity     = loading ? '0.55' : '1';
+            btn.style.cursor      = loading ? 'not-allowed' : 'pointer';
+            if (loading) { scrollChatToBottom(); }
+        }
+
+        // ─── Error helpers ────────────────────────────────────────────────
+        function showChatError(msg) {
+            var el = document.getElementById('chat-error');
+            el.textContent = '\u26a0 ' + msg;
+            el.style.display = 'block';
+        }
+
+        function hideChatError() {
+            document.getElementById('chat-error').style.display = 'none';
+        }
+
+        // ─── Auto-resize textarea ─────────────────────────────────────────
+        function autoResizeTextarea(el) {
+            el.style.height = '';
+            el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+        }
+
+        // ─── Scroll to bottom ─────────────────────────────────────────────
+        function scrollChatToBottom() {
+            var el = document.getElementById('chat-messages');
+            if (el) { el.scrollTop = el.scrollHeight; }
+        }
+
+        // ─── Expose only inline-handler functions to global scope ─────────
+        window.toggleChat       = toggleChat;
+        window.sendChatMessage  = sendChatMessage;
+        window.handleChatKey    = handleChatKey;
+        window.clearChat        = clearChat;
+        window.autoResizeTextarea = autoResizeTextarea;
+
+        })(); // end IIFE
+    </script>
+}
