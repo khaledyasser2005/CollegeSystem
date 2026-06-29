@@ -1,45 +1,145 @@
 ﻿@model IEnumerable<CollegeSystem.Models.Course>
+
 @{
     ViewData["Title"] = "College Courses";
 }
 
-<section class="min-h-full flex flex-col items-center justify-start bg-surface-container-low px-10 pt-10">
+<style>
+    .card-box {
+        background: white;
+        border-radius: 16px;
+        padding: 25px;
+        box-shadow: 0 5px 15px rgba(0,0,0,.08);
+    }
 
-    <div class="text-center mb-10 -mt-2">
-        <h1 class="text-4xl font-bold text-on-surface">
-            College Courses
+    .students-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        margin-top: 10px;
+    }
+
+    .students-table thead tr {
+        background: #2f55a4;
+        color: white;
+    }
+
+    .students-table thead th {
+        padding: 14px 18px;
+        font-size: 14px;
+        text-align: left;
+    }
+
+    .students-table tbody tr {
+        border-bottom: 1px solid #eef2ff;
+        transition: .2s;
+    }
+
+    .students-table tbody tr:hover {
+        background: #f5f8ff;
+    }
+
+    .students-table td {
+        padding: 14px 18px;
+        font-size: 14px;
+    }
+
+    .search-box {
+        max-width: 400px;
+        margin-bottom: 20px;
+    }
+
+    .search-box input {
+        width: 100%;
+        padding: 10px 15px;
+        border: 2px solid #dbe8ff;
+        border-radius: 10px;
+        outline: none;
+    }
+
+    .search-box input:focus {
+        border-color: #2f55a4;
+    }
+
+    .no-results {
+        text-align: center;
+        padding: 20px;
+        color: #888;
+        display: none;
+    }
+</style>
+
+<section class="px-10 pt-6">
+
+    <!-- Title -->
+    <div style="margin-bottom: 25px;">
+        <h1 style="color:#1e3a5f; font-size:28px; font-weight:bold;">
+        College Courses
         </h1>
-        <p class="text-sm text-on-surface-variant mt-2">
+        <p style="color:#666;">
             Browse all available courses in the college
         </p>
     </div>
 
-    <div class="w-full max-w-6xl bg-white rounded-3xl shadow-lg border border-outline-variant p-8">
-        <table class="w-full text-left border-collapse">
+    <!-- Search -->
+    <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Search course by name..." onkeyup="searchCourses()" />
+    </div>
+
+    <!-- Table -->
+    <div class="card-box">
+        <table class="students-table">
             <thead>
-                <tr class="bg-surface-container text-on-surface-variant text-sm uppercase">
-                    <th class="px-6 py-4 rounded-tl-2xl">ID</th>
-                    <th class="px-6 py-4">Course Name</th>
-                    <th class="px-6 py-4">Description</th>
-                    <th class="px-6 py-4">Duration</th>
-                    <th class="px-6 py-4">Semesters</th>
-                    <th class="px-6 py-4 rounded-tr-2xl">Prerequisites</th>
+                <tr>
+                    <th>ID</th>
+                    <th>Course Name</th>
+                    <th>Description</th>
+                    <th>Duration</th>
+                    <th>Semesters</th>
+                    <th>Prerequisites</th>
                 </tr>
             </thead>
-            <tbody class="divide-y divide-outline-variant text-on-surface text-sm">
+
+            <tbody id="coursesTable">
                 @foreach (var course in Model)
                 {
-                    <tr class="hover:bg-surface-container-low transition">
-                        <td class="px-6 py-4">@course.ID</td>
-                        <td class="px-6 py-4 font-medium">@course.Name</td>
-                        <td class="px-6 py-4">@course.Description</td>
-                        <td class="px-6 py-4">@course.Duration</td>
-                        <td class="px-6 py-4">@course.Semesters</td>
-                        <td class="px-6 py-4">@course.CoursePrerequisites</td>
-                    </tr>
+                        <tr class="course-row">
+                            <td>@course.ID</td>
+                            <td class="course-name" style="font-weight:600;">@course.Name</td>
+                            <td>@course.Description</td>
+                            <td>@course.Duration</td>
+                            <td>@course.Semesters</td>
+                            <td>@course.CoursePrerequisites</td>
+                        </tr>
                 }
             </tbody>
         </table>
+
+        <div id="noResults" class="no-results">
+            No courses found
+        </div>
     </div>
 
 </section>
+
+<script>
+    function searchCourses() {
+        var input = document.getElementById("searchInput").value.toLowerCase();
+        var rows = document.querySelectorAll(".course-row");
+        var visible = 0;
+
+        rows.forEach(function (row) {
+            var name = row.querySelector(".course-name").textContent.toLowerCase();
+
+            if (name.includes(input)) {
+                row.style.display = "";
+                visible++;
+            } else {
+                row.style.display = "none";
+            }
+        });
+
+        document.getElementById("noResults").style.display =
+            visible === 0 ? "block" : "none";
+    }
+</script>
