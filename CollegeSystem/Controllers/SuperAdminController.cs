@@ -1,14 +1,8 @@
 ﻿using CollegeSystem.Data;
 using CollegeSystem.Models;
 using CollegeSystem.ViewModels;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query.Internal;
-using Microsoft.EntityFrameworkCore.SqlServer;
-using System.ComponentModel.DataAnnotations;
-
 
 namespace CollegeSystem.Controllers
 {
@@ -19,23 +13,30 @@ namespace CollegeSystem.Controllers
         {
             _context = context;
         }
+
         public IActionResult SuperAdminDashboard()
         {
             return View("SuperAdminDashboard");
+        }
+
+        public IActionResult CollegeAdmins()
+        {
+            var admins = _context.Admins.ToList();
+            return View("CollegeAdmin", admins); // غيرت CollegeAdmins لـ CollegeAdmin
         }
 
         // ================= ADD ADMIN =================
         [HttpPost]
         public IActionResult AddAdmin(AddAdminModel model)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 ModelState.AddModelError("", "Invalid Data");
                 return View("SuperAdminDashboard", model);
             }
 
-            var _exists = _context.Admins.Any(x=> x.Email == model.Email);
-            if(_exists)
+            var _exists = _context.Admins.Any(x => x.Email == model.Email);
+            if (_exists)
             {
                 ModelState.AddModelError("", "Email Already Exists!");
                 return View("SuperAdminDashboard", model);
@@ -61,8 +62,10 @@ namespace CollegeSystem.Controllers
 
             if (admin == null)
                 return NotFound();
+
             if (!string.IsNullOrEmpty(model.Name))
                 admin.Name = model.Name;
+
             if (!string.IsNullOrEmpty(model.Email))
                 admin.Email = model.Email;
 
@@ -73,7 +76,6 @@ namespace CollegeSystem.Controllers
             }
 
             _context.SaveChanges();
-
             return RedirectToAction("SuperAdminDashboard");
         }
 
@@ -88,7 +90,6 @@ namespace CollegeSystem.Controllers
 
             _context.Admins.Remove(admin);
             _context.SaveChanges();
-
             return RedirectToAction("SuperAdminDashboard");
         }
     }
