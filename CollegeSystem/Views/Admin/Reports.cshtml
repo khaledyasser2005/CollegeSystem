@@ -3,54 +3,50 @@
     ViewData["Title"] = "Reports";
 }
 
-<div class="container mt-4">
-    <h2 class="mb-4" style="color:#1f4aa8; font-weight:bold;">
-        📋 Received Reports
+<div class="p-6">
+    <h2 class="text-2xl font-bold mb-6" style="color:#1f4aa8;">
+        Received Reports
     </h2>
 
     @if (Model != null && Model.Any())
     {
-        <table class="table table-hover table-bordered">
-            <thead class="table-primary">
-                <tr>
-                    <th>#</th>
-                    <th>Title</th>
-                    <th>Sent By</th>
-                    <th>Date</th>
-                    <th>Status</th>
-                    <th>Download</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var report in Model)
-                {
-                    <tr>
-                        <td>@report.ID</td>
-                        <td>@report.Title</td>
-                        <td>@report.GeneratedBy</td>
-                        <td>@report.GeneratedDate.ToString("dd/MM/yyyy")</td>
-                        <td>
-                            <span class="badge bg-warning text-dark">
-                                @report.Status
-                            </span>
-                        </td>
-                        <td>
-                            <a asp-action="DownloadReport" asp-controller="Admin" asp-route-id="@report.ID"
-                               class="btn btn-sm btn-primary">
-                                Download
-                            </a>
-                        </td>
-                        <td>
+        <div class="rounded-2xl overflow-hidden shadow-md">
+            <table class="w-full text-sm">
+                <thead>
+                    <tr class="bg-[#1f4aa8] text-white text-left">
+                        <th class="px-6 py-4 font-semibold">ID</th>
+                        <th class="px-6 py-4 font-semibold">Title</th>
+                        <th class="px-6 py-4 font-semibold">Sent By</th>
+                        <th class="px-6 py-4 font-semibold">Date</th>
+                        <th class="px-6 py-4 font-semibold">Download</th>
                     </tr>
-                }
-            </tbody>
-        </table>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-100">
+                    @foreach (var report in Model)
+                    {
+                        <tr class="hover:bg-gray-50 transition">
+                            <td class="px-6 py-4 text-gray-700 font-medium">@report.ID</td>
+                            <td class="px-6 py-4 text-gray-800 font-semibold">@report.Title</td>
+                            <td class="px-6 py-4 text-gray-600">
+                                @(report.Course?.Professor?.Name ?? report.GeneratedBy)
+                            </td>
+                            <td class="px-6 py-4 text-gray-500">@report.GeneratedDate.ToString("dd/MM/yyyy")</td>
+                            <td class="px-6 py-4">
+                                <a asp-action="DownloadReport" asp-controller="Admin" asp-route-id="@report.ID"
+                                       class="px-4 py-2 bg-[#1f4aa8] text-white text-xs font-semibold rounded-lg hover:bg-blue-800 transition">
+                                    Download
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
     }
     else
     {
-
-        <div class="alert alert-info">No Reports Found</div>
+        <div class="bg-blue-50 border border-blue-200 text-blue-700 px-6 py-4 rounded-xl">
+            No Reports Found
+        </div>
     }
 </div>
-       
-
