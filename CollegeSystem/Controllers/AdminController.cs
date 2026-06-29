@@ -37,6 +37,11 @@ namespace CollegeSystem.Controllers
 
             ViewBag.SearchName = searchName;
 
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                return PartialView("_ProfessorsTablePartial", professors.ToList());
+            }
+
             return View("AllProfessors", professors.ToList());
         }
 
