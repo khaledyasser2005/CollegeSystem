@@ -37,6 +37,11 @@ namespace CollegeSystem.Controllers
 
             ViewBag.SearchName = searchName;
 
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                return PartialView("_ProfessorsTablePartial", professors.ToList());
+            }
+
             return View("AllProfessors", professors.ToList());
         }
 
@@ -326,10 +331,9 @@ namespace CollegeSystem.Controllers
 
         public IActionResult CollegeCourses()
         {
-            var courses = _context.Courses.ToList();
+            var courses = _context.Courses.Include(c=>c.Professor).ToList();
             return View("CollegeCourses", courses);
         }
-
 
         public IActionResult ManageDepartments()
         {

@@ -276,46 +276,179 @@
 <!-- ================= STUDENTS ================= -->
 <div id="students" class="tab-content">
     <div class="card-box">
-        <h3>Students Enrolled in this Course</h3>
-        <hr />
+
+        <h3 style="color:#1f4aa8; font-weight:bold; margin-bottom:10px;">
+            Students Enrolled in this Course
+        </h3>
+
+        <!-- Search -->
+        <div class="search-box">
+            <input type="text" id="searchStudent"
+                   placeholder="Search student by name..."
+                   onkeyup="searchStudents()" />
+        </div>
 
         @if (enrolledStudents != null && enrolledStudents.Any())
         {
-            <table class="table table-hover">
-                <thead class="table-primary">
-                    <tr>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Grade</th>
-                        <th>Level</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var student in enrolledStudents)
-                    {
-                        <tr>
-                            <td>@student.Name</td>
-                            <td>@student.Email</td>
-                            <td>
-                                @{
-                                    var enrollment = (ViewBag.Enrollments as List<CollegeSystem.Models.Enrollment>)
-                                        ?.FirstOrDefault(e => e.StudentID == student.ID);
-                                }
-                                @(enrollment?.Grade ?? "N/A")
-                            </td>
-                            <td>@student.Level</td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
+                <div class="table-wrap">
+                    <table class="students-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Grade</th>
+                                <th>Level</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                        @foreach (var student in enrolledStudents)
+                        {
+                                    <tr class="student-row">
+
+                                        <td class="student-name" style="font-weight:600;">
+                                    @student.Name
+                                        </td>
+
+                                        <td style="color:#555;">
+                                    @student.Email
+                                        </td>
+
+                                        <td>
+                                    @{
+                                        var enrollment = (ViewBag.Enrollments as List<CollegeSystem.Models.Enrollment>)
+                                            ?.FirstOrDefault(e => e.StudentID == student.ID);
+                                    }
+
+                                    @if (enrollment?.Grade != null)
+                                    {
+                                                    <span style="color:#1f4aa8; font-weight:bold;">
+                                            @enrollment.Grade
+                                                    </span>
+                                    }
+                                    else
+                                    {
+                                                    <span style="color:#aaa;">N/A</span>
+                                    }
+                                        </td>
+
+                                        <td>
+                                            <span class="level-badge">
+                                                Level @student.Level
+                                            </span>
+                                        </td>
+
+                                    </tr>
+                        }
+                        </tbody>
+                    </table>
+                </div>
+
+                <div id="noStudentResults" class="no-results">
+                    No students found.
+                </div>
         }
         else
         {
-            <div class="alert alert-info">No Students Enrolled Yet</div>
+                <div class="no-results">No Students Enrolled Yet</div>
         }
+
     </div>
 </div>
 
+<style>
+    .search-box {
+        max-width: 350px;
+        margin-bottom: 20px;
+    }
+
+    .search-box input {
+        width: 100%;
+        padding: 10px 14px;
+        border: 2px solid #dbe8ff;
+        border-radius: 10px;
+        outline: none;
+        font-size: 14px;
+    }
+
+    .search-box input:focus {
+        border-color: #1f4aa8;
+        box-shadow: 0 0 0 3px rgba(31,74,168,.08);
+    }
+
+    .table-wrap {
+        overflow-x: auto;
+    }
+
+    .students-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+    }
+
+    .students-table thead tr {
+        background: #1f4aa8;
+        color: white;
+    }
+
+    .students-table th {
+        padding: 14px 18px;
+        font-size: 14px;
+        text-align: left;
+    }
+
+    .students-table td {
+        padding: 14px 18px;
+        font-size: 14px;
+    }
+
+    .students-table tbody tr {
+        border-bottom: 1px solid #eef2ff;
+        transition: 0.2s;
+    }
+
+    .students-table tbody tr:hover {
+        background: #f0f5ff;
+    }
+
+    .level-badge {
+        background: #eef2ff;
+        color: #1f4aa8;
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: bold;
+    }
+
+    .no-results {
+        text-align: center;
+        padding: 20px;
+        color: #888;
+        display: none;
+    }
+</style>
+
+<script>
+    function searchStudents() {
+        var input = document.getElementById("searchStudent").value.toLowerCase();
+        var rows = document.querySelectorAll(".student-row");
+        var visible = 0;
+
+        rows.forEach(function (row) {
+            var name = row.querySelector(".student-name").textContent.toLowerCase();
+
+            if (name.includes(input)) {
+                row.style.display = "";
+                visible++;
+            } else {
+                row.style.display = "none";
+            }
+        });
+
+        document.getElementById("noStudentResults").style.display =
+            visible === 0 ? "block" : "none";
+    }
+</script>
 <!-- ================= REPORTS ================= -->
 <div id="reports" class="tab-content">
     <div class="card-box">

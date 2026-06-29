@@ -18,27 +18,17 @@
     <div class="max-w-5xl mx-auto">
 
         <!-- Search Bar -->
-        <form asp-action="AllProfessors" asp-controller="Admin" method="get" class="mb-6 flex gap-3">
+        <div class="mb-6 flex gap-3">
             <input type="text"
-                   name="searchName"
+                   id="searchNameInput"
                    value="@ViewBag.SearchName"
                    placeholder="Search professor by name..."
                    class="form-control"
                    style="flex:1; padding:10px 15px; border-radius:8px; border:1px solid #ccc;" />
-
-            <button type="submit"
-                    style="background:#0d6efd;color:white;border:none;padding:10px 25px;border-radius:6px;cursor:pointer;font-weight:bold;">
-                Search
-            </button>
-
-            <a asp-action="AllProfessors" asp-controller="Admin"
-               style="background:#6c757d;color:white;border:none;padding:10px 25px;border-radius:6px;cursor:pointer;font-weight:bold;text-decoration:none;display:inline-block;">
-                Reset
-            </a>
-        </form>
+        </div>
 
         <!-- Professors Table -->
-        <div class="bg-white rounded-2xl shadow-md p-6 border border-gray-200">
+        <div class="bg-white rounded-2xl shadow-md p-6 border border-gray-200" id="professorsTableContainer">
 
             @if (Model != null && Model.Any())
             {
@@ -68,6 +58,30 @@
             }
 
         </div>
+
+        <script>
+                    let searchTimer;
+
+                    document.getElementById('searchNameInput').addEventListener('input', function () {
+                        clearTimeout(searchTimer);
+                        const value = this.value;
+
+                        searchTimer = setTimeout(function () {
+                            fetch('/Admin/AllProfessors?searchName=' + encodeURIComponent(value), {
+                                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                            })
+                                .then(response => response.text())
+                                .then(html => {
+                                    document.getElementById('professorsTableContainer').innerHTML = html;
+                                });
+                        }, 300);
+                    });
+
+                    function resetSearch() {
+                        document.getElementById('searchNameInput').value = '';
+                        document.getElementById('searchNameInput').dispatchEvent(new Event('input'));
+                    }
+        </script>
 
     </div>
 

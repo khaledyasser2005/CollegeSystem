@@ -5,22 +5,91 @@
     var courses = ViewBag.Courses as List<Course>;
 }
 
-<section class="min-h-screen flex flex-col items-center justify-start bg-surface-container-low px-10 pt-10">
+<style>
+    body {
+        background: #f5f8ff;
+    }
 
-    <div class="text-center mb-10 -mt-2">
-        <h1 class="text-4xl font-bold text-on-surface">
-            Assign Course To Student
-        </h1>
-        <p class="text-sm text-on-surface-variant mt-2">
+    .page-title {
+        color: #1e3a5f;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .card-box {
+        background: white;
+        border-radius: 16px;
+        padding: 25px;
+        box-shadow: 0 5px 15px rgba(0,0,0,.08);
+        width: 100%;
+        max-width: 600px;
+    }
+
+    .form-label {
+        font-size: 14px;
+        font-weight: 600;
+        color: #1e3a5f;
+        margin-bottom: 8px;
+        display: block;
+    }
+
+    .form-select {
+        width: 100%;
+        padding: 12px 15px;
+        border: 2px solid #dbe8ff;
+        border-radius: 10px;
+        outline: none;
+        font-size: 14px;
+        transition: .2s;
+    }
+
+    .form-select:focus {
+        border-color: #2f55a4;
+        box-shadow: 0 0 0 2px rgba(47,85,164,.1);
+    }
+
+    .submit-btn {
+        width: 100%;
+        background: #2f55a4;
+        color: white;
+        font-weight: 600;
+        padding: 12px;
+        border-radius: 10px;
+        border: none;
+        transition: .2s;
+    }
+
+    .submit-btn:hover {
+        background: #24478c;
+    }
+
+    .error-box {
+        margin-bottom: 20px;
+        padding: 12px;
+        background: #ffeaea;
+        border: 1px solid #ffbcbc;
+        border-radius: 10px;
+        color: #c53030;
+        font-size: 13px;
+    }
+</style>
+
+<section class="flex flex-col items-center pt-8">
+
+    <!-- Title -->
+    <div style="margin-bottom: 25px; text-align:center;">
+        <h1 class="page-title">Assign Course To Student</h1>
+        <p style="color:#666;">
             Select a student and a course to assign
         </p>
     </div>
 
-    <div class="w-full max-w-2xl bg-white rounded-3xl shadow-lg border border-outline-variant p-8">
+    <!-- Card -->
+    <div class="card-box">
 
         @if (!ViewData.ModelState.IsValid)
         {
-                <div class="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl text-red-600 text-sm">
+                <div class="error-box">
                 @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
                 {
                             <p>@error.ErrorMessage</p>
@@ -31,14 +100,13 @@
         <form method="post" asp-action="AssignCourseToStudent" asp-controller="Admin">
 
             <!-- Student -->
-            <div class="mb-6">
-                <label class="block text-sm font-medium text-on-surface mb-2">Student</label>
-                <select name="StudentID"
-                        class="w-full rounded-xl border border-outline-variant px-4 py-3 text-on-surface focus:ring-2 focus:ring-primary focus:outline-none">
+            <div style="margin-bottom:20px;">
+                <label class="form-label">Student</label>
+                <select name="StudentID" class="form-select">
                     <option value="">-- Select Student --</option>
                     @if (students != null)
                     {
-                        @foreach (var student in students)
+                        foreach (var student in students)
                         {
                                     <option value="@student.ID">@student.Name</option>
                         }
@@ -47,14 +115,13 @@
             </div>
 
             <!-- Course -->
-            <div class="mb-8">
-                <label class="block text-sm font-medium text-on-surface mb-2">Course</label>
-                <select name="CourseID"
-                        class="w-full rounded-xl border border-outline-variant px-4 py-3 text-on-surface focus:ring-2 focus:ring-primary focus:outline-none">
+            <div style="margin-bottom:25px;">
+                <label class="form-label">Course</label>
+                <select name="CourseID" class="form-select">
                     <option value="">-- Select Course --</option>
                     @if (courses != null)
                     {
-                        @foreach (var course in courses)
+                        foreach (var course in courses)
                         {
                                     <option value="@course.ID">@course.Name</option>
                         }
@@ -63,10 +130,9 @@
             </div>
 
             <!-- Submit -->
-        <button type="submit"
-                class="w-full bg-[#00174d] text-white font-semibold py-3 rounded-xl hover:bg-[#002080] transition">
-            Assign Course
-        </button>
+            <button type="submit" class="submit-btn">
+                Assign Course
+            </button>
 
         </form>
     </div>

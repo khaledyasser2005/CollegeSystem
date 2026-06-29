@@ -6,27 +6,30 @@
 }
 
 <style>
+    body {
+        background: #f5f8ff;
+    }
+
     .page-header {
         text-align: center;
         margin-bottom: 28px;
     }
 
     .page-header h1 {
-        color: #00174d;
+        color: #1e3a5f;
         font-size: 32px;
         font-weight: 700;
         margin-bottom: 8px;
     }
 
     .page-header p {
-        color: #667085;
+        color: #666;
         font-size: 14px;
     }
 
     .search-box {
         max-width: 420px;
         margin-bottom: 20px;
-        position: relative;
     }
 
     .search-box input {
@@ -40,8 +43,8 @@
     }
 
     .search-box input:focus {
-        border-color: #00174d;
-        box-shadow: 0 0 0 3px rgba(0, 23, 77, .08);
+        border-color: #2f55a4;
+        box-shadow: 0 0 0 3px rgba(47,85,164,.08);
     }
 
     .tabs {
@@ -49,12 +52,11 @@
         gap: 10px;
         margin-bottom: 20px;
         border-bottom: 2px solid #ddd;
-        flex-wrap: wrap;
     }
 
     .tab-btn {
         border: none;
-        background: #00174d;
+        background: #2f55a4;
         color: white;
         padding: 12px 22px;
         border-radius: 10px 10px 0 0;
@@ -67,7 +69,7 @@
 
     .badge-level {
         background: white;
-        color: #00174d;
+        color: #2f55a4;
         border-radius: 20px;
         padding: 2px 10px;
         font-size: 12px;
@@ -75,9 +77,9 @@
 
     .card-box {
         background: white;
-        border-radius: 12px;
+        border-radius: 16px;
         padding: 25px;
-        box-shadow: 0 3px 10px rgba(0,0,0,.1);
+        box-shadow: 0 5px 15px rgba(0,0,0,.08);
     }
 
     .table-wrap {
@@ -87,14 +89,13 @@
 
     .dept-table {
         width: 100%;
-        min-width: 600px;
         border-collapse: separate;
         border-spacing: 0;
         margin-top: 10px;
     }
 
     .dept-table thead tr {
-        background: #00174d;
+        background: #2f55a4;
         color: white;
     }
 
@@ -107,11 +108,11 @@
 
     .dept-table tbody tr {
         border-bottom: 1px solid #eef2ff;
-        transition: background .2s;
+        transition: .2s;
     }
 
     .dept-table tbody tr:hover {
-        background: #f0f5ff;
+        background: #f5f8ff;
     }
 
     .dept-table tbody td {
@@ -121,13 +122,13 @@
     }
 
     .dept-name {
-        color: #1f4aa8;
+        color: #2f55a4;
         font-weight: bold;
     }
 
     .gpa-badge {
         background: #eef2ff;
-        color: #00174d;
+        color: #2f55a4;
         border-radius: 20px;
         padding: 4px 12px;
         font-size: 12px;
@@ -137,7 +138,6 @@
     .num-cell {
         color: #888;
         font-weight: bold;
-        width: 40px;
     }
 
     .no-results {
@@ -148,13 +148,14 @@
     }
 </style>
 
-<section class="min-h-full px-4 sm:px-10 pt-4">
+<section class="px-10 pt-6">
 
     <div class="page-header">
         <h1>Departments</h1>
         <p>Browse all departments in the college</p>
     </div>
 
+    <!-- Search -->
     <div class="search-box">
         <input type="text"
                id="searchInput"
@@ -162,6 +163,7 @@
                onkeyup="searchDepartments()" />
     </div>
 
+    <!-- Tabs -->
     <div class="tabs">
         <button class="tab-btn">
             Departments
@@ -169,9 +171,10 @@
         </button>
     </div>
 
+    <!-- Table -->
     <div class="card-box">
 
-        <h4 style="color:#00174d; margin-bottom:20px; font-size:17px;">
+        <h4 style="color:#2f55a4; margin-bottom:20px; font-size:17px;">
             All Departments -
             <span style="color:#555;">@departments.Count</span>
         </h4>
@@ -182,17 +185,13 @@
                     <table class="dept-table">
                         <thead>
                             <tr>
-                                    <th>Department ID</th>
+                                <th>ID</th>
                                 <th>Department Name</th>
                                 <th>GPA Required</th>
                             </tr>
                         </thead>
 
                         <tbody>
-                        @{
-                            int i = 1;
-                        }
-
                         @foreach (var dept in departments)
                         {
                                     <tr class="dept-row">
@@ -204,7 +203,6 @@
                                             </span>
                                         </td>
                                     </tr>
-                            i++;
                         }
                         </tbody>
                     </table>
@@ -226,15 +224,14 @@
 
 <script>
     function searchDepartments() {
-        var input = document.getElementById("searchInput");
-        var query = input.value.toLowerCase();
+        var input = document.getElementById("searchInput").value.toLowerCase();
         var rows = document.querySelectorAll(".dept-row");
         var visibleCount = 0;
 
         rows.forEach(function (row) {
             var name = row.querySelector(".dept-name").textContent.toLowerCase();
 
-            if (name.includes(query)) {
+            if (name.includes(input)) {
                 row.style.display = "";
                 visibleCount++;
             } else {
@@ -242,10 +239,7 @@
             }
         });
 
-        var noResults = document.getElementById("noResults");
-
-        if (noResults) {
-            noResults.style.display = visibleCount === 0 ? "block" : "none";
-        }
+        document.getElementById("noResults").style.display =
+            visibleCount === 0 ? "block" : "none";
     }
 </script>

@@ -2,7 +2,8 @@
 @using CollegeSystem.Models
 
 @{
-    Layout = "_LayoutHome";
+    var role = Context.Session.GetString("Role");
+    Layout = string.IsNullOrEmpty(role) ? "_LayoutHome" : "_Layout";
     ViewData["Title"] = "DEPI College";
 }
 
@@ -129,7 +130,10 @@ body {
 <div class="hero">
     <h1>Welcome to DEPI College</h1>
     <p>Empowering students with knowledge and skills.</p>
-    <a asp-controller="Account" asp-action="Login">Login</a>
+    @if (string.IsNullOrEmpty(role))
+    {
+        <a asp-controller="Account" asp-action="Login">Login</a>
+    }
 </div>
 
 <!-- ABOUT -->
