@@ -179,7 +179,7 @@
 
 <!-- Search -->
 <div class="search-box">
-    <input type="text" id="searchInput" placeholder="?? Search by name..." onkeyup="searchStudents()" />
+    <input type="text" id="searchInput" placeholder=" Search by name..." onkeyup="searchStudents()" />
 </div>
 
 <!-- Tabs -->
@@ -265,13 +265,25 @@
                                                         <span style="color:#aaa;">No Courses</span>
                                     }
                                             </td>
-                                        </tr>
+                                            <td>
+                                    @if (student.Department != null)
+                                    {
+                                        <div style="font-weight:600; color:#1f4aa8;">
+                                            @student.Department.Name
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                         <span style="color:#aaa;">No Department</span>
+                                    }
+                                    </td>
+                                    </tr>
                             i++;
                         }
                             </tbody>
                         </table>
                         <div class="no-results" id="noResults-@level" style="display:none;">
-                            ?? No students found matching your search.
+                            No students found matching your search.
                         </div>
             }
             else
