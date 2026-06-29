@@ -1,6 +1,8 @@
 ﻿@{
 
-    if (Context.Request.Path.StartsWithSegments("/Home"))
+    var role = Context.Session.GetString("Role");
+
+    if (Context.Request.Path.StartsWithSegments("/Home") && string.IsNullOrEmpty(role))
     {
         Layout = "_LayoutHome";
     }
