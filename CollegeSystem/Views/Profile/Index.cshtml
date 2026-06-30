@@ -1,0 +1,82 @@
+﻿@{
+    ViewData["Title"] = "My Profile";
+    var role = Context.Session.GetString("Role");
+}
+
+<section class="min-h-screen bg-gray-50 flex justify-center items-start pt-10 px-6">
+
+    <div class="w-full max-w-3xl bg-white shadow-xl rounded-3xl p-8">
+
+        <!-- Title -->
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-[#00174d]">
+                My Profile
+            </h1>
+            <p class="text-gray-500 mt-2">
+                View your personal information
+            </p>
+        </div>
+
+        <!-- Basic Info -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+            <div class="bg-gray-50 p-4 rounded-xl">
+                <p class="text-sm text-gray-500">Name</p>
+                <p class="font-semibold text-gray-800">@ViewBag.Name</p>
+            </div>
+
+            <div class="bg-gray-50 p-4 rounded-xl">
+                <p class="text-sm text-gray-500">Email</p>
+                <p class="font-semibold text-gray-800">@ViewBag.Email</p>
+            </div>
+
+            @if (role == "Student")
+            {
+                    <div class="bg-gray-50 p-4 rounded-xl">
+                        <p class="text-sm text-gray-500">Level</p>
+                        <p class="font-semibold text-gray-800">@ViewBag.Level</p>
+                    </div>
+
+                    <div class="bg-gray-50 p-4 rounded-xl">
+                        <p class="text-sm text-gray-500">GPA</p>
+                        <p class="font-semibold text-gray-800">@ViewBag.GPA</p>
+                    </div>
+
+                    <div class="bg-gray-50 p-4 rounded-xl md:col-span-2">
+                        <p class="text-sm text-gray-500">Department</p>
+                        <p class="font-semibold text-gray-800">@ViewBag.Department</p>
+                    </div>
+            }
+        </div>
+
+        <!-- Courses Section -->
+        @if (role == "Student" || role == "Professor")
+        {
+                <div class="mt-8">
+                    <h2 class="text-lg font-bold text-[#00174d] mb-4">
+                    @(role == "Student" ? "My Courses" : "Courses Teaching")
+                    </h2>
+
+                    <div class="bg-gray-50 p-4 rounded-xl">
+
+                    @if (ViewBag.Courses != null && ((List<string>)ViewBag.Courses).Any())
+                    {
+                        foreach (var course in ViewBag.Courses)
+                        {
+                                        <span class="inline-block bg-[#00174d]/10 text-[#00174d] px-3 py-1 rounded-lg text-sm m-1">
+                                @course
+                                        </span>
+                        }
+                    }
+                    else
+                    {
+                                <p class="text-gray-400">No courses available</p>
+                    }
+
+                    </div>
+                </div>
+        }
+
+    </div>
+
+</section>

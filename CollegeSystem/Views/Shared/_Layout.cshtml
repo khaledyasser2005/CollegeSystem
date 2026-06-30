@@ -1,5 +1,6 @@
 @{
     var Role = Context.Session.GetString("Role");
+    var Name = Context.Session.GetString("Name");
 }
 
 <!DOCTYPE html>
@@ -67,39 +68,37 @@
                             <span class="material-symbols-outlined mr-3">shield</span>
                             College Courses
                         </a>
+                            <a asp-controller="Admin" asp-action="StudentsByLevel"
+                                   class="flex items-center px-4 py-3 text-white/80 hover:text-white hover:bg-white/10 rounded-lg">
+                                <span class="material-symbols-outlined mr-3">shield</span>
+                                College Students
+                            </a>
+                                                        <a asp-controller="Admin" asp-action="CollegeDepartments"
+                                   class="flex items-center px-4 py-3 text-white/80 hover:text-white hover:bg-white/10 rounded-lg">
+                                <span class="material-symbols-outlined mr-3">shield</span>
+                                College Departments
+                            </a>
+
+                            <a asp-controller="Admin" asp-action="AllProfessors"
+                               class="flex items-center px-4 py-3 text-white/80 hover:text-white hover:bg-white/10 rounded-lg">
+                                <span class="material-symbols-outlined mr-3">shield</span>
+                                College Professors
+                            </a>
                         <a asp-controller="Admin" asp-action="AssignCourseToStudent"
                                class="flex items-center px-4 py-3 text-white/80 hover:text-white hover:bg-white/10 rounded-lg">
                             <span class="material-symbols-outlined mr-3">shield</span>
                             Student Enrollment Management
                         </a>
-                        <a asp-controller="Admin" asp-action="StudentsByLevel"
-                               class="flex items-center px-4 py-3 text-white/80 hover:text-white hover:bg-white/10 rounded-lg">
-                            <span class="material-symbols-outlined mr-3">shield</span>
-                            College Students
-                        </a>
-                        <a asp-controller="Admin" asp-action="CollegeDepartments"
-                               class="flex items-center px-4 py-3 text-white/80 hover:text-white hover:bg-white/10 rounded-lg">
-                            <span class="material-symbols-outlined mr-3">shield</span>
-                            College Departments
-                        </a>
+                             <a asp-controller="Admin" asp-action="ProfessorsCourseAssignment"
+                                   class="flex items-center px-4 py-3 text-white/80 hover:text-white hover:bg-white/10 rounded-lg">
+                                <span class="material-symbols-outlined mr-3">shield</span>
+                                Professors Course Assignment
+                            </a>
 
-                        <a asp-controller="Admin" asp-action="AllProfessors"
-                           class="flex items-center px-4 py-3 text-white/80 hover:text-white hover:bg-white/10 rounded-lg">
-                            <span class="material-symbols-outlined mr-3">shield</span>
-                            College Professors
-                        </a>
                         <a asp-controller="Admin" asp-action="Reports"
                                class="flex items-center px-4 py-3 text-white/80 hover:text-white hover:bg-white/10 rounded-lg">
                             <span class="material-symbols-outlined mr-3">shield</span>
                             Reports
-
-                        </a>
-
-
-                        <a asp-controller="Admin" asp-action="ProfessorsCourseAssignment"
-                               class="flex items-center px-4 py-3 text-white/80 hover:text-white hover:bg-white/10 rounded-lg">
-                            <span class="material-symbols-outlined mr-3">shield</span>
-                            Professors Course Assignment
                         </a>
                     }
                     else if (Role == "Professor")
@@ -146,17 +145,40 @@
         <!-- MAIN AREA -->
         <div class="flex-1 flex flex-col">
 
-            <header class="h-16 flex items-center justify-between px-8 bg-white border-b">
-                <div class="text-lg font-semibold">
-                    Welcome
-                </div>
+          <header class="h-16 flex items-center justify-between px-8 bg-white border-b">
 
-                <a asp-controller="Account" asp-action="Logout"
-                       class="text-gray-600 hover:text-red-500 font-medium">
-                    Log out
-                </a>
-            </header>
+    <!-- LEFT -->
+    <div class="text-lg font-semibold">
+        Welcome
+    </div>
 
+    <!-- RIGHT -->
+    <div class="flex items-center gap-4">
+
+        <!-- USER INFO -->
+        <a asp-controller="Profile" asp-action="Index"
+           class="flex items-center gap-2 bg-gray-100 hover:bg-gray-200 px-3 py-2 rounded-xl transition">
+
+            <!-- ICON -->
+            <span class="material-symbols-outlined text-gray-600">
+                account_circle
+            </span>
+
+            <!-- NAME -->
+            <span class="text-sm font-medium text-gray-700">
+                            @Name
+            </span>
+        </a>
+
+        <!-- LOGOUT -->
+        <a asp-controller="Account" asp-action="Logout"
+           class="text-gray-600 hover:text-red-500 font-medium">
+            Log out
+        </a>
+
+    </div>
+
+</header>
             <main class="flex-1 overflow-y-auto p-8 bg-gray-50">
                 @RenderBody()
             </main>

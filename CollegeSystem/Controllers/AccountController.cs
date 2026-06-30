@@ -38,6 +38,7 @@ namespace CollegeSystem.Controllers
                     {
                         HttpContext.Session.SetString("UserId",student.ID.ToString());
                         HttpContext.Session.SetString("Role", "Student");
+                        HttpContext.Session.SetString("Name", student.Name);
                         return RedirectToAction("MyCourses", "Student");
                     }
                 }
@@ -54,6 +55,7 @@ namespace CollegeSystem.Controllers
                     {
                         HttpContext.Session.SetString("UserId", professor.ID.ToString());
                         HttpContext.Session.SetString("Role", "Professor");
+                        HttpContext.Session.SetString("Name", professor.Name);
                         return RedirectToAction("MyCourses", "Professor");
                     }
                 }
@@ -70,7 +72,8 @@ namespace CollegeSystem.Controllers
                     {
                         HttpContext.Session.SetString("UserId", admin.ID.ToString());
                         HttpContext.Session.SetString("Role", "Admin");
-                        return RedirectToAction("AdminDashboard", "Admin");       
+                        HttpContext.Session.SetString("Name", admin.Name);
+                        return RedirectToAction("AdminDashboard", "Admin");   
                     }
                 }
             }
@@ -86,6 +89,7 @@ namespace CollegeSystem.Controllers
                     {
                         HttpContext.Session.SetString("UserId", superAdmin.ID.ToString());
                         HttpContext.Session.SetString("Role", "Super Admin");
+                        HttpContext.Session.SetString("Name", "SuperAdmin");
                         return RedirectToAction("SuperAdminDashboard", "SuperAdmin");
                     }
                 }

@@ -99,11 +99,11 @@ namespace CollegeSystem.Controllers
             {
                 assistantReply = await _gemini.GetResponseAsync(systemPrompt, history, trimmedMessage);
             }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Gemini API call failed for user {UserId} ({UserRole})", userId.Value, userRole);
-                assistantReply = $"Error: {ex.Message}";
-            }
+           catch (Exception ex)
+{
+    _logger.LogError(ex, "Gemini Error");
+    assistantReply = ex.ToString();
+}
 
             // Persist the assistant's reply
             var assistantMsg = new ChatMessage
