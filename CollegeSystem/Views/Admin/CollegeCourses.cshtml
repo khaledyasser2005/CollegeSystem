@@ -111,7 +111,7 @@
                             <td>@course.Duration</td>
                             <td>@course.Semesters</td>
                             <td>@course.CoursePrerequisites</td>
-                             <td>@course.Professor.Name</td>
+                        <td>@(course.Professor?.Name ?? "No Professor")</td>
                         </tr>
                 }
             </tbody>

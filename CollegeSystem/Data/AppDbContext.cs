@@ -1,4 +1,4 @@
-﻿using CollegeSystem.Models;
+using CollegeSystem.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Reflection.Emit;
@@ -21,6 +21,7 @@ namespace CollegeSystem.Data
         public DbSet<Material> Materials { get; set; }
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<Report> Reports { get; set; }
+        public DbSet<ChatMessage> ChatMessages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -36,6 +37,11 @@ namespace CollegeSystem.Data
             // Enrollment Primary Key
             modelBuilder.Entity<Enrollment>()
                 .HasKey(e => new { e.StudentID, e.CourseID });
+
+            // ChatMessage index for efficient per-user history retrieval
+            modelBuilder.Entity<ChatMessage>()
+                .HasIndex(m => new { m.UserId, m.UserRole, m.Timestamp })
+                .HasDatabaseName("IX_ChatMessages_User_Timestamp");
         }
     }
 }

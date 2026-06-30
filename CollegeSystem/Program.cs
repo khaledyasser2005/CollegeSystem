@@ -1,4 +1,5 @@
-﻿using CollegeSystem.Data;
+using CollegeSystem.Data;
+using CollegeSystem.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,6 +8,11 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddSession();
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddHttpContextAccessor();
+
+
+
+// Register AI chat service
+builder.Services.AddScoped<IGeminiChatService, GeminiChatService>();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));

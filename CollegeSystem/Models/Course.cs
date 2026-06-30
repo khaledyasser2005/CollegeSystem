@@ -16,5 +16,6 @@
         public ICollection<Assignment> Assignments { get; set; }
         public ICollection<Quiz> Quizzes { get; set; }
         public ICollection<Material> Materials { get; set; }
+
     }
 }
