@@ -19,47 +19,47 @@
         margin-top: 10px;
     }
 
-    .students-table thead tr {
-        background: #2f55a4;
-        color: white;
-    }
+        .students-table thead tr {
+            background: #2f55a4;
+            color: white;
+        }
 
-    .students-table thead th {
-        padding: 14px 18px;
-        font-size: 14px;
-        text-align: left;
-    }
+        .students-table thead th {
+            padding: 14px 18px;
+            font-size: 14px;
+            text-align: left;
+        }
 
-    .students-table tbody tr {
-        border-bottom: 1px solid #eef2ff;
-        transition: .2s;
-    }
+        .students-table tbody tr {
+            border-bottom: 1px solid #eef2ff;
+            transition: .2s;
+        }
 
-    .students-table tbody tr:hover {
-        background: #f5f8ff;
-    }
+            .students-table tbody tr:hover {
+                background: #f5f8ff;
+            }
 
-    .students-table td {
-        padding: 14px 18px;
-        font-size: 14px;
-    }
+        .students-table td {
+            padding: 14px 18px;
+            font-size: 14px;
+        }
 
     .search-box {
         max-width: 400px;
         margin-bottom: 20px;
     }
 
-    .search-box input {
-        width: 100%;
-        padding: 10px 15px;
-        border: 2px solid #dbe8ff;
-        border-radius: 10px;
-        outline: none;
-    }
+        .search-box input {
+            width: 100%;
+            padding: 10px 15px;
+            border: 2px solid #dbe8ff;
+            border-radius: 10px;
+            outline: none;
+        }
 
-    .search-box input:focus {
-        border-color: #2f55a4;
-    }
+            .search-box input:focus {
+                border-color: #2f55a4;
+            }
 
     .no-results {
         text-align: center;
@@ -74,7 +74,7 @@
     <!-- Title -->
     <div style="margin-bottom: 25px;">
         <h1 style="color:#1e3a5f; font-size:28px; font-weight:bold;">
-        College Courses
+            College Courses
         </h1>
         <p style="color:#666;">
             Browse all available courses in the college
@@ -95,7 +95,6 @@
                     <th>Course Name</th>
                     <th>Description</th>
                     <th>Duration</th>
-                    <th>Semesters</th>
                     <th>Prerequisites</th>
                     <th>Professor</th>
                 </tr>
@@ -104,15 +103,14 @@
             <tbody id="coursesTable">
                 @foreach (var course in Model)
                 {
-                        <tr class="course-row">
-                            <td>@course.ID</td>
-                            <td class="course-name" style="font-weight:600;">@course.Name</td>
-                            <td>@course.Description</td>
-                            <td>@course.Duration</td>
-                            <td>@course.Semesters</td>
-                            <td>@course.CoursePrerequisites</td>
+                    <tr class="course-row">
+                        <td>@course.ID</td>
+                        <td class="course-name" style="font-weight:600;">@course.Name</td>
+                        <td>@course.Description</td>
+                        <td>@course.Duration</td>
+                        <td>@course.CoursePrerequisites</td>
                         <td>@(course.Professor?.Name ?? "No Professor")</td>
-                        </tr>
+                    </tr>
                 }
             </tbody>
         </table>
