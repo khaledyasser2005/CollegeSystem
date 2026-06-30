@@ -14,7 +14,7 @@
 
         public string GeneratedBy { get; set; }
 
-        public int AdminID { get; set; }
+        //public int AdminID { get; set; }
 
         // 📌 PDF file
         public string FileName { get; set; }
@@ -26,6 +26,6 @@
 
 
 
-        public Admin Admin { get; set; }
+        //public Admin Admin { get; set; }
     }
 }
