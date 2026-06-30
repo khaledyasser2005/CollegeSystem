@@ -493,5 +493,61 @@ namespace CollegeSystem.Controllers
             var departments = _context.Departments.ToList();
             return View(departments);
         }
+
+
+        // ================= PROFESSORS COURSE ASSIGNMENT =================
+
+        public IActionResult ProfessorsCourseAssignment()
+        {
+            var courses = _context.Courses
+                .Include(c => c.Professor)
+                .ToList();
+
+            ViewBag.Professors = _context.Professors.ToList();
+
+            return View("ProfessorsCourseAssignment", courses);
+        }
+
+        [HttpPost]
+        public IActionResult AssignCourseToProfessor(int ProfessorID, int CourseID)
+        {
+            var course = _context.Courses.Find(CourseID);
+
+            if (course == null)
+            {
+                TempData["ErrorMessage"] = "Course not found.";
+                return RedirectToAction("ProfessorsCourseAssignment");
+            }
+
+            if (course.ProfessorID == ProfessorID)
+            {
+                TempData["ErrorMessage"] = "This course is already assigned to the selected professor.";
+                return RedirectToAction("ProfessorsCourseAssignment");
+            }
+
+            course.ProfessorID = ProfessorID;
+            _context.SaveChanges();
+
+            TempData["SuccessMessage"] = "Course assigned to professor successfully.";
+            return RedirectToAction("ProfessorsCourseAssignment");
+        }
+
+        [HttpPost]
+        public IActionResult UnassignCourseFromProfessor(int CourseID)
+        {
+            var course = _context.Courses.Find(CourseID);
+
+            if (course == null)
+            {
+                TempData["ErrorMessage"] = "Course not found.";
+                return RedirectToAction("ProfessorsCourseAssignment");
+            }
+
+            course.ProfessorID = null;
+            _context.SaveChanges();
+
+            TempData["SuccessMessage"] = "Course unassigned successfully.";
+            return RedirectToAction("ProfessorsCourseAssignment");
+        }
     }
 }
