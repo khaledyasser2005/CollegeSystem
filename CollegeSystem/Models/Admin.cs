@@ -1,9 +1,9 @@
-﻿namespace CollegeSystem.Models
+namespace CollegeSystem.Models
 {
     public class Admin : AppUser
     {
         // Navigation Properties
-        public ICollection<Report> Reports { get; set; }
-        public ICollection<Notification> Notifications { get; set; }
+        public ICollection<Report> Reports { get; set; } = new List<Report>();
+        public ICollection<Notification> Notifications { get; set; } = new List<Notification>();
     }
 }

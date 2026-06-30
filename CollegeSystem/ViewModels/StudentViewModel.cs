@@ -1,4 +1,4 @@
-﻿using Microsoft.Identity.Client;
+using Microsoft.Identity.Client;
 using System.ComponentModel.DataAnnotations;
 
 namespace CollegeSystem.ViewModels
@@ -8,15 +8,15 @@ namespace CollegeSystem.ViewModels
     public class AddStudentViewModel
     {
         [Required(ErrorMessage = "Student Name is required")]
-        public string Name { get; set; }
+        public string Name { get; set; } = null!;
         [Required(ErrorMessage = "Student Email is required")]
-        public string Email { get; set; }
+        public string Email { get; set; } = null!;
 
         [Required(ErrorMessage = "Student Password is required")]
-        public string Password {  get; set; }
+        public string Password {  get; set; } = null!;
 
         [Required(ErrorMessage = "Student Phone is required")]
-        public string Phone { get; set; }
+        public string Phone { get; set; } = null!;
         [Required(ErrorMessage = "Student Level is required")]
         public int Level { get; set; }
 

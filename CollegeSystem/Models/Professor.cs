@@ -1,9 +1,9 @@
-﻿namespace CollegeSystem.Models
+namespace CollegeSystem.Models
 {
     public class Professor : AppUser
     {
         // Navigation Properties
-        public ICollection<Course> Courses { get; set; }
+        public ICollection<Course> Courses { get; set; } = new List<Course>();
 
     }
 }

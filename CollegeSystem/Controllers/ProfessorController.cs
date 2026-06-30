@@ -13,7 +13,7 @@ namespace CollegeSystem.Controllers
     {
         public IActionResult MyCourses()
         {
-            var context = HttpContext.RequestServices.GetService<AppDbContext>();
+            var context = HttpContext.RequestServices.GetService<AppDbContext>()!;
 
             var professorId = HttpContext.Session.GetString("UserId");
 
@@ -30,7 +30,7 @@ namespace CollegeSystem.Controllers
         }
         public IActionResult CourseDetails(int id, string tab = "materials")
         {
-            var context = HttpContext.RequestServices.GetService<AppDbContext>();
+            var context = HttpContext.RequestServices.GetService<AppDbContext>()!;
             var course = context.Courses.FirstOrDefault(c => c.ID == id);
             if (course == null)
                 return NotFound();
@@ -72,7 +72,7 @@ namespace CollegeSystem.Controllers
         }
         public IActionResult Professors()
         {
-            var context = HttpContext.RequestServices.GetService<AppDbContext>();
+            var context = HttpContext.RequestServices.GetService<AppDbContext>()!;
 
             var professors = context.Professors.ToList();
 
@@ -81,7 +81,7 @@ namespace CollegeSystem.Controllers
 
         public IActionResult CollegeCourses()
         {
-            var context = HttpContext.RequestServices.GetService<AppDbContext>();
+            var context = HttpContext.RequestServices.GetService<AppDbContext>()!;
             var courses = context.Courses.ToList();
             return View("CollegeCourses", courses);
         }
@@ -89,7 +89,7 @@ namespace CollegeSystem.Controllers
         [HttpPost]
         public IActionResult UploadMaterial(int courseId, IFormFile pdfFile, string title, string description)
         {
-            var context = HttpContext.RequestServices.GetService<AppDbContext>();
+            var context = HttpContext.RequestServices.GetService<AppDbContext>()!;
 
             if (pdfFile != null && pdfFile.Length > 0)
             {
@@ -128,7 +128,7 @@ namespace CollegeSystem.Controllers
 
         public IActionResult DeleteMaterial(int id, int courseId)
         {
-            var context = HttpContext.RequestServices.GetService<AppDbContext>();
+            var context = HttpContext.RequestServices.GetService<AppDbContext>()!;
 
             var material = context.Materials.FirstOrDefault(m => m.ID == id);
 
@@ -154,7 +154,7 @@ namespace CollegeSystem.Controllers
         [HttpPost]
         public IActionResult CreateAssignment(int courseId, string title, string description, DateTime dueDate, int maxMarks)
         {
-            var context = HttpContext.RequestServices.GetService<AppDbContext>();
+            var context = HttpContext.RequestServices.GetService<AppDbContext>()!;
 
             Assignment assignment = new Assignment
             {
@@ -174,7 +174,7 @@ namespace CollegeSystem.Controllers
 
         public IActionResult DeleteAssignment(int id, int courseId)
         {
-            var context = HttpContext.RequestServices.GetService<AppDbContext>();
+            var context = HttpContext.RequestServices.GetService<AppDbContext>()!;
 
             var assignment = context.Assignments.FirstOrDefault(a => a.ID == id);
 
@@ -189,7 +189,7 @@ namespace CollegeSystem.Controllers
         [HttpPost]
         public IActionResult CreateQuiz(int courseId, string title, string description, int totalMarks, int duration, int attemptsAllowed, DateTime startTime, DateTime endTime)
         {
-            var context = HttpContext.RequestServices.GetService<AppDbContext>();
+            var context = HttpContext.RequestServices.GetService<AppDbContext>()!;
 
             Quiz quiz = new Quiz
             {
@@ -213,7 +213,7 @@ namespace CollegeSystem.Controllers
 
         public IActionResult DeleteQuiz(int id, int courseId)
         {
-            var context = HttpContext.RequestServices.GetService<AppDbContext>();
+            var context = HttpContext.RequestServices.GetService<AppDbContext>()!;
 
             var quiz = context.Quizzes.FirstOrDefault(q => q.ID == id);
 
@@ -233,7 +233,7 @@ namespace CollegeSystem.Controllers
         [HttpPost]
         public async Task<IActionResult> UploadReport(int courseId, IFormFile file, string title)
         {
-            var context = HttpContext.RequestServices.GetService<AppDbContext>();
+            var context = HttpContext.RequestServices.GetService<AppDbContext>()!;
 
             if (file == null || file.Length == 0)
                 return RedirectToAction("CourseDetails", new { id = courseId });
@@ -266,7 +266,7 @@ namespace CollegeSystem.Controllers
         }
         public IActionResult DownloadReport(int id)
         {
-            var context = HttpContext.RequestServices.GetService<AppDbContext>();
+            var context = HttpContext.RequestServices.GetService<AppDbContext>()!;
 
             var report = context.Reports.FirstOrDefault(r => r.ID == id);
 
@@ -277,7 +277,7 @@ namespace CollegeSystem.Controllers
         }
         public IActionResult DeleteReport(int id, int courseId)
         {
-            var context = HttpContext.RequestServices.GetService<AppDbContext>();
+            var context = HttpContext.RequestServices.GetService<AppDbContext>()!;
 
             var report = context.Reports.FirstOrDefault(r => r.ID == id);
 

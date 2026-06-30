@@ -1,18 +1,18 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
 namespace CollegeSystem.ViewModels
 {
     public class AddCourseViewModel
     {
         [Required(ErrorMessage = "Course name is required")]
-        public string Name { get; set; }
+        public string Name { get; set; } = null!;
         public string? Description { get; set; }
         [Required(ErrorMessage = "Course Duration is required")]
         [Range(1, 10, ErrorMessage = "Duration must be between 1 and 10")]
         public int Duration { get; set; }
         public string? Semesters { get; set; }
         [Required(ErrorMessage = "Course Prerequists is required")]
-        public string CoursePrerequisites { get; set; }
+        public string CoursePrerequisites { get; set; } = null!;
         public int? ProfessorID { get; set; }
     }
     public class UpdateCourseViewModel

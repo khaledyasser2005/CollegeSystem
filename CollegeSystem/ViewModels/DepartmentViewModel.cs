@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Conventions;
+using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using Microsoft.Identity.Client;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -10,7 +10,7 @@ namespace CollegeSystem.ViewModels
         [Required(ErrorMessage = "Department ID is required")]
         public int ID { get; set; }
         [Required(ErrorMessage = "Department name is required")]
-        public string Name { get; set; }
+        public string Name { get; set; } = null!;
         [Required(ErrorMessage = "Department GPA is required")]
         [Range(0.0, 4.0, ErrorMessage = "GPA must be between 0 and 4")]
         public double GPARequired { get; set; }

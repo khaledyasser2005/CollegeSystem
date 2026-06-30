@@ -1,4 +1,4 @@
-﻿using CollegeSystem.Data;
+using CollegeSystem.Data;
 using Google.GenAI.Types;
 using Microsoft.AspNetCore.Mvc;
 using System.Reflection.Metadata.Ecma335;
@@ -40,6 +40,7 @@ namespace CollegeSystem.Controllers
                             Courses = s.Enrollments.Select(e => e.Course.Name).ToList()
                         })
                         .FirstOrDefault(); 
+                if (student == null) return NotFound();
                 ViewBag.Name = student.Name;
                 ViewBag.Email = student.Email;
                 ViewBag.Level = student.Level;
@@ -51,6 +52,7 @@ namespace CollegeSystem.Controllers
             else if(Role == "Admin")
             {
                 var admin = _context.Admins.FirstOrDefault(a => a.ID == id);
+                if (admin == null) return NotFound();
                 ViewBag.Name = admin.Name;
                 ViewBag.Email = admin.Email;
             }
@@ -65,6 +67,7 @@ namespace CollegeSystem.Controllers
                          Courses = p.Courses.Select(c => c.Name).ToList()
                      })
                      .FirstOrDefault(); 
+                if (professor == null) return NotFound();
                 ViewBag.Name = professor.Name;
                 ViewBag.Email = professor.Email;
                 ViewBag.Courses = professor.Courses;

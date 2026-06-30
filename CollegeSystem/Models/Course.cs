@@ -1,4 +1,4 @@
-﻿namespace CollegeSystem.Models
+namespace CollegeSystem.Models
 {
     public class Course
     {
@@ -11,11 +11,11 @@
         public int? ProfessorID { get; set; }
 
         // Navigation Properties
-        public Professor Professor { get; set; }
-        public ICollection<Enrollment> Enrollments { get; set; }
-        public ICollection<Assignment> Assignments { get; set; }
-        public ICollection<Quiz> Quizzes { get; set; }
-        public ICollection<Material> Materials { get; set; }
+        public Professor Professor { get; set; } = null!;
+        public ICollection<Enrollment> Enrollments { get; set; } = new List<Enrollment>();
+        public ICollection<Assignment> Assignments { get; set; } = new List<Assignment>();
+        public ICollection<Quiz> Quizzes { get; set; } = new List<Quiz>();
+        public ICollection<Material> Materials { get; set; } = new List<Material>();
 
     }
 }

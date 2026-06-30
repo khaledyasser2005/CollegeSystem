@@ -102,7 +102,7 @@ namespace CollegeSystem.Controllers
            catch (Exception ex)
 {
     _logger.LogError(ex, "Gemini Error");
-    assistantReply = ex.ToString();
+    assistantReply = "I'm sorry, I encountered an error connecting to the AI service. Please try again in a moment.";
 }
 
             // Persist the assistant's reply
