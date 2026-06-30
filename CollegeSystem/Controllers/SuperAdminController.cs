@@ -1,4 +1,4 @@
-﻿using CollegeSystem.Data;
+using CollegeSystem.Data;
 using CollegeSystem.Models;
 using CollegeSystem.ViewModels;
 using Microsoft.AspNetCore.Identity;
@@ -22,7 +22,7 @@ namespace CollegeSystem.Controllers
         public IActionResult CollegeAdmins()
         {
             var admins = _context.Admins.ToList();
-            return View("CollegeAdmin", admins); // غيرت CollegeAdmins لـ CollegeAdmin
+            return View("CollegeAdmin", admins);
         }
 
         // ================= ADD ADMIN =================
