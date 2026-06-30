@@ -331,7 +331,7 @@ namespace CollegeSystem.Controllers
 
         public IActionResult CollegeCourses()
         {
-            var courses = _context.Courses.Include(c=>c.Professor).ToList();
+            var courses = _context.Courses.Include(c => c.Professor).ToList();
             return View("CollegeCourses", courses);
         }
 
@@ -420,6 +420,8 @@ namespace CollegeSystem.Controllers
 
             return RedirectToAction("ManageDepartments");
         }
+
+        // ================= ASSIGN / UNASSIGN COURSE TO STUDENT =================
         public IActionResult AssignCourseToStudent()
         {
             var students = _context.Students.ToList();
@@ -447,7 +449,6 @@ namespace CollegeSystem.Controllers
 
             var enrollment = new Enrollment
             {
-
                 StudentID = StudentID,
                 CourseID = CourseID,
                 Grade = "N/A",
@@ -456,8 +457,30 @@ namespace CollegeSystem.Controllers
 
             _context.Enrollments.Add(enrollment);
             _context.SaveChanges();
+
+            TempData["SuccessMessage"] = "Course assigned to student successfully.";
             return RedirectToAction("AssignCourseToStudent");
         }
+
+        [HttpPost]
+        public IActionResult UnassignCourseFromStudent(int StudentID, int CourseID)
+        {
+            var enrollment = _context.Enrollments
+                .FirstOrDefault(e => e.StudentID == StudentID && e.CourseID == CourseID);
+
+            if (enrollment == null)
+            {
+                TempData["ErrorMessage"] = "Enrollment not found.";
+                return RedirectToAction("AssignCourseToStudent");
+            }
+
+            _context.Enrollments.Remove(enrollment);
+            _context.SaveChanges();
+
+            TempData["SuccessMessage"] = "Course unassigned from student successfully.";
+            return RedirectToAction("AssignCourseToStudent");
+        }
+
         public IActionResult Reports()
         {
             var reports = _context.Reports.ToList();
@@ -487,7 +510,7 @@ namespace CollegeSystem.Controllers
 
             return View(grouped);
         }
-        
+
         public IActionResult CollegeDepartments()
         {
             var departments = _context.Departments.ToList();
