@@ -1,15 +1,11 @@
 ﻿@using CollegeSystem.Models
 @{
-    ViewData["Title"] = "Assign Course To Student";
+    ViewData["Title"] = "Student Enrollment Management";
     var students = ViewBag.Students as List<Student>;
     var courses = ViewBag.Courses as List<Course>;
 }
 
 <style>
-    body {
-        background: #f5f8ff;
-    }
-
     .page-title {
         color: #1e3a5f;
         font-size: 28px;
@@ -43,10 +39,10 @@
         transition: .2s;
     }
 
-    .form-select:focus {
-        border-color: #2f55a4;
-        box-shadow: 0 0 0 2px rgba(47,85,164,.1);
-    }
+        .form-select:focus {
+            border-color: #2f55a4;
+            box-shadow: 0 0 0 2px rgba(47,85,164,.1);
+        }
 
     .submit-btn {
         width: 100%;
@@ -57,10 +53,21 @@
         border-radius: 10px;
         border: none;
         transition: .2s;
+        cursor: pointer;
     }
 
-    .submit-btn:hover {
-        background: #24478c;
+        .submit-btn:hover {
+            background: #24478c;
+        }
+
+    .success-box {
+        margin-bottom: 20px;
+        padding: 12px;
+        background: #eaffea;
+        border: 1px solid #b2f0b2;
+        border-radius: 10px;
+        color: #276227;
+        font-size: 13px;
     }
 
     .error-box {
@@ -78,63 +85,130 @@
 
     <!-- Title -->
     <div style="margin-bottom: 25px; text-align:center;">
-        <h1 class="page-title">Assign Course To Student</h1>
-        <p style="color:#666;">
-            Select a student and a course to assign
-        </p>
+        <h1 class="page-title">Student Enrollment Management</h1>
+        <p style="color:#666;">Enroll or unenroll students from courses</p>
     </div>
 
-    <!-- Card -->
-    <div class="card-box">
+    @if (!ViewData.ModelState.IsValid)
+    {
+        <div class="error-box" style="width:100%; max-width:1240px;">
+            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+            {
+                <p>@error.ErrorMessage</p>
+            }
+        </div>
+    }
 
-        @if (!ViewData.ModelState.IsValid)
-        {
-                <div class="error-box">
-                @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
-                {
-                            <p>@error.ErrorMessage</p>
-                }
-                </div>
-        }
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="success-box" style="width:100%; max-width:1240px;">
+            @TempData["SuccessMessage"]
+        </div>
+    }
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="error-box" style="width:100%; max-width:1240px;">
+            @TempData["ErrorMessage"]
+        </div>
+    }
 
-        <form method="post" asp-action="AssignCourseToStudent" asp-controller="Admin">
+    <div class="flex flex-col md:flex-row gap-6 w-full justify-center">
 
-            <!-- Student -->
+        <!-- ENROLL CARD -->
+        <div class="card-box">
+
             <div style="margin-bottom:20px;">
-                <label class="form-label">Student</label>
-                <select name="StudentID" class="form-select">
-                    <option value="">-- Select Student --</option>
-                    @if (students != null)
-                    {
-                        foreach (var student in students)
-                        {
-                                    <option value="@student.ID">@student.Name</option>
-                        }
-                    }
-                </select>
+                <h2 style="color:#1e3a5f; font-size:18px; font-weight:700; margin-bottom:4px;">
+                    Enroll Student
+                </h2>
+                <p style="color:#666; font-size:13px;">Select a student and a course to enroll</p>
             </div>
 
-            <!-- Course -->
-            <div style="margin-bottom:25px;">
-                <label class="form-label">Course</label>
-                <select name="CourseID" class="form-select">
-                    <option value="">-- Select Course --</option>
-                    @if (courses != null)
-                    {
-                        foreach (var course in courses)
+            <form method="post" asp-action="AssignCourseToStudent" asp-controller="Admin">
+
+                <div style="margin-bottom:20px;">
+                    <label class="form-label">Student</label>
+                    <select name="StudentID" class="form-select">
+                        <option value="">-- Select Student --</option>
+                        @if (students != null)
                         {
-                                    <option value="@course.ID">@course.Name</option>
+                            foreach (var student in students)
+                            {
+                                <option value="@student.ID">@student.Name</option>
+                            }
                         }
-                    }
-                </select>
+                    </select>
+                </div>
+
+                <div style="margin-bottom:25px;">
+                    <label class="form-label">Course</label>
+                    <select name="CourseID" class="form-select">
+                        <option value="">-- Select Course --</option>
+                        @if (courses != null)
+                        {
+                            foreach (var course in courses)
+                            {
+                                <option value="@course.ID">@course.Name</option>
+                            }
+                        }
+                    </select>
+                </div>
+
+                <button type="submit" class="submit-btn">
+                    Enroll Student
+                </button>
+
+            </form>
+        </div>
+
+        <!-- UNENROLL CARD -->
+        <div class="card-box">
+
+            <div style="margin-bottom:20px;">
+                <h2 style="color:#1e3a5f; font-size:18px; font-weight:700; margin-bottom:4px;">
+                    Unenroll Student
+                </h2>
+                <p style="color:#666; font-size:13px;">Select a student and a course to unenroll</p>
             </div>
 
-            <!-- Submit -->
-            <button type="submit" class="submit-btn">
-                Assign Course
-            </button>
+            <form method="post" asp-action="UnassignCourseFromStudent" asp-controller="Admin"
+                  onsubmit="return confirm('Are you sure you want to unenroll this student?');">
 
-        </form>
+                <div style="margin-bottom:20px;">
+                    <label class="form-label">Student</label>
+                    <select name="StudentID" class="form-select">
+                        <option value="">-- Select Student --</option>
+                        @if (students != null)
+                        {
+                            foreach (var student in students)
+                            {
+                                <option value="@student.ID">@student.Name</option>
+                            }
+                        }
+                    </select>
+                </div>
+
+                <div style="margin-bottom:25px;">
+                    <label class="form-label">Course</label>
+                    <select name="CourseID" class="form-select">
+                        <option value="">-- Select Course --</option>
+                        @if (courses != null)
+                        {
+                            foreach (var course in courses)
+                            {
+                                <option value="@course.ID">@course.Name</option>
+                            }
+                        }
+                    </select>
+                </div>
+
+                <button type="submit" class="submit-btn">
+                    Unenroll Student
+                </button>
+
+            </form>
+        </div>
+
     </div>
 
 </section>

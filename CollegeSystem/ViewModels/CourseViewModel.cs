@@ -13,8 +13,7 @@ namespace CollegeSystem.ViewModels
         public string? Semesters { get; set; }
         [Required(ErrorMessage = "Course Prerequists is required")]
         public string CoursePrerequisites { get; set; }
-        [Required(ErrorMessage = "Professor ID is required")]
-        public int ProfessorID { get; set; }
+        public int? ProfessorID { get; set; }
     }
     public class UpdateCourseViewModel
     {
