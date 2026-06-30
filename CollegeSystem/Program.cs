@@ -9,11 +9,7 @@ builder.Services.AddSession();
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddHttpContextAccessor();
 
-// Register named HttpClient for Gemini API calls
-builder.Services.AddHttpClient("Gemini", client =>
-{
-    client.Timeout = TimeSpan.FromSeconds(30);
-});
+
 
 // Register AI chat service
 builder.Services.AddScoped<IGeminiChatService, GeminiChatService>();
