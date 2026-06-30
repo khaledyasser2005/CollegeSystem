@@ -40,12 +40,11 @@ namespace CollegeSystem.Controllers
                 .OrderByDescending(m => m.UploadDate)
                 .ToList();
 
-            /*
+            
             ViewBag.Reports = context.Reports
                 .Where(r => r.CourseID == id)
                 .OrderByDescending(r => r.GeneratedDate)
                 .ToList();
-             */     
 
             var enrollments = context.Enrollments
                 .Where(e => e.CourseID == id)
@@ -239,6 +238,7 @@ namespace CollegeSystem.Controllers
             if (file == null || file.Length == 0)
                 return RedirectToAction("CourseDetails", new { id = courseId });
 
+            var course = context.Courses.Include(c => c.Professor).FirstOrDefault(c=>c.ID == courseId);
             using (var ms = new MemoryStream())
             {
                 await file.CopyToAsync(ms);
@@ -249,9 +249,8 @@ namespace CollegeSystem.Controllers
                     Type = "PDF",
                     Status = "Pending",
                     GeneratedDate = DateTime.Now,
-                    GeneratedBy = "Professor",
+                    GeneratedBy = course?.Professor?.Name ?? "Unknown",
 
-                    AdminID = 2, // ممكن نربطها بعدين بالـ login
                     CourseID = courseId,
 
                     FileName = file.FileName,
