@@ -42,7 +42,7 @@ namespace CollegeSystem.Services
             }
 
             _apiKey = apiKey;
-            _model  = configuration["Gemini:Model"] ?? "gemini-1.5-flash";
+            _model  = configuration["Gemini:Model"] ?? "gemini-flash-latest";
         }
 
         public async Task<string> GetResponseAsync(
@@ -133,8 +133,7 @@ namespace CollegeSystem.Services
             {
                 var errorBody = await response.Content.ReadAsStringAsync();
                 _logger.LogError("Gemini API error {StatusCode}: {Body}", (int)response.StatusCode, errorBody);
-                throw new HttpRequestException(
-                    $"Gemini API error {(int)response.StatusCode}");
+                throw new HttpRequestException($"Gemini API error {(int)response.StatusCode}: {errorBody}");
             }
 
             using var stream = await response.Content.ReadAsStreamAsync();
