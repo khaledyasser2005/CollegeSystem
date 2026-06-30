@@ -126,10 +126,14 @@ namespace CollegeSystem.Controllers
                 ModelState.AddModelError("", "professor not found!");
                 return View("ManageProfessors", model);
             }
+            var courses = _context.Courses.Where(c => c.ProfessorID == model.ID).ToList();
+
+            foreach(var course in courses) {
+                course.ProfessorID = null;
+            }
 
             _context.Professors.Remove(professor);
             _context.SaveChanges();
-
             return RedirectToAction("ManageProfessors");
         }
 
