@@ -148,7 +148,9 @@ namespace CollegeSystem.Controllers
             course.Description = model.Description;
             course.CoursePrerequisites = model.CoursePrerequisites;
             course.Duration = model.Duration;
-            course.ProfessorID = model.ProfessorID;
+            course.ProfessorID = (model.ProfessorID.HasValue && model.ProfessorID.Value > 0)
+                  ? model.ProfessorID
+                  : null;
 
             _context.Courses.Add(course);
             _context.SaveChanges();
